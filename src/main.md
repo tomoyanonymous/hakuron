@@ -104,6 +104,14 @@ format matters
 
 ## 基本文法
 
+```Rust
+fn hoge{
+    fuga = 2;
+    return 0
+}
+```
+
+
 ## Type Systems
 
 ## scheduling with @

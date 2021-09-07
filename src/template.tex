@@ -14,7 +14,11 @@
 \usepackage{caption}
 
 \usepackage{biblatex}
-\usepackage{listings}
+
+\usepackage{xcolor}
+\usepackage{fvextra}
+
+
 \usepackage{framed}
 \usepackage[dvipdfmx]{hyperref}
 \usepackage{pxjahyper} % ハイパーリンクに日本語が含まれる場合に必要
@@ -45,12 +49,22 @@
 
 \def\tightlist{\itemsep1pt\parskip0pt\parsep0pt} % これがないと\tightlistが動かない
 
-\newenvironment{Shaded}{\begin{shaded}}{\end{shaded}}
-\definecolor{shadecolor}{RGB}{200,200,200}
-\newenvironment{Highlighting}{}{}
+% ハイライトの設定、Rustのトークナイズあんまりうまく行ってない？
 
-\newcommand{\passthrough}[1]{#1}
+\newenvironment{Shaded}{\begin{shaded}}{\end{shaded}}
+\definecolor{shadecolor}{RGB}{240,240,240}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}
+  {breaklines,breakanywhere,commandchars=\\\{\}}
+
 \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+
 \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
 \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
 \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
@@ -61,11 +75,40 @@
 \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
 \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
 \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
 \newcommand{\RegionMarkerTok}[1]{{#1}}
 \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
 \newcommand{\NormalTok}[1]{{#1}}
-\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+
+% listingsでhighlightする時の設定一応残しとく
+% \usepackage{listings,listings-rust}
+
+% \definecolor{codegreen}{rgb}{0,0.6,0}
+% \definecolor{codegray}{rgb}{0.1,0.1,0.8}
+% \definecolor{codepurple}{rgb}{0.58,0,0.82}
+% \definecolor{backcolour}{rgb}{0.98,0.98,0.98}
+% \lstdefinestyle{mystyle}{
+%     backgroundcolor=\color{backcolour},   
+%     commentstyle=\color{codegreen},
+%     keywordstyle=\color{magenta},
+%     numberstyle=\tiny\color{codegray},
+%     stringstyle=\color{codepurple},
+%     basicstyle=\ttfamily\footnotesize,
+%     breakatwhitespace=true,         
+%     breaklines=true,                 
+%     captionpos=b,                    
+%     keepspaces=true,                 
+%     numbers=left,        
+%     xleftmargin=1em,
+%     xrightmargin=0.6em,
+%     framexleftmargin=0.7em,       
+%     numbersep=2pt,                  
+%     showspaces=false,                
+%     showstringspaces=false,
+%     showtabs=false,                  
+%     tabsize=2
+% }
+% \lstset{style=mystyle}
+
 
 \providecommand{\citep}{\cite}
 
