@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  texlive-ja:
+    build: .
+    environment:
+      SHELL: "/bin/bash"
+    command: sleep infinity
+    volumes:
+      - ../:/workdir
+      - ../.latexmkrc:/root/.latexmkrc
+      - ~/.zshrc:/root/.zshrc #bashの設定
+      - ~/.ssh:/root/.ssh #sshキー
+      - ~/.gitconfig:/root/.gitconfig #gitの設定
