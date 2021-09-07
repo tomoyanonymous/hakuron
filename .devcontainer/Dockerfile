@@ -1,3 +1,16 @@
 FROM tomoyanonymous/latex-remote-container-acmart:latest
 
+RUN tlmgr install biber
+
+RUN wget -c --no-check-certificate https://github.com/jgm/pandoc/releases/download/2.14.2/pandoc-2.14.2-linux-amd64.tar.gz &&\
+tar xvzf pandoc-2.14.2-linux-amd64.tar.gz --strip-components 1 -C /usr/local/
+# install pandoc-crossref binary
+
+RUN wget -c --no-check-certificate https://github.com/lierdakil/pandoc-crossref/releases/download/v0.3.12.0c/pandoc-crossref-Linux.tar.xz && \
+tar -xf pandoc-crossref-Linux.tar.xz &&\
+mv pandoc-crossref /usr/local/bin/ &&\
+chmod a+x /usr/local/bin/pandoc-crossref &&\
+mkdir -p /usr/local/man/man1 &&\ 
+mv pandoc-crossref.1  /usr/local/man/man1 
+
 CMD ["/bin/bash"]
