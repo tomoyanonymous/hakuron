@@ -2,10 +2,13 @@
   "name": "latex-in-docker-on-vscode",
   "dockerComposeFile": "docker-compose.yml",
   "extensions": [
-	"lfs.vscode-emacs-friendly",
-	"james-yu.latex-workshop",
-	"znck.grammarly"
-],
+    "lfs.vscode-emacs-friendly",
+    "james-yu.latex-workshop",
+    "znck.grammarly"
+  ],
+  "settings": {
+    "terminal.integrated.shell": "/bin/bash"
+  },
   "service": "texlive-ja",
   "workspaceFolder": "/workdir",
   "shutdownAction": "stopCompose"

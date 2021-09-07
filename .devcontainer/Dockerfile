@@ -1,3 +1,3 @@
-FROM nukopy/ubuntu-texlive-ja:latest
+FROM tomoyanonymous/latex-remote-container-acmart:latest
 
 CMD ["/bin/bash"]
