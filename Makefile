@@ -1,17 +1,23 @@
+PANDOC := pandoc --filter pandoc-crossref  \
+	-M "crossrefYaml=./src/pandoc-crossref-config.yml" \
+	--citeproc --bibliography=./src/ref.bib --natbib \
+
 LATEX_FILE := template
+
+MDS := $(wildcard src/*.md)
+TEXS := $(MDS:.md=.tex)
+
 
 PHONY: latexmk
 
 all:latexmk
 
-md:src/main.md 
-	pandoc --filter pandoc-crossref  \
-	-M "crossrefYaml=./src/pandoc-crossref-config.yml" \
-	--top-level-division=chapter \
-	--citeproc --bibliography=./src/ref.bib --natbib \
-	./src/main.md -o ./src/main.tex
+# type rule
 
-latexmk:md src/ref.bib
+src/%.tex:src/%.md
+	$(PANDOC) $< -o $@
+
+latexmk:$(TEXS) src/ref.bib
 	latexmk -f  -cd src/$(LATEX_FILE).tex
 
 clean:
