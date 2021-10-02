@@ -1,7 +1,5 @@
 FROM tomoyanonymous/latex-remote-container-acmart:latest
 
-RUN tlmgr install biber
-
 RUN wget -c --no-check-certificate https://github.com/jgm/pandoc/releases/download/2.14.2/pandoc-2.14.2-linux-amd64.tar.gz &&\
 tar xvzf pandoc-2.14.2-linux-amd64.tar.gz --strip-components 1 -C /usr/local/
 # install pandoc-crossref binary
