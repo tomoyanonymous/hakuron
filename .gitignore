@@ -856,3 +856,8 @@ TSWLatexianTemp*
 # Uncomment the next line to have this generated file ignored.
 #*Notes.bib
 /*.pdf
+
+# auto-generated tex files
+
+src/chapter*.tex 
+src/abstract.tex
