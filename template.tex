@@ -1,10 +1,11 @@
-\documentclass[a4paper,openany]{jsbook}
+\documentclass[dvipdfmx,a4paper,openany]{jsbook}
 \usepackage[includeheadfoot,top=20truemm,bottom=20truemm, right=25truemm,left=25truemm]{geometry} % 余白を調製
 
 \usepackage{amsmath,amssymb}
 \usepackage{bm}
 \usepackage{ascmac}
-\usepackage[dvipdfmx]{graphicx,color}
+\usepackage{graphicx,color}
+
 \usepackage{longtable} % 表組みに必要
 \usepackage{booktabs} % 表組みに必要
 \usepackage{subfig} % 図の横並びに必要
@@ -78,6 +79,8 @@
 \newcommand{\RegionMarkerTok}[1]{{#1}}
 \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
 \newcommand{\NormalTok}[1]{{#1}}
+\newcommand{\PreprocessorTok}[1]{\ImportTok{{#1}}}
+
 
 % listingsでhighlightする時の設定一応残しとく
 % \usepackage{listings,listings-rust}
@@ -112,7 +115,7 @@
 
 \providecommand{\citep}{\cite}
 
-\addbibresource{ref.bib}
+\addbibresource{./ref.bib}
 
 
 \title{インフラストラクチャとしての音楽プログラミング言語mimiumの設計と実装}
@@ -128,21 +131,23 @@
 \chapter{自由なメディア装置としてのコンピューター}
 \input{chapter2}
 
-\chapter{準・汎計算機時代の音楽インフラストラクチャ}
+\chapter{準汎計算機時代の音楽インフラストラクチャ}
 \input{chapter3}
 
-\chapter{音楽プログラミング言語の歴史と諸用語の整理}
+\chapter{音楽プログラミング言語の歴史}
 \input{chapter4}
 
-\chapter{音楽プログラミング言語mimiumの設計と実装}
+\chapter{音楽プログラミング言語における諸用語の整理}
 \input{chapter5}
 
-\chapter{議論：音楽土木工学に向けて}
+\chapter{音楽プログラミング言語mimiumの設計と実装}
 \input{chapter6}
 
-\chapter{結論}
+\chapter{議論：音楽土木工学に向けて}
 \input{chapter7}
 
+\chapter{結論}
+\input{chapter8}
 
 \printbibliography[title = 参考文献]
 
