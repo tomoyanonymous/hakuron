@@ -859,5 +859,6 @@ TSWLatexianTemp*
 
 # auto-generated tex files
 
-src/chapter*.tex 
 src/abstract.tex
+src/acknowledgement.tex
+src/chapter*.tex 
