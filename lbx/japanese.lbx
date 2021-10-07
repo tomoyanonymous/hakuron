@@ -1,0 +1,433 @@
+\ProvidesFile{japanese.lbx}
+[\abx@lbxid]
+
+%% ad hoc...
+\InheritBibliographyExtras{english}
+\InheritBibliographyStrings{english}
+
+\NewBibliographyString{%
+  japanese-bytranslator,
+  japanese-cbytranslator,
+  japanese-page,
+  japanese-pages,
+  japanese-yearsuffix,
+  japanese-chapter,
+  japanese-edition,
+  japanese-andothers,
+  japanese-editor,
+  japanese-editors,
+  japanese-name-delimiter,
+}
+
+
+%% For patching to macros taking parameters, change the catcode of #.
+%% Cf. http://tex.stackexchange.com/questions/113147
+%%     http://tex.stackexchange.com/questions/51929
+\begingroup
+\catcode`\#=12
+\DeclareBibliographyExtras{%
+  \ifundef{\blxja@macrosdefined}
+          {\input{biblatex-japanese.def}}
+          {}%
+
+  \savecommand{\blx@imc@addcomma}%
+  \replacecommand{\blx@imc@addcomma}{iflangidisjapanese}{\bibfwcomma\ignorespaces}%
+
+  \savecommand{\finalnamdelim}%
+  \replacecommand{\finalnamedelim}{iflangidisjapanese}
+    {\bibstring{japanese-name-delimiter}}%
+
+  \savecommand{\multinamedelim}%
+  \replacecommand{\multinamedelim}{iflangidisjapanese}
+    {\bibstring{japanese-name-delimiter}}%
+
+  \savecommand{\mkbibdatelong}%
+  \replacecommand{\mkbibdatelong}{iflangidisjapanese}{%
+    \iffieldundef{#2}
+      {}
+      {\mkbibmonth{\thefield{#2}}%
+       \iffieldundef{#3}
+         {\iffieldundef{#1}{}{\space}}
+         {\nobreakspace}}%
+    \iffieldundef{#3}
+      {}
+      {\stripzeros{\thefield{#3}}%
+       \iffieldundef{#1}{}{,\space}}%
+     \iffieldbibstring{#1}
+       {\bibstring{\thefield{#1}}\bibstring{japanese-yearsuffix}}
+       {\dateeraprintpre{#1}\stripzeros{\thefield{#1}\bibstring{japanese-yearsuffix}}}}%
+  \savecommand{\newunitpunct}%
+  \replacecommand{\newunitpunct}{iflangidisjapanese}{\addcomma}%
+
+  \savecommand{\editortypedelim}%
+  \replacecommand{\editortypedelim}{iflangidisjapanese}{}%
+
+  \savecommand{\blx@begunit}%
+  \pretocmd{\blx@begunit}
+           {\ifdef{\blxja@hook@print@name}{\csuse{\blxja@hook@print@name}}{}}
+           {}{}%
+  \savecommand{\blx@getformat}%
+  \apptocmd{\blx@getformat}
+           {\blxja@hook@print@getname\blxja@hook@print@name{#2}{#3}{#4}}
+           {}{}%
+
+  \savebibmacro{bytranslator+others}%
+  \replacebibmacro{bytranslator+others}{iflangidisjapanese}{%
+    \ifnameundef{translator}
+                {}
+                {\setunit{\addspace}%
+                  \printnames[bytranslator]{translator}%
+                  \clearname{translator}%
+                  \usebibmacro{bytranslator+othersstrg}%
+                  \newunit}%
+                \usebibmacro{withothers}}%
+
+  \savebibmacro{bytranslator+othersstrg}%
+  \replacebibmacro{bytranslator+othersstrg}{iflangidisjapanese}{%
+    \def\abx@tempa{japanese-bytranslator}%
+    \ifnamesequal{translator}{commentator}
+                 {\appto\abx@tempa{co}%
+                   \clearname{commentator}}
+                 {\ifnamesequal{translator}{annotator}
+                   {\appto\abx@tempa{an}%
+                     \clearname{annotator}}
+                   {}}%
+    \ifnamesequal{translator}{introduction}
+                 {\appto\abx@tempa{in}%
+                   \clearname{introduction}}
+                 {\ifnamesequal{translator}{foreword}
+                   {\appto\abx@tempa{fo}%
+                     \clearname{foreword}}
+                 {\ifnamesequal{translator}{afterword}
+                   {\appto\abx@tempa{af}%
+                     \clearname{afterword}}
+                   {}}}%
+    \bibstring{\abx@tempa}}%
+
+  \savebibmacro{in:}%
+  \replacebibmacro{in:}{iflangidisjapanese}{}%
+
+  \savebibmacro{name:andothers}%
+  \replacebibmacro{name:andothers}{iflangidisjapanese}{%
+    \ifboolexpr{%
+      test {\ifnumequal{\value{listcount}}{\value{liststop}}}
+      and
+      test \ifmorenames
+    }
+      {\bibstring{japanese-andothers}}
+      {}}
+
+  \def\blxja@removeunitpunct{%
+    \iffieldequalstr{langid}{japanese}
+                    {\global\togglefalse{blx@insert}}
+                    {}}
+  \savefieldformat{booktitle}%
+  \replacefieldformat{booktitle}{iffieldisCJK}{\mkbibwcbrackets{#1}}%
+  \printfieldhook{booktitle}{\blxja@removeunitpunct}
+  \savefieldformat{citetitle}%
+  \replacefieldformat{citetitle}{iffieldisCJK}{\mkbibwcbrackets{#1}}%
+  \savefieldformats
+      [article,inbook,incollection,inproceedings,patent,thesis,unpublished]
+      {citetitle}%
+  \replacefieldformat
+      [article,inbook,incollection,inproceedings,patent,thesis,unpublished]
+      {citetitle}{iffieldisCJK}{\mkbibcbrackets{#1}}%
+  \printfieldhook{citetitle}{\blxja@removeunitpunct}%
+  \savefieldformat{issuetitle}%
+  \replacefieldformat{issuetitle}{iffieldisCJK}{\mkbibwcbrackets{#1}}%
+  \savefieldformat{journaltitle}%
+  \replacefieldformat{journaltitle}{iffieldisCJK}{\mkbibwcbrackets{#1}}%
+  \printfieldhook{journaltitle}{\blxja@removeunitpunct}%
+  \savefieldformat{maintitle}%
+  \replacefieldformat{maintitle}{iffieldisCJK}{\mkbibwcbrackets{#1}}%
+  \savefieldformat{pages}%
+  \replacefieldformat{pages}{iffieldisCJK}{#1\bibstring{japanese-pages}}%
+  \savefieldformat{title}%
+  \replacefieldformat{title}{iffieldisCJK}{\mkbibwcbrackets{#1}}%
+  \savefieldformats
+      [article,inbook,incollection,inproceedings,patent,thesis,unpublished]
+      {title}%
+  \replacefieldformat
+      [article,inbook,incollection,inproceedings,patent,thesis,unpublished]
+      {title}{iffieldisCJK}{\mkbibcbrackets{#1}}%
+  \printfieldhook{title}{\blxja@removeunitpunct}%
+  \printfieldhook{volume}{\blxja@removeunitpunct}%
+
+  \savebibmacro{editor+othersstrg}%
+  \replacebibmacro{editor+othersstrg}{iflangidisjapanese}{%
+    \iffieldundef{editortype}
+      {\ifboolexpr{
+         test {\ifnumgreater{\value{editor}}{1}}
+         or
+         test {\ifandothers{editor}}
+       }
+         {\def\abx@tempa{japanese-editors}}
+         {\def\abx@tempa{japanese-editor}}}
+      {\ifboolexpr{
+         test {\ifnumgreater{\value{editor}}{1}}
+         or
+         test {\ifandothers{editor}}
+       }
+         {\edef\abx@tempa{\thefield{editortype}s}}
+         {\edef\abx@tempa{\thefield{editortype}}}}%
+    \let\abx@tempb=\empty
+    \ifnamesequal{editor}{translator}
+      {\appto\abx@tempa{tr}%
+       \appto\abx@tempb{\clearname{translator}}}
+      {}%
+    \ifnamesequal{editor}{commentator}
+      {\appto\abx@tempa{co}%
+       \appto\abx@tempb{\clearname{commentator}}}
+      {\ifnamesequal{editor}{annotator}
+         {\appto\abx@tempa{an}%
+          \appto\abx@tempb{\clearname{annotator}}}
+         {}}%
+    \ifnamesequal{editor}{introduction}
+      {\appto\abx@tempa{in}%
+       \appto\abx@tempb{\clearname{introduction}}}
+      {\ifnamesequal{editor}{foreword}
+         {\appto\abx@tempa{fo}%
+          \appto\abx@tempb{\clearname{foreword}}}
+         {\ifnamesequal{editor}{afterword}
+            {\appto\abx@tempa{af}%
+             \appto\abx@tempb{\clearname{afterword}}}
+            {}}}%
+    \ifbibxstring{\abx@tempa}
+      {\printtext[editortype]{\bibstring{\abx@tempa}}\abx@tempb}
+      {\usebibmacro{editorstrg}}}
+
+  \savebibmacro{byeditor+others}
+  \replacebibmacro{byeditor+others}{iflangidisjapanese}{%
+    \ifnameundef{editor}
+      {}
+      {\setunit{\addspace}%
+       \printnames[byeditor]{editor}%
+       \usebibmacro{editor+othersstrg}%
+       \clearname{editor}%
+       \newunit}%
+    \usebibmacro{byeditorx}%
+    \usebibmacro{bytranslator+others}}
+
+  \savefieldformat{chapter}%
+  \replacefieldformat{chapter}{iflangidisjapanese}{%
+    {#1\bibstring{japanese-chapter}}}%
+
+  \savefieldformat{edition}
+  \replacefieldformat{edition}{iflangidisjapanese}{%
+    \ifinteger{#1}%
+      {#1\bibstring{japanese-edition}}%
+      {#1}}%
+
+  \savenameformat{given-family}%
+  \replacenameformat{given-family}{iflangidisjapanese}{%
+    \nameparts{#1}%
+    \usebibmacro{name:japanese-full}%
+                {\namepartfamily}%
+                {\namepartgiven}%
+                {\namepartprefix}%
+                {\namepartsuffix}%
+    \usebibmacro{name:andothers}}%
+
+  \savenameformat{family-given}%
+  \replacenameformat{family-given}{iflangidisjapanese}{%
+    \nameparts{#1}%
+    \usebibmacro{name:japanese-full}%
+                {\namepartfamily}%
+                {\namepartgiven}%
+                {\namepartprefix}%
+                {\namepartsuffix}%
+    \usebibmacro{name:andothers}}%
+
+  \savenameformat{family-given/given-family}%
+  \replacenameformat{family-given/given-family}{iflangidisjapanese}{%
+    \nameparts{#1}%
+    \usebibmacro{name:japanese-full}%
+                {\namepartfamily}%
+                {\namepartgiven}%
+                {\namepartprefix}%
+                {\namepartsuffix}%
+    \usebibmacro{name:andothers}}%
+
+  \savenameformat{labelname}%
+  \replacenameformat{labelname}{iflangidisjapanese}{%
+    \ifcase\value{uniquename}%
+        \usebibmacro{name:japanese-last}%
+                    {\namepartfamily}%
+                    {\namepartgiven}%
+                    {\namepartprefix}%
+                    {\namepartsuffix}%
+    \or
+        \usebibmacro{name:japanese-full}%
+                    {\namepartfamily}%
+                    {\namepartgiven}%
+                    {\namepartprefix}%
+                    {\namepartsuffix}%
+    \or
+        \usebibmacro{name:japanese-full}%
+                    {\namepartfamily}%
+                    {\namepartgiven}%
+                    {\namepartprefix}%
+                    {\namepartsuffix}%
+    \fi
+    \usebibmacro{name:andothers}}%
+
+  %% -- for chicago --
+  \@ifpackageloaded{biblatex-chicago}{%
+    \savecommand{\classicpunct}%
+    \replacecommand{\classicpunct}{iflangidisjapanese}{}%
+
+    \savebibmacro{cbytranslator+others}%
+    \replacebibmacro{cbytranslator+others}{iflangidisjapanese}{%
+      \ifnameundef{translator}
+                  {}
+                  {\def\@tempa{japanese-cbytranslator}%
+                    \ifnamesequal{translator}{namec}
+                                 {\edef\@tempa{\@tempa cp}%
+                                   \clearname{namec}}
+                                 {}%
+                    \ifnamesequal{translator}{commentator}
+                                 {\edef\@tempa{\@tempa co}%
+                                   \clearname{commentator}}
+                                 {\ifnamesequal{translator}{annotator}
+                                   {\edef\@tempa{\@tempa an}%
+                                     \clearname{annotator}}
+                                   {}}%
+                    \ifnamesequal{translator}{introduction}
+                                 {\edef\@tempa{\@tempa in}%
+                                   \clearname{introduction}}
+                                 {\ifnamesequal{translator}{foreword}
+                                   {\edef\@tempa{\@tempa fo}%
+                                     \clearname{foreword}}
+                                   {\ifnamesequal{translator}{afterword}
+                                     {\edef\@tempa{\@tempa af}%
+                                       \clearname{afterword}}
+                                     {}}}%
+                   \printnames[bytranslator]{translator}%
+                   \clearname{translator}%
+                   \bibstring{\@tempa}%
+                   \newcunit}%
+      \usebibmacro{cbycompiler+others}}%
+
+    \savebibmacro{editstrg}%
+    \replacebibmacro{editstrg}{iflangidisjapanese}{%
+      \blxja@removeunitpunct% For removing comma after Japanese editor names.
+      \ifthenelse{\iffieldundef{editortype}\OR%
+        \iffieldequalstr{editortype}{editor}}%
+      {\ifthenelse{\value{editor}>1\OR\ifandothers{editor}}%
+        {\ifthenelse{\ifnamesequal{editor}{translator}\AND%
+            \ifnamesequal{editor}{namec}}%
+          {\bibstring{editortranscompilers}%
+            \clearname{translator}%
+            \clearname{namec}}%
+          {\ifnamesequal{editor}{namec}%
+            {\bibstring{editorcompilers}%
+              \clearname{namec}}%
+            {\ifnamesequal{editor}{translator}%
+              {\bibstring{editortranslators}%
+                \clearname{translator}}%
+              {\bibstring{japanese-editors}}}}}%
+        {\ifthenelse{\ifnamesequal{editor}{translator}\AND%
+            \ifnamesequal{editor}{namec}}%
+          {\bibstring{editortranscompiler}%
+            \clearname{translator}%
+            \clearname{namec}}%
+          {\ifnamesequal{editor}{namec}%
+            {\bibstring{editorcompiler}%
+              \clearname{namec}}%
+            {\ifnamesequal{editor}{translator}%
+              {\bibstring{editortranslator}%
+                \clearname{translator}}%
+              {\bibstring{japanese-editor}}}}}}%
+      {\ifbibxstring{\thefield{editortype}}%
+        {\ifthenelse{\value{editor}>1\OR\ifandothers{editor}}%
+          {\bibstring{\thefield{editortype}s}}%
+          {\bibstring{\thefield{editortype}}}}%
+        {\printtext[capital]{\thefield{editortype}}}}%
+      \clearname{editor}}%
+
+      \savebibmacro{cms-in:}%
+      \replacebibmacro{cms-in:}{iflangidisjapanese}{}%
+
+      \savefieldformat{injournaltitle}%
+      \replacefieldformat{injournaltitle}{iflangidisjapanese}{%
+        \mkbibwcbrackets{#1}\isdot}%
+      \printfieldhook{injournaltitle}{\blxja@removeunitpunct}
+      
+  }{}%
+  %% -- End: for chicago --
+}
+\endgroup
+
+\UndeclareBibliographyExtras{%
+  \restorecommand{\blx@imc@addcomma}%
+  \restorecommand{\finalnamedelim}%
+  \restorecommand{\multinamedelim}%
+  \restorecommand{\mkbibdatelong}%
+  \restorecommand{\newunitpunct}%
+  \restorecommand{\editortypedelim}%
+
+  \restorecommand{\blx@begunit}%
+  \restorecommand{\blx@getformat}%
+
+  \restorebibmacro{bytranslator+others}%
+  \restorebibmacro{bytranslator+othersstrg}%
+  \restorebibmacro{in:}%
+  \restorebibmacro{name:andothers}%
+  \restorebibmacro{editor+othersstrg}%
+  \restorebibmacro{byeditor+others}
+
+  \restorefieldformat{booktitle}%
+  \restorefieldformat{citetitle}%
+  \restorefieldformats
+      [article,inbook,incollection,inproceedings,patent,thesis,unpublished]
+      {citetitle}%
+  \restorefieldformat{issuetitle}%
+  \restorefieldformat{journaltitle}%
+  \restorefieldformat{maintitle}%
+  \restorefieldformat{pages}%
+  \restorefieldformat{title}%
+  \restorefieldformats
+      [article,inbook,incollection,inproceedings,patent,thesis,unpublished]
+      {title}%
+  \restorefieldformat{chapter}
+  \restorefieldformat{edition}
+
+  \restorenameformat{given-family}%
+  \restorenameformat{family-given}%
+  \restorenameformat{family-given/given-family}%
+  \restorenameformat{labelname}%
+
+  %% -- for chicago --
+  \@ifpackageloaded{biblatex-chicago}{%
+    \restorecommand{\classicpunct}%
+    \restorebibmacro{cbytranslator+others}%
+    \restorebibmacro{editstrg}%
+    \restorebibmacro{cms-in:}%
+    \restorefieldformat{injournaltitle}%
+  }{}%
+  %% -- End: for chicago --
+}
+
+\DeclareBibliographyStrings{%
+  bibliography           = {{参考文献}{参考文献}},
+  ibidem                 = {{同書}{同書}},
+  japanese-bytranslator  = {{訳}{訳}},
+  japanese-cbytranslator = {{訳}{訳}},
+  japanese-page          = {{頁}{頁}},
+  japanese-pages         = {{頁}{頁}},
+  japanese-yearsuffix    = {{}{}},
+  references             = {{参考文献}{参考文献}},
+  japanese-chapter	 = {{章}{章}},
+  japanese-edition	 = {{版}{版}},
+  japanese-andothers     = {{他}{他}},
+  japanese-editor	 = {{編}{編}},
+  japanese-editors	 = {{編}{編}},
+  japanese-name-delimiter = {{\addcomma}{\addcomma}},
+}
+
+\ifbool{blxja@yearsuffix}{%
+\DeclareBibliographyStrings{%
+  japanese-yearsuffix    = {{年}{年}},
+}}{}
+
+\endinput
