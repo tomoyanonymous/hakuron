@@ -4,17 +4,47 @@
 \usepackage{amsmath,amssymb}
 \usepackage{bm}
 \usepackage{ascmac}
-\usepackage{graphicx,color}
+\usepackage[dvipdfmx]{color}
+\usepackage[dvipdfmx]{graphicx}
+% \usepackage[draft]{graphicx} %コンパイルが遅い時はこれで枠だけにすると速くできる
+
 
 \usepackage{longtable} % 表組みに必要
-\usepackage{booktabs} % 表組みに必要
+\usepackage{booktabs,array} % 表組みに必要
 \usepackage{subfig} % 図の横並びに必要
 \usepackage{ulem} % 取り消し線に必要
 \usepackage{url}
 
 \usepackage{caption}
 
-\usepackage{biblatex}
+\usepackage[backend=biber,backref=true,date=year,style=authoryear]{biblatex-japanese}
+% % 日本語文献の引用形式を普通にするためのマクロ。日本語文献はlanguage=japaneseを指定しておくこと
+% \newbibmacro*{finalnamedelim:{japanese}}{%
+%   \ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}%
+%   \addspace\multinamedelim
+% }
+
+% \renewcommand*{\finalnamedelim}{%
+%   \iflistundef{language}
+%   {\ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}%
+%   \addspace\bibstring{and}\space}
+%   {\usebibmacro*{finalnamedelim:\strlist{language}}}
+% }
+
+% \newbibmacro*{name:given-family:{japanese}}[4]{%
+%   \usebibmacro{name:delim}{#1#2}\usebibmacro{name:hook}{#1#2}#1\bibnamedelimc#2}
+
+% \DeclareNameFormat{given-family}{%
+%   \iflistundef{language}{%
+%     \ifgiveninits
+%       {\usebibmacro{name:given-family}{\namepartfamily}{\namepartgiveni}{\namepartprefix}{\namepartsuffix}}
+%       {\usebibmacro{name:given-family}{\namepartfamily}{\namepartgiven}{\namepartprefix}{\namepartsuffix}}
+%   }
+%   {\usebibmacro*{name:given-family:\strlist{language}}{\namepartfamily}{\namepartgiven}{\namepartprefix}{\namepartsuffix}}
+%   \usebibmacro{name:andothers}
+% }
+% % 
+
 
 \usepackage{xcolor}
 \usepackage{fvextra}
@@ -83,37 +113,38 @@
 
 
 % listingsでhighlightする時の設定一応残しとく
-% \usepackage{listings,listings-rust}
+\usepackage{listings,listings-rust}
 
-% \definecolor{codegreen}{rgb}{0,0.6,0}
-% \definecolor{codegray}{rgb}{0.1,0.1,0.8}
-% \definecolor{codepurple}{rgb}{0.58,0,0.82}
-% \definecolor{backcolour}{rgb}{0.98,0.98,0.98}
-% \lstdefinestyle{mystyle}{
-%     backgroundcolor=\color{backcolour},   
-%     commentstyle=\color{codegreen},
-%     keywordstyle=\color{magenta},
-%     numberstyle=\tiny\color{codegray},
-%     stringstyle=\color{codepurple},
-%     basicstyle=\ttfamily\footnotesize,
-%     breakatwhitespace=true,         
-%     breaklines=true,                 
-%     captionpos=b,                    
-%     keepspaces=true,                 
-%     numbers=left,        
-%     xleftmargin=1em,
-%     xrightmargin=0.6em,
-%     framexleftmargin=0.7em,       
-%     numbersep=2pt,                  
-%     showspaces=false,                
-%     showstringspaces=false,
-%     showtabs=false,                  
-%     tabsize=2
-% }
-% \lstset{style=mystyle}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.1,0.1,0.8}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.98,0.98,0.98}
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=true,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,        
+    xleftmargin=1em,
+    xrightmargin=0.6em,
+    framexleftmargin=0.7em,       
+    numbersep=2pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
 
 
-\providecommand{\citep}{\cite}
+\providecommand{\citep}{\parencite}
+\providecommand{\mimium}{\textit{mimium}}
 
 \addbibresource{./ref.bib}
 
@@ -124,6 +155,15 @@
 
 \begin{document}
 \maketitle
+
+\begin{abstract}
+\chapter*{概要}
+    \input{abstract}
+\end{abstract}
+
+\chapter*{謝辞}
+\input{acknowledgement}
+
 \tableofcontents
 \chapter{序論}
 \input{chapter1}
