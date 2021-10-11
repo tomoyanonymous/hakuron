@@ -20,17 +20,28 @@ NishinoとNakatsuのサーベイでは1940年代の電子計算機誕生直後�
 そもそも音楽プログラミング言語の祖先となるソフトウェアMUSICが開発されたのは正解で最初の(汎用)プログラミング言語FORTRANが作られた翌年であり、当然1章で見たアラン・ケイらによる対話的プログラミング環境や豊富な入出力インターフェースを備えるよりもずっと前のことである。
 なので、必然的に音楽ソフトウェアのプログラミング自体も機械語を直接入力するかアセンブリ言語(機械語の命令をテキストと1対1対応させたプリミティブなプログラミング言語のようなもの)しかなかったし、そのソフトウェアに対する入力データ（≒楽譜）も同様の形式を取らざるを得ないものだった。
 
-つまり、1950〜1970年代の音楽プログラミング環境は大まかにいってコンピューターで音楽を作るためのソフトウェア全般の祖先にあたるものであって、必ずしもプログラミングという行為やテキスト入力という形式の固有性を積極的に取り入れたものではない、ということだ。逆に、70年代以降の音楽プログラミング言語/環境はマウスや(文字入力や、ピアノ鍵盤どちらにせよ)キーボード入力といった直感的なインターフェースが選択肢として存在する中で敢えてプログラミングという手段を使うものとして設計されてきた、という違いがあると言えるだろう。
+つまり、1950〜1970年代の音楽プログラミング環境は大まかにいってコンピューターで音楽を作るためのソフトウェア全般の祖先にあたるものであって、必ずしもプログラミングという行為やテキスト入力という形式の固有性を積極的に取り入れたものではない、ということだ。
+
+逆に、70年代以降の音楽プログラミング言語/環境はマウスや(文字入力や、ピアノ鍵盤どちらにせよ)キーボード入力といった直感的（WYSIWYG的）なインターフェースが選択肢として存在する中で敢えてプログラミングという手段を使うものとして設計されてきた、という違いがあると言えるだろう。プログラミング環境であっても、GUIの誕生はMax(Puckette)を代表としてテキストインターフェースだけでなく、入出力を持つボックスをマウスで繋いでいくような形式など、テキストに留まらない形式でのプログラミング行為を可能にした。これは同時に、出力された信号などもオシロスコープのようなグラフィックとしてフィードバックが返ってきたり、パッチ（Maxにおけるプログラムのこと）中にスライダーのような、プログラムされたソフトウェアを操作するためのインターフェースが同居していたりといった、それまで存在していた”プログラムを構築するステップ”と”構築されたプログラムを使用するステップ”に明確な境目が無くなっていく歴史でもある。
+
 
 また、1990年代の区切りは、パーソナルコンピューターが専用のサウンドチップなしに、CPUだけで音声信号処理をリアルタイムで行えるようになったこと、そして汎用プログラミング言語の理論が音楽向けの言語にも流入し始めたことの2種類である。
 
-
-
 チップチューンを歴史に入れること
+
+コンピューターアーキテクチャのスタンダード（もっと言ってしまえば、x86アーキテクチャ）が定まるまでのプログラミングは、特定のハードウェアのための特定のプログラムを作るという側面が大きく、書かれたソフトウェアが様々なプラットフォームで使い回しが効くということでもなかったことも頭に入れておくべきだろう。汎用プログラミング言語はそれまでの実在するハードウェアに対する命令列を可読性のあるテキストデータから出力するためのソフトウェアという側面だけでなく、ラムダ計算（引用）のような、計算過程自体を数学的になるべく普遍的になるように記述する代数学の理論との接続を見せるようになり、LISPやML、Haskellに代表されるような関数型プログラミング言語のパラダイムが発生してきた。
+そしてこうした分野で培われたプログラミング言語の理論は現在ではFaustやKronosを代表とする、関数型でかつ音楽や音声処理のための言語の理論的基盤としても用いられるようになっている。
+
+
+つまり2020年代現在において、本論文が定義する音楽プログラミング言語とは、**コンピューターを用いて音楽を生成するためのソフトウェア群に始まりつつも、並行して発展してきた汎用プログラミング言語やその理論を取り込みつつ発展してきたソフトウェアやツール**のことを指す。なので、Maxのように前者の流れを強く汲むものは、Dannenbergが言うように、言語体系とランタイムやライブラリ、開発/実行環境があらかじめ切り離せない形式(＝実装そのものが仕様)となっていることが多い。
+逆に、汎用プログラミング言語の理論をベースに構築された言語、例えばExtemporeやFaust、Kronosでは、言語仕様は言語仕様として独立しておりランタイムが存在しないーあるいは複数のランタイムの実装があり得る、そのほか、決まったIDEが存在しなかったり、複数の開発/実行環境が存在するといった構成になっているものがある。
+
 
 図を入れる
 
 なお、本稿では既存のサーベイでは特に70年代以前の研究所レベルのコンピューターを用いた取り組みに関してはNishinoらのサーベイに十分詳しい記述がなされているので、本稿に大きく関係しないと事例については省くことにし、より記述の少ない2000年、2010年代に作られた言語について積極的に取り上げる。
+
+また、用語として”音楽プログラミング環境(Music Programming Environment)”と”音楽プログラミング言語(Music Programming Language)”という2つの言葉は特に明示的な使い分けをされずに使用されることも多い（英語では、Computer Music LanguageやComputer Music Environment、Computer Music Systemsなどなど）が、本稿では、"音楽プログラミング環境”といった時には開発環境やライブラリなど、その言語を用いる時に利用するツール全体に重点を置きたいときに、”音楽プログラミング言語”といった場合にはその言語仕様や文法など、ソフトウェアというよりも言語そのものに着目したいときに、用いることを附しておく。
 
 # 研究所レベルでの取り組み
 
@@ -85,3 +96,44 @@ MUSICシリーズにおいて触れておくべきことは、MUSIC IIIにおい
 
 まず、Unit Generatorとは〜
 
+# ボーンのIRCAM 4Xプログラミングの分析
+
+リアルタイムで処理できない程度に重かったこと
+楽器のモデルを計算できる理論が存在しなかったこと→Rissetに始まる物理モデリング合成研究（Analysis-Synthesisアプローチ）
+
+80年代にしては計算のシンプルさに対して複雑な音色が出せるFM合成とかはあったが、コンピューター音楽言語は大学や研究所に限られていたし、リアルタイム性にもまだ欠けていた extreme mediation, both temporal and conceptual
+
+モデルがしっかりしていないと音を改善することができないけど、トライ&エラーに時間がかかるのでモデルの妥当性を確かめるのにも時間がかかってしまうパラドックス
+
+学生がCmusicで適当に音量をデカくしたせいでfoldover歪みが発生していたが、それが案外良かった→しかしシステム側で発生した歪みだったので再現できない 本当はなんでもできるはずのコンピューターが何故！
+
+技術のトリクルダウン　研究所でパイオニア的テクノロジーが発達し、それがコマーシャルに低価格化していくという考え方をIRCAMは持っていた
+
+ヤマハの人がCXのデモにIRCAMにきた話
+
+4xは当時最強のスペックだった→これ何がそうさせたんだろう？オシレーターとかはソフトウェアで仮想化できたんだろうか？西野の文献読む必要あり→できた。Variable Digital Signal Processorの話
+
+OSから作ってた　ハードは凄かったがソフトとペリフェラルが弱い
+
+Chant 歌声合成、Formes PatchworkとOpenMusicの手前
+
+Chant／Formesのグループからは、音楽概念の高度な発達というコンピューターのポテンシャルを無視していると思われてた
+
+Chant/FormesはLISP製、VAX/UNIXシステムで動いていたノンリアルタイムシステム
+    users could create their own "personalized environment"
+    object oriented
+
+The use and the development of software involve the writing of coded instructions within a software language or the creation of a completely new language, within the context of a hierarchy of such languages. At each of the hierarchy a traslation occurs between any two adjacent language or levels of code. Instructions from the language at a higher level mus be translated into aform whereby they can be "read" and executed by the lower-level code or language without any (or with minimal) loss of "meaning"
+
+The hierarcy of codes that normally operates in computer software include, at the lowest level, machine code, the instructions that drive athe hardware, writtedn in binary form; at the next level up, assembler code, made of mnemonic abbreviations of machine code; above this, the general operating system that provides a basic framework and set of servicies; and above this, any of the major lkanguages such as FORTRAN, Pascal, C, or LISP.
+
+〜〜
+
+Computer music software such as that used and produced by IRCAM adds yet a further level of mediation, hierarchy, and translation, sincce the music languages are themselvels based upon, or written in, established general languages.
+
+Thus, Music V is written in FORTRAN, Cmusic in C, IRCAM's Chant in FORTRAN, and Formes in LISP.
+
+
+Chantを使うにはFORTRANの知識も必要だったし、Formesを使うにはLISPの知識も必要だったので、それを勉強するためにまずLISPについて勉強しなくてはならない（これは西野のAbstract Inversionかもな）
+
+Piggybackなパターンの場合はそうだろうな（OpenmusicもまあLISPだし）
