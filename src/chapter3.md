@@ -146,6 +146,15 @@ Chantを使うにはFORTRANの知識も必要だったし、Formesを使うに�
 ここでの高性能化と低価格化に関しては、具体的にどの製品の登場によってブレイクスルーが発生したという具体的な事例があるわけではないが、例えば久保田は「PowerPC G3やPentium IIといったCPUによって、CDクオリティのサウンド処理に必要な、ある種のスレッショルドを超えたのだろう」と説明している[Kubota2017,88p]。
 
 
+# 2000年代
+
+## より詳細な時間制御（ChucK、LC、Gwion）
+
+## 低レイヤの拡張（Faust、Extempore、Kronos、Vult、Soul）
+
+## 高レイヤの拡張（TidalCycles、Sonic Pi、IXI、Gibber、Foxdot、Takt、Alda）
+
+
 
 # 小括
 
