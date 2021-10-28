@@ -56,7 +56,7 @@
 
 2000年代初頭には、音楽にパーソナルコンピューティング、あるいはユビキタス・コンピューティングの思想が関わることで、音楽制作ソフトウェアに限らず、音楽における生産と消費の関係が変わるという議論がなされてきた。
 
-例えば増田は Korg社のKAOSSILATORやYAMAHAのTENORI-ONのような2000年代に登場した音楽フレーズ自体を演奏として操作できる電子楽器を例に挙げ、それらの発音ボタンを押す行為はiPodのようなデジタル音楽プレーヤーというーどちらも物理的にはコンピューターによって音声処理をするデバイス[^infoappli]の再生ボタンを押すと言う行為：Playにどれほどの差がつけられるのだろうか、という視点から、音楽がデジタル化することによって消費と生産の区別がつかなくなるという議論を展開した[@Masuda2008]。
+例えば増田はKorg社のKAOSSILATORやYAMAHAのTENORI-ONのような2000年代に登場した音楽フレーズ自体を演奏として操作できる電子楽器を例に挙げ、それらの発音ボタンを押す行為はiPodのようなデジタル音楽プレーヤーというーどちらも物理的にはコンピューターによって音声処理をするデバイス[^infoappli]の再生ボタンを押すと言う行為：Playにどれほどの差がつけられるのだろうか、という視点から、音楽がデジタル化することによって消費と生産の区別がつかなくなるという議論を展開した[@Masuda2008]。
 
 [^infoappli]: のちに挙げるNormanが言う、"情報アプライアンス"と置き換えてもいいだろう。
 
@@ -72,9 +72,10 @@
 
 Attaliが反復の系と作曲の系を分かつものとして議論の中心においていたのは、大量消費社会が産む、一方で個々の商品の差異によって価値を生み出しながらも、他方では生産物と消費者のスペクトラムがそれぞれ自らを画一するように収束し続けるという矛盾した傾向である。それゆえ音楽ソフトウェアやプラグインも録音音楽そのものの販売と同様の市場原理に基づいてブランディングやスタイル付けをされ続ける以上は、作曲の系に突入したと見せかけて反復の系に逆戻りという状況を産むのも必然と言える。
 
-またAttaliがここで「作曲家はボタンを押すだけのパイロットのようなものになる」と引用しているのは20世紀の作曲家Iannis Xenakisの言葉だ。Xenakisは20世紀の作家の中でも数学、特に確率統計的アプローチによって音を操ることで新しい音楽を生み出す試みをしていた作曲家で、後年はUPICという、二次元平面上のドローイングを直接的に音声へと変換するプログラムをCEMAmu(現CCMIX)という研究所と共同で開発していた。Attaliが録音音源による表現の画一化を厳しく批判する中でXenakisのような次世代の楽器、あるいはより高度な音楽生成システム作り自体を行うとしていたXenakisの発言を引き合いに出しているのは示唆的とも言えよう。
+またAttaliがここで「作曲家はボタンを押すだけのパイロットのようなものになる」と引用しているのは20世紀の作曲家Iannis Xenakisの言葉だ。Xenakisは20世紀の作家の中でも数学、特に確率統計的アプローチによって音を操ることで新しい音楽を生み出す試みをしていた作曲家で、後年はUPICという、二次元平面上のドローイングを直接的に音声へと変換するプログラムをCEMAmu(現CCMIX)という研究所と共同で開発していた。Attaliが録音音源による表現の画一化を厳しく批判する中でXenakisのような次世代の楽器、あるいはより高度な音楽生成システム作り自体を行うとしていたXenakisの発言を引き合いに出しているのは、単に音楽を作る（あるいはそれに準じた何かしらの制作行為）ことを皆がはじめればそれが作曲の系であると言うことではないことを端に示している。
 
-Freed from tedious calculations the composer is able to devote himself to the general problems that the new musical forms poses and to explore the nooks and crannies of this form while modifying the values of the input data. For example, he may test all instrumental combination from soloists to chanber orchestras, to large orchestras. With the air of electronic comuters the composer becomes a sort of pilit: he presses the buttons, introduces coordinates, and supervises the controls of a cosmic vessel sailing in the space of sound, across sonic constellations and galaxies that he could formerly glimpse only as a distant dream. Now he can explire them at his ease, seated in an armchair.
+> 作曲家は退屈な計算から解放されて，この新たな音楽の形が投げかける一般的な問題に没頭し，さらに入力データの値をいじるなどしてこの音楽形態の詳細な調査に専念することができる．たとえば，ソリストや室内オーケストラから大オーケストラまでのありとあらゆる楽器の組み合わせを試してみるのもよいだろう．電子頭脳という助っ人を得たことで，作曲家はいわば飛行士となる．ボタンを押し，座標を入力して，音の空間を航行する宇宙船を監督，制御し，以前は遠い夢でしかなく覗き見るだけだった音の星座や銀河を抜けて、さらに前に進むことができる．今や安楽椅子に座ったままで星座や銀河を自在に探検することが可能なのである．
+
 
 ## 無限のバージョニングとなめらかな忘却
 
