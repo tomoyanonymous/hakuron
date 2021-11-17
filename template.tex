@@ -10,7 +10,6 @@
 \usepackage[dvipdfmx]{graphicx}
 % \usepackage[draft]{graphicx} %コンパイルが遅い時はこれで枠だけにすると速くできる
 
-
 \usepackage{longtable} % 表組みに必要
 \usepackage{booktabs,array} % 表組みに必要
 \usepackage{subfig} % 図の横並びに必要
@@ -146,6 +145,8 @@
 
 
 \providecommand{\citep}{\parencite}
+\renewcommand{\emph}{\textit}
+
 \providecommand{\mimium}{\textit{mimium}}
 
 \addbibresource{./ref.bib}
@@ -155,7 +156,8 @@
 Designing \mimium{}, a programming language for music as an infrastructure
 }
 
-\author{松浦 知也}
+\author{松浦 知也 \\
+        Matsuura Tomoya}
 \date{2022年3月}
 
 \begin{document}
@@ -164,6 +166,8 @@ Designing \mimium{}, a programming language for music as an infrastructure
 \begin{abstract}
 \chapter*{概要}
     \input{abstract}
+\chapter*{Abstract}
+    \input{abstract_en}
 \end{abstract}
 
 \chapter*{謝辞}
@@ -175,10 +179,10 @@ Designing \mimium{}, a programming language for music as an infrastructure
 \chapter{序論}
 \input{chapter1}
 
-\chapter{Why:音楽プログラミング言語をなぜ研究するか}
+\chapter{How:音楽プログラミング言語をどう研究するか}
 \input{chapter2}
 
-\chapter{How:音楽プログラミング言語をどう研究するか}
+\chapter{Why:音楽プログラミング言語をなぜ研究するか}
 \input{chapter3}
 
 \chapter{What1:音楽プログラミング言語の歴史}
