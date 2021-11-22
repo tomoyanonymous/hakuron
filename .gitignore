@@ -862,4 +862,5 @@ TSWLatexianTemp*
 src/abstract.tex
 src/abstract_en.tex
 src/acknowledgement.tex
-src/chapter*.tex 
+src/chapter*.tex
+src/glossary.tex
