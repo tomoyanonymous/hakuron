@@ -164,6 +164,7 @@ Designing \mimium{}, a programming language for music as an infrastructure
 \begin{document}
 \maketitle
 
+\addcontentsline{toc}{chapter}{概要}
 \begin{abstract}
 \chapter*{概要}
     \input{abstract}
@@ -171,13 +172,24 @@ Designing \mimium{}, a programming language for music as an infrastructure
     \input{abstract_en}
 \end{abstract}
 
+\addcontentsline{toc}{chapter}{謝辞}
 \chapter*{謝辞}
 \input{acknowledgement}
 
 \setcounter{tocdepth}{3}
 \tableofcontents
 
-\chapter{序論:Programming Languag for Music:PLfM}
+\addcontentsline{toc}{chapter}{用語集}
+\chapter*{用語集}
+\input{glossary}
+
+\addcontentsline{toc}{chapter}{図目次}
+\listoffigures
+\renewcommand\lstlistlistingname{コード例目次}
+\addcontentsline{toc}{chapter}{コード例目次}
+\lstlistoflistings
+
+\chapter{序論:Programming Language for Music:PLfM}
 \input{chapter1}
 
 \chapter{How:PLfMをどう研究するか}
@@ -201,6 +213,7 @@ Designing \mimium{}, a programming language for music as an infrastructure
 \chapter{結論:音楽土木工学に向けて}
 \input{chapter8}
 
+\addcontentsline{toc}{chapter}{参考文献}
 \printbibliography[title = 参考文献]
 
 \end{document}
