@@ -1,2 +1,2 @@
 #!/bin/bash
-pandoc -s $(find src/*.md) -t plain | wc -m
+pandoc -s $(find src/*.md | grep -E "src/chapter(.).md") -t plain | wc -m
