@@ -20,6 +20,11 @@
 \usepackage[font={sf,small}]{caption}
 
 \usepackage[backend=biber,backref=true,date=year,style=authoryear]{biblatex-japanese}
+% 引用にnodateを許す
+\renewbibmacro*{date}{%
+  \iffieldundef{year}
+    {\bibstring{nodate}}
+    {\printdate}}
 % % 日本語文献の引用形式を普通にするためのマクロ。日本語文献はlanguage=japaneseを指定しておくこと
 % \newbibmacro*{finalnamedelim:{japanese}}{%
 %   \ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}%
