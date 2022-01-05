@@ -69,3 +69,45 @@ MUSIGOLの背景にもあったように、1960年代後半から1970年代に�
 
 E.A.T
 
+The use and the development of software involve the writing of coded instructions within a software language or the creation of a completely new language, within the context of a hierarchy of such languages. At each of the hierarchy a traslation occurs between any two adjacent language or levels of code. Instructions from the language at a higher level mus be translated into aform whereby they can be "read" and executed by the lower-level code or language without any (or with minimal) loss of "meaning"
+
+The hierarcy of codes that normally operates in computer software include, at the lowest level, machine code, the instructions that drive the hardware, written in binary form; at the next level up, assembler code, made of mnemonic abbreviations of machine code; above this, the general operating system that provides a basic framework and set of servicies; and above this, any of the major lkanguages such as FORTRAN, Pascal, C, or LISP.
+
+リアルタイムで処理できない程度に重かったこと
+楽器のモデルを計算できる理論が存在しなかったこと→Rissetに始まる物理モデリング合成研究（Analysis-Synthesisアプローチ）
+
+80年代にしては計算のシンプルさに対して複雑な音色が出せるFM合成とかはあったが、コンピューター音楽言語は大学や研究所に限られていたし、リアルタイム性にもまだ欠けていた extreme mediation, both temporal and conceptual
+
+モデルがしっかりしていないと音を改善することができないけど、トライ&エラーに時間がかかるのでモデルの妥当性を確かめるのにも時間がかかってしまうパラドックス
+
+
+技術のトリクルダウン：研究所でパイオニア的テクノロジーが発達し、それがコマーシャルに低価格化していくという考え方をIRCAMは持っていた
+一方で、マシューズのようなインターフェース系のを拒否し、かなり基礎的な部分に投資するという矛盾
+
+その上で、当時出てきたばかりのMacintoshの登場や、コンピューターアーキテクチャの発展にかなり振り回されている
+
+
+ヤマハの人がCXのデモにIRCAMにきた話
+
+4xは当時最強のスペックだった→これ何がそうさせたんだろう？オシレーターとかはソフトウェアで仮想化できたんだろうか？西野の文献読む必要あり→できた。Variable Digital Signal Processorの話
+
+OSから作ってた　ハードは凄かったがソフトとペリフェラルが弱い
+
+Chant 歌声合成、Formes PatchworkとOpenMusicの手前
+
+Chant／Formesのグループからは、音楽概念の高度な発達というコンピューターのポテンシャルを無視していると思われてた
+
+Chant/FormesはLISP製、VAX/UNIXシステムで動いていたノンリアルタイムシステム
+    users could create their own "personalized environment"
+    object oriented
+
+
+
+〜〜
+
+Computer music software such as that used and produced by IRCAM adds yet a further level of mediation, hierarchy, and translation, sincce the music languages are themselvels based upon, or written in, established general languages.
+
+Thus, Music V is written in FORTRAN, Cmusic in C, IRCAM's Chant in FORTRAN, and Formes in LISP.
+
+
+Chantを使うにはFORTRANの知識も必要だったし、Formesを使うにはLISPの知識も必要だったので、それを勉強するためにまずLISPについて勉強しなくてはならない →**つまりこの時点ではまだ、後にMcCartneyがSuperColliderの設計指針として挙げる、プログラミングというコンピューターハードウェアを使うための専門的知識が必要な事項をencapsulateし、音楽のNotationに集中させるという意味での音楽”言語”の概念は達成されていなかったということが言えるだろう。**
