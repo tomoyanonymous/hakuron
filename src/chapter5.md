@@ -110,9 +110,9 @@ DSLは音楽に限らず、例えばProcessingやGLSLのようなグラフィッ
 
 本来SuperColliderは構文解析から行う言語であり、ネイティブアプリケーションとして動作するがWebブラウザでは動作しない。
 
-CoffeeColliderはSuperCollider上におけるUnit Generatorの接続をWeb Audio APIという、Webブラウザに近年標準的に組み込まれるようになったインターフェースを用いることで実現している。CoffeeColliderは文字列解析を自分では行っておらず、特定のオブジェクトに対する`+`演算子や`*`演算子の挙動をオーバーロードすることで、CoffeeScriptの文法で可能な範囲の表現でシンタックスをSuperColliderへと模している。以下にCoffeeColliderのサンプルコードを示す。
+CoffeeColliderはSuperCollider上におけるUnit Generatorの接続をWeb Audio APIという、Webブラウザに近年標準的に組み込まれるようになったインターフェースを用いることで実現している。CoffeeColliderは文字列解析を自分では行っておらず、特定のオブジェクトに対する`+`演算子や`*`演算子の挙動をオーバーロードすることで、CoffeeScriptの文法で可能な範囲の表現でシンタックスをSuperColliderへと模している。
 
-```coffeescript
+\begin{lstlisting}[float=btph,caption=CoffeeColliderのコードサンプル,label=lst:coffeecollider]
 (->
   noise = PinkNoise.ar(0.2)
   noise = Mix Array.fill 10, (i)->
@@ -121,11 +121,9 @@ CoffeeColliderはSuperCollider上におけるUnit Generatorの接続をWeb Audio
   noise = RHPF.ar(noise, LFNoise0.kr(0.5).range(220, 880), rq:0.001)
   CombL.ar(noise, delaytime:0.5, decaytime:25).dup() * 0.5
 ).play()
-```
+\end{lstlisting}
 
-この例と実質的に等価なコードをSuperColliderの記法で書いたのが次のコードだ。
-
-```smalltalk
+\begin{lstlisting}[float=btph,caption=SuperColliderのコードサンプル,label=lst:supercollider]
 {
    var noise = PinkNoise.ar(0.2);
    noise = Mix.new(Array.fill(10, {arg i;
@@ -134,11 +132,12 @@ CoffeeColliderはSuperCollider上におけるUnit Generatorの接続をWeb Audio
    noise = RHPF.ar(noise, LFNoise0.kr(0.5).range(220, 880), rq:0.001);
    CombL.ar(noise, delaytime:0.5, decaytime:25).dup() * 0.5
 }.play;
-```
+\end{lstlisting}
 
-SuperColliderでの`{}`で囲むことでオブジェクトを生成するシンタックスを、CoffeeScriptにおける無名関数`(-> statements)`を利用して似せていることがわかる。
+[@lst:coffeecollider]と[@lst:supercollider]にSuperColliderとCoffeeColliderで、等価な音を出すサンプルコードの比較を示す。2つのコードを見比べると、SuperColliderでの`{}`で囲むことでオブジェクトを生成するシンタックスを、CoffeeScriptにおける無名関数`(-> statements)`を利用して似せていることがわかる。CoffeeColliderの実装は、**演算子のオーバーロード**というホスト言語にある機能を積極的に活用することで、テキストをパースするプログラムを書くことなく、かつ、CoffeeScriptのシンタックスの中で可能な限り記法をSuperColliderに近づけている。
 
-CoffeeColliderの実装は、**演算子のオーバーロード**というホスト言語にある機能を積極的に活用することで、テキストをパースするプログラムを書くことなく、かつ、CoffeeScriptのシンタックスの中で可能な限り記法をSuperColliderに近づけている。
+
+
 
 演算子のオーバーロードとは、たとえば`+`や`*`などの二項演算を数値の加算乗算やテキストの結合などの言語組み込みの型だけではなく、自身の定義したカスタム型に対して新しく振る舞いを定義してやれるような機能のことだ。たとえば、Number型2つで構成されるの2次元ベクトルの型を定義したら+演算子を使ったら要素同士をそれぞれ加算できたり、`*`演算子を使ったら直積、内積や外積を計算できるようにしたらコードの記述が短くできたり、一般的に数学で使われるような記法と近づけられることでソースコードを直感的に読めるようにできる。
 
@@ -204,7 +203,6 @@ McCartneyはSuperColliderの設計についての論文で、究極的には音�
 
 ここまで、PLfMを特徴づける要素と実装の方法の違いについて概観してきた。では実際のところ、これらの要素がそれぞれの言語を**どのように特徴づけるのだろうか？**
 
-
 これまで、PLfMの実装に関する論文では、**汎用的（General）**、**効率的（Efficient）**、**表現力が高い（Expressive）**という3つの語がそのシステムの特徴を形容するために頻繁に使われてきた。
 
 しかし実際にはこれらの語が指している意味は文献ごとにかなりのばらつきがある。
@@ -231,20 +229,13 @@ McCartneyはSuperColliderの設計についての論文で、究極的には音�
 
 とされており、ここでのefficientはprogramsに掛かっているのでラッザリーニとは異なり実行コストのことを指していると推察できる。このように、同じEfficiencyというワードでも計算機が負担するコストとユーザーが負担するコストという異なる事項を指している場合があることがわかる。
 
-こうした語彙の整理を行なっている
+## 汎用プログラミング言語における評価語彙の研究
 
-らは音楽プログラミング環境の設計者へのインタビューを通じて、言語設計者がそれぞれどのような価値観を持って機能実装をしているかを分析している[@Mcpherson2020]。
+実のところ、音楽に限らずプログラミング言語という分野自体、1960年頃から長く研究がされている中、学術的研究として貢献をどう主張するか、特に作った言語をどのように評価すればよいかという話題は2009年のACM SIGPLAN（Special Interest Group of Programming Language:プログラミング言語の国際会議を主催する団体で最も大きなもの）主催の*PLATEAU: Evaluation and Usability of Programming Languages and Tools*が開催されるまであまり触れられてこなかった。2010年のPLATEAUでマークストラムは新しい言語の実装や設計などのアイデアを論文として提示する際の正当化の方法として、**主張と根拠の整合性(Claim-Evidence-Correspondense)**という見方を提示する[@Markstrum2010]。マークストラムによれば、プログラミング言語の論文で提示される主張は大きく分けて3種類あるという。1つ目はこれまで存在しなかった新機能を作ったというもの、2つ目はすでにある既存の機能の効率性を上げるような内容、3つ目は望ましい言語の特徴(property)、つまりこの言語は直感的である、読みやすい、効率的であるといったような内容だ。しかしこれまでのプログラミング言語の提案の論文には、1と2、つまり新機能と機能の増強に関しては論文が査読されたものであるならば十分認められるものであるが、望ましい言語の特徴に関してはその主張と、それを支える根拠は両方とも提示されているが論理的な結びつきは不十分なものが多数あるとしたのだ。
 
-汎用のプログラミング言語においてはCoblenzらが主に以下のような評価のための用語整理とその意味の明確化を試みている[@Coblenz2018]。
+主張と根拠の整合性を証明する方法論は、統計的な評価実験のような実証主義的方法だけでは不十分とマークストラムは警鐘している。こうした流れを引き継いで近年では例えば2018年の、ベンチマークや評価実験など工学的手法に限らない学際的なプログラミング言語デザインについての提言がなされたり[@Coblenz2018]、2020年のミュラーとリングラーの修辞的フレームワーク[@Muller2020]のように、論文中で主張された表現の変遷などを人文学的手法で辿ることで明らかにするような研究が進んでいる。
 
-- General
-- Efficient "Execution cost"
-- Expressive "To what extent can users specify their intent using the formal mechanisms of the language?"
-- Modifiability "How easy or hard is it to adapt software to changing requirements?"
-- Learnability
-- Understandability
-- Portability
-- ...
+
 
 そこで、次の項ではMcphersonらやCoblenzらの分類を参考にしながら、改めて評価のための語彙を整理する。
 そのためにまずは、音楽プログラミング言語を評価、また設計の指針となるためのvalueを、ユーザーがソースを編集し、実行し、そのフィードバックが帰ってくるhuman-in-the-loopシステムとしてモデル化し、その際に考えられるコストや自由度をユーザー、コンピューターそれぞれの観点で分類するという方針をとる。
@@ -252,14 +243,16 @@ McCartneyはSuperColliderの設計についての論文で、究極的には音�
 
 # 音楽プログラミング行為のモデル化と評価語彙の提示
 
+らは音楽プログラミング環境の設計者へのインタビューを通じて、言語設計者がそれぞれどのような価値観を持って機能実装をしているかを分析している[@Mcpherson2020]。
+
 
 Human in the Loopなシステムとしての音楽プログラミングモデルの行為[@Anderson1990]
 
-![AndersonとKuibilaによる音楽プログラミングのモデル。](img/Anderson-model.png){width=60% #fig:andersonmodel}
+![AndersonとKuibilaによる音楽プログラミングのモデル。](img/Anderson-model.png){width=100% #fig:andersonmodel}
 
-![Screen Shot 2021-06-07 at 15.12.26](img/diagram1.png){width=70% #fig:humanintheloop}
+![Human In the Loopとしての音楽プログラミング言語の利用モデルを、言語を特徴付ける各要素、実際に現れる特徴で表した図。](img/diagram1.png){width=100% #fig:humanintheloop}
 
-![Screen Shot 2021-06-07 at 16.25.25](img/diagram2.png){width=70% #fig:tradeoff}
+![[@fig:humanintheloop]の図における特徴間に存在するトレードオフを表した図。](img/diagram2.png){width=80% #fig:tradeoff}
 
 ユーザーへのフィードバックが音を出す前にわかる場合と、音を鳴らして初めてわかるものとある（型チェックとか）
 
