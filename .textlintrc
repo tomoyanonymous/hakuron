@@ -1,0 +1,18 @@
+{
+    "rules": {
+        "preset-ja-technical-writing": {
+            "sentence-length": {
+                "max": 150
+            },
+            "max-comma": {
+                "max": 4
+            },
+            "max-ten": {
+                "max": 4
+            },
+            "max-kanji-continuous-len": {
+                "max": 10
+            },
+        }
+    }
+}
