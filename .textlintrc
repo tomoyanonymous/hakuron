@@ -1,6 +1,17 @@
 {
+    "filters": {
+        "node-types": {
+            "nodeTypes": ["BlockQuote"]
+        },
+        "allowlist": {
+            "allow": [
+                "/\"(.)*\"/g"
+            ]
+        }
+    },
     "rules": {
         "preset-ja-technical-writing": {
+            "severity" : "warning",
             "sentence-length": {
                 "max": 150
             },
@@ -13,6 +24,8 @@
             "max-kanji-continuous-len": {
                 "max": 10
             },
+            "no-mix-dearu-desumasu":false, //引用囲みの表記ゆれを検知できない
+        "no-zero-width-spaces":false //causes weird error
         }
     }
 }
