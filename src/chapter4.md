@@ -489,6 +489,17 @@ Csoundでは1990年に外部モジュールなしでのリアルタイム動作�
 
 ## MaxとPuredata
 
+<!-- ![MaxとPureDataの歴史的変遷をまとめた図。](img/max-pd-history.pdf){#fig:max-pd-history width=100%} -->
+
+\begin{figure}[tbhp]
+ \centering
+ \includegraphics[keepaspectratio, width=1.4\linewidth,angle=90]
+      {img/max-pd-history.pdf}
+ \caption{MaxとPureDataの歴史的変遷をまとめた図。}
+ \label{fig:max-pd-history}
+\end{figure}
+
+
 ヴァーコーの教え子だったミラー・パケットは、元々MUSIC 400、MUSIC 500というMUSIC系の派生言語を制作していた。
 これには、マシューズが1986年ごろに提案したMIDIベースのシンセサイザー制御言語、RTSKEDの言語仕様が取り込まれていた。RTSKEDの詳細な仕様の記述は残されていないが、命令型のように上から順に命令を実行するのではなく、あるイベントAに対して処理Bを実行するという、リアルタイムインタラクションを想定した記述を導入していた。これは命令型では不可能な、複数の処理が同時並行して発生することをユーザーに意識させずに記述可能にすることでもあった。
 
