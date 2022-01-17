@@ -149,6 +149,7 @@
 }
 \lstset{style=mystyle}
 
+\renewcommand{\lstlistingname}{コード}
 
 \providecommand{\citep}{\parencite}
 \renewcommand{\emph}[1]{\textgt{\textit{#1}}}
@@ -167,6 +168,9 @@ Designing Civil Engineering of Music through the development of \mimium{}, a pro
 \date{2022年3月}
 
 \begin{document}
+
+\frontmatter
+
 \maketitle
 
 \addcontentsline{toc}{chapter}{概要}
@@ -193,6 +197,8 @@ Designing Civil Engineering of Music through the development of \mimium{}, a pro
 \renewcommand\lstlistlistingname{コード例目次}
 \addcontentsline{toc}{chapter}{コード例目次}
 \lstlistoflistings
+
+\mainmatter
 
 \chapter{序論}
 \input{chapter1}

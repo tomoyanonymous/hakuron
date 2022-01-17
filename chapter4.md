@@ -5,7 +5,7 @@
 
 本章では音楽のためのプログラミング言語（Programming Language for Music：PLfM）の存在論の通時的な整理を行う。
 
-## PLfMの定義
+## PLfMの定義 {#sec:plfmdef}
 
 ここで初めて、ここまでは字義通りの定義に留めて暗黙的に用いてきたPLfMという用語をより明確に定義することにする。音楽のためのプログラミング言語は既存の文献では、Computer Music Language[@McCartney2002;@Mcpherson2020]、Language for Computer Music[@Dannenberg2018]、Computer Music Programming Systems[@Lazzarini2013]などの呼ばれ方がされているが、それぞれの語の使用に明確なコンセンサスがあるわけではない。
 
@@ -335,7 +335,7 @@ ALGOL（以下、MUSIGOLに関連する話題で単にALGOLと示した時はALG
 
 実際の、論文に示されていたサイン波のインストゥルメントのプロシージャ（いわゆる関数、FORTRANにおけるサブルーチン）定義を[@lst:musigolsin]に示す。[^musigolsample]。
 
-\begin{lstlisting}[float,floatplacement=Htb,language=Algol,caption=MUSIGOLにおけるサイン波生成プロシージャのサンプル。7、8行目を見ると、三角関数の0を交差する近傍は線形で近似し、それ以外の部分はおそらく5次までの多項式でなるべく計算コストの高い乗算の回数を減らすような近似を行っている（細かい数値は円周率の倍/約数と多項式近似のために事前に計算した係数である）。,label=lst:musigolsin]
+\begin{lstlisting}[float,floatplacement=Htb,language=Algol,caption=MUSIGOLにおけるサイン波生成プロシージャのサンプル。,label=lst:musigolsin]
     real procedure Sinoscil(Time, Frequency, Amplitude);
         value Time, Frequency, Amplitude;
         real Time, Frequency, Amplitude;
@@ -358,7 +358,7 @@ ALGOL（以下、MUSIGOLに関連する話題で単にALGOLと示した時はALG
 
 ここではMUSICにおけるUnit GeneratorがFORTRANの関数ではなかったのと違い、この正弦波発振器はもはやALGOLの関数そのものである。論文で示されていたノコギリ波と正弦波の実装はMUSICと異なりすべて純粋に時間`Time`の写像として表せる方式になっている。一方、内部状態を格納する変数が必要なはずのバンドパスフィルタも実装はされていたようだが、それがどのように成されていたのかに関しては情報が残っておらずはっきりしない。ただ、ALGOLには関数の引数を、2行目で示されているような`value`という宣言をしないことで、関数の内側から引数として渡された変数を書き換えることができる、名前渡しと呼ばれる機能が存在している。これを用いれば関数として内部状態付きのUGenを定義することも難しくはなかったことが予想される。
 
-[^musigolsample]: 論文中ではALGOLの予約語のみすべて大文字で表されていたが、実際にはすべて大文字である。また乗算は全角の乗算記号×で表されていたが今日の慣習に合わせて読みやすいように、*で示している。同様に、代入演算子も実際には一文字（←）で表されていたが、現在のAlgolの表記で一般的な:=に置き換えた。
+[^musigolsample]: 論文中ではALGOLの予約語のみすべて大文字で表されていたが、実際にはすべて大文字である。また乗算は全角の乗算記号×で表されていたが今日の慣習に合わせて読みやすいように、*で示している。同様に、代入演算子も実際には一文字（←）で表されていたが、現在のAlgolの表記で一般的な:=に置き換えた。なお、[@lst:musigolsin]のコードでは、7、8行目を見ると、三角関数の0を交差する近傍は線形で近似し、それ以外の部分はおそらく5次までの多項式でなるべく計算コストの高い乗算の回数を減らすような近似を行っていると思われる。細かい数値は円周率の倍/約数と多項式近似のために事前に計算した係数などである。
 
 スコアも同様にALOGLのプロシージャである。[@lst:musigolscore]に論文から引用した。`Boing`関数の引数は`開始時間、長さ、音量、音程`である。3行目の`Boing`の音程はE4となっており、おそらく事前にE4に対応する周波数が変数として宣言されている。次の行では音程が`Slope`関数で時間に応じてC\#からC9までグリッサンドのように滑らかに変化するよう指定されている。そして、この`Boing`関数自体もユーザーが、`Sinoscil`関数などを呼び出すものとして実装する部分である。
 
