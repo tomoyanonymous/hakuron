@@ -37,17 +37,26 @@ mimiumでは特に`@`演算子の実行を保証するのは基本的にはラ�
 
 この参考となる研究がmimiumを発表したACM SIGPLAN FARM(Functional Art, Research, Modeling)というワークショップで同じセッションで発表されたW計算（W-calculus、ラムダ計算と同じような名付け）である[@Arias2021]。W計算はFaustに強く影響を受けていながらも、Faustのように入出力を持ったブロックのグラフを組み合わせる構造ではなく、ラムダ計算をベースにした信号処理のための計算で、通常のラムダ計算に現れる項に加えて、$feed\: x.e$といった独自の項が追加されている。この`feed`はその項における1時刻前のサンプルでの計算結果が$x$として項の中で再帰的に利用できるといった意味合いをもち、これはmimiumにおける`self`の概念に直接的に対応する。例えば1サンプルずつ引数`incl`に応じて増加するカウンターの関数[@lst:wcalc]はW計算の中では次のように表せる[^wcalculus]。
 
-[^wcalculus]: W計算はフィルタなどの線形時不変システムの実質的等価性などを形式的に証明することを1つの目的としているため、厳密には式同士の加算と、式と定数の乗算（スケーリング）のみが許されている。しかし基本的な演算の項を追加すれば非線型システムにも対応はできる。
+[^wcalculus]: W計算はフィルタなどの線形時不変システムの実質的等価性などを形式的に証明することを1つの目的としているため、厳密に言うと基本的演算では式同士の加算と、式と定数の乗算（スケーリング）のみが許されている。しかし基本的な演算の項を追加すれば非線型システムにも対応はできる。
 
-\begin{lstlisting}[float,floatplacement=H,label=lst:wcalc,language=Rust,caption=1サンプルずつ増加するカウンター]
+\begin{lstlisting}[float,floatplacement=H,label=lst:wcalc,language=Rust,caption=\mimium{}での引数$\mathit{incl}$サンプルずつ増加するカウンター]
 fn counter(incl:float){
     return self+incl
 }
 \end{lstlisting}
 
+<!-- 
 $$
-\lambda \: incl.feed \: self.(incl+self)
-$$
+\lambda \ incl.feed \ self.(incl+self)
+$$ 
+-->
+
+\begin{figure}
+\[ \lambda \ incl.feed \ self.(incl+self) \]
+\label{eq:label}
+\caption{W計算によるコード\ref{lst:wcalc}と等価な表現。}
+\end{figure}
+
 
 W計算はディレイのような、過去のサンプルを参照するような意味合いを定義すると、実用的には過去のサンプル全てを保存しなければならず無限のメモリを必要としてしまうという理想的形式化に伴う問題（例えばChronicがその典型である[@Brandt2002,pどこか]）に対しても都度意味論を拡張することで対応できている。また、OCamlで書かれたW計算で記述された信号処理のプログラムを、W計算のインタプリタとともに一度MetaOCaml上で評価することで、入力プログラムに特化したインタプリタプログラムを生成し、コンパイラの最適化をさらに組み合わせることでリアルタイムでの計算も実現できるようになっている、Multi-rate信号処理への拡張も既に方針が示されているなど、実用を意識した上での理論構築がなされている。
 

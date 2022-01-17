@@ -20,7 +20,7 @@
 こうした、目的を音楽に特化させつつもなるべく広い表現を保証した言語という視点で、既存の言語の仕様とその不足点について検討してみよう。
 
 \begin{table*}[htb]
-  \caption{mimiumと既存の言語の仕様比較。それぞれの要素が4章の目標とどう対応づけられるのか追記したい。}
+  \caption{mimiumと既存の言語の仕様比較。}
 \label{langcomparison}
 \newcolumntype{C}[1]{>{\hfil}m{#1}<{\hfil}}
 \begin{tabular}{m{0.3\textwidth}cccccc}
@@ -62,7 +62,7 @@ mimiumの基本的なシンタックスは、Rust[@Klabnik2020]をベースに�
 
 Rustの構文は予約語が比較的短いので音楽のように素早くプロトタイピングを行う分野に適していることが主な理由である。また、既存の言語の構文と似せると、既存の言語のシンタックスハイライトを再利用しやすいという副次的効果も得られる。
 
-\begin{lstlisting}[float,floatplacement=Htb,language=Rust,caption=Basic syntax of \mimium{}.,label=lst:mimiumbasic]
+\begin{lstlisting}[float,floatplacement=Htb,language=Rust,caption=\mimium{}の基本的なシンタックスの説明。,label=lst:mimiumbasic]
 //コメントはダブルスラッシュ
 //新しい名前の変数への代入が変数宣言になる
 mynumber = 1000 
@@ -125,7 +125,7 @@ fact = |input|{ if(input>0) 1 else input * fact(input-1) }
 
 \mimium{}では、$\mathit{dsp}$という関数をユーザーが定義すると、オーディオドライバーと音声の入出力に仕様される。例をコード\ref{lst:dsp}に示す、。この場合、$\mathit{dsp}$関数の型は、\emph{1つ以上のfloat型からなるタプル型}を取り、かつ、\emph{1つ以上のfloat型からなるタプル型}を返す関数型にする必要がある。タプルの各要素が、オーディオドライバの入力チャンネルと出力チャンネルに対応する。例では、オーディオドライバから2つのチャンネルの入力を受け取り，それらをミックスして、左右それぞれのチャンネルに複製して返している。
 
-\begin{lstlisting}[float,floatplacement=Htb,language=Rust,caption=Example of $\mathit{dsp}$ function which merges stereo inputs and returns the same signal to each output channels.,label=lst:dsp]
+\begin{lstlisting}[float,floatplacement=Htb,language=Rust,caption=\mimium{}での、1chの入力を2chに複製して返却する$\mathit{dsp}$関数の例。,label=lst:dsp]
 fn dsp(input:(float,float)) ->(float,float){
 	left,right = input
 	out = (left+right)/2
@@ -141,7 +141,7 @@ fn dsp(input:(float,float)) ->(float,float){
 
 図\ref{fig:arch}に\mimium{}の実行環境（コンパイラとランタイム）のアーキテクチャを示す。
 
-![Architecture of \mimium{} compiler and runtime.](img/mimium-arch-v4-affinity.pdf){width=100% #fig:arch}
+![\mimium{}のコンパイラとランタイムのアーキテクチャの構成。](img/mimium-arch-v4-affinity.pdf){width=100% #fig:arch}
 
 コンパイラの構造は、一般的な関数型言語の構造に近く、mincaml[@Sumii2005]をベースに、C++を用いて実装されている。
 
@@ -157,7 +157,7 @@ LLVM IRまで変換されたコードの中では、タスクの登録と、内�
 
 ## $\mathit{@}$演算子によるスケジューリング
 
-\begin{lstlisting}[float,floatplacement=Htb,language=Rust,caption=Example of Temporal Recursion,label=lst:tr-mimium]
+\begin{lstlisting}[float,floatplacement=Htb,language=Rust,caption=\mimium{}における継時再帰のサンプル,label=lst:tr-mimium]
   ntrigger = 1
   fn setN(val:float){
      ntrigger = val
@@ -178,7 +178,7 @@ LLVM IRまで変換されたコードの中では、タスクの登録と、内�
 
 コード\ref{lst:tr-mimium}に具体的な例を挙げる。関数呼び出しに続けて$\mathit{@}$演算子、さらにその後ろに数値型の式を置くと、その関数はすぐには実行されない。代わりに、時間をキーとした優先順位付きタスクキューに登録され、実行コンテキストは次の文に移る。ランタイムは、オーディオドライバのクロックを基にして、各サンプルを処理する前にタスクキューをチェックし、先頭の要素のキーが現在の論理時間に達していれば、それらを先に実行する。時刻は、ランタイム実行を開始を0とした絶対時刻（単位は現在のところサンプル）となっているが、キーワード$\mathit{now}$を用いてランタイムから現在の論理的な時間を取得し相対的な時間を記述できる。
 
-\begin{lstlisting}[float,floatplacement=Htb,language=lisp,caption=Equivalent code to Listing \ref{lst:tr-mimium} in Extempore,label=lst:tr-extempore]
+\begin{lstlisting}[float,floatplacement=Htb,language=lisp,caption=コード\ref{lst:tr-mimium}と等価なコードをExtemporeで記述したもの,label=lst:tr-extempore]
   (define ntrigger 1)
   (define setN
       (lambda (val)
@@ -228,7 +228,7 @@ UGenは、入力データ（もしくはその配列）を受け取り、何ら�
 オブジェクトとは、メンバー変数のセットと、変数を変更したり他のオブジェクトにメッセージを送ったりするメンバー関数（メソッド）のセットを含むデータ構造である。オブジェクトの場合，内部状態はメンバ定数として定義されている.これを利用するには，あらかじめインスタンス化した上で，メインの処理メソッドを呼び出す必要がある。
 
 
-\begin{lstlisting}[float,floatplacement=H,language=c++,label=cppexample,caption=The code of Phasor written with object in C++.]
+\begin{lstlisting}[float,floatplacement=H,language=c++,label=cppexample,caption=phasorをC++のオブジェクトを用いて表現した例.]
 class Phasor{
   double out_tmp=0;
   double process(double freq){
@@ -254,9 +254,9 @@ double something(){
 
 信号処理をクロージャで記述する場合、コンパイル時に変数の寿命を決めることが難しくなるという問題がある。クロージャが使える言語では、ガベージコレクション(GC)を実装して、変数へのメモリの割り当てと解放を動的に行うことが一般的だが、1秒間に48000回もの関数がリアルタイムで実行されるDSPのための言語にGCを導入することは困難である[@Dannenberg2005]。クロージャを利用できる数少ない言語として、SuperColliderでは、リアルタイムシステムで動作可能な複雑なGCをランタイムに実装しており、Extemporeでは、ユーザーが手動でメモリと変数の寿命の管理することで解決している。言うなれば、クロージャを用いると、ユーザーか開発者のどちらかが大きな実装コストを負担しなければならない。
 
-The following example(Listing \ref{lst:closure}) is a pseudo-code in Java-Script. It is difficult to use this for signal processing practically as JS works with GC, but we used JS to show an example because it is imperative, easy to read, and closure can be used.
+[@lst:closure]にクロージャを用いたphasorの表現をJavaScriptでの疑似コードで示す。JavaScriptは内部的にガベージコレクションなどを利用する言語のため実際にこのコードを利用することは難しいが、命令型ベースの読みやすいシンタックスを持ち、かつクロージャを利用可能な言語であるため例示のために用いている。
 
-\begin{lstlisting}[float,floatplacement=H,language=c++,caption=The pseudo-code of Phasor written with Closure in Javascript.,label=lst:closure]
+\begin{lstlisting}[float,floatplacement=H,language=c++,caption=phasorのクロージャを用いた表現をJavaScriptによる疑似コードで表したもの,label=lst:closure]
 //pseudo-code in javascript
 function makeFilter(tmpinit){
   let out_tmp = tmpinit;
@@ -287,7 +287,7 @@ FaustやKronosの信号処理の記述では，一時変数の読み書きなし
 これらの言語ではそれぞれ、Faustではそれぞれ0以上の入出力を持つUGen（定数は入力0、出力が1つの関数、$\mathit{+}$演算子は入力が2つで出力が1つの関数、のように）、KronosではUGenの入出力がリストとしてシンボル化されており、通常の言語のように、記号が特定のメモリアドレス上のデータに対応しているわけではない。そのためこれらの言語に汎用言語と同等の自己拡張性を期待することは難しい。
 
 
-\begin{lstlisting}[float,floatplacement=Htb,caption=The code of Phasor written with Faust.,label=lst:faust]
+\begin{lstlisting}[float,floatplacement=Htb,caption= Faustでのphasor関数の定義の例。,label=lst:faust]
 phasor(freq) = +(freq/4800) ~ out_tmp
 	with{
         out_tmp = _ <: select2(>(1),_,0);
@@ -299,7 +299,7 @@ something = phasor(phasor(10)+1000);
 
 Vult言語[@Ruiz2020]では、関数定義において、通常の変数宣言である$\mathit{var}$ではなく、キーワード$\mathit{mem}$で変数を宣言すると、破壊的変更された値が時系列で保持され、UGenの内部状態を表現できる。この機能により、Faustと同じくあらかじめインスタンス化しておく必要がなく、通常の関数適用として、内部状態を持つUGenの接続を表現できる。
 
-\begin{lstlisting}[float,floatplacement=Htb,caption=The code of Phasor written with Vult.,label=lst:vult]
+\begin{lstlisting}[float,floatplacement=Htb,caption=Vult言語でのphasor関数の定義の例。,label=lst:vult]
 fun phasor(freq){
 	mem out_tmp;//"mem" variable holds its value over times
   out_tmp = out_tmp+freq/48000;
@@ -323,7 +323,7 @@ Faust、Vultともに、内部状態を持つ関数は、最初にインスタ�
 こうした前提を基に、\mimium{}では、状態付き関数をUGenのように利用できる文法を備えた。これらの関数は，Vultと同じように，通常の関数適用$\mathit{f(x)}$のセマンティクスで呼び出せ、その上でFaustのようにdelayなどの限られた組み込み状態付き関数を使い、状態変数管理を意識せずにステートフル関数を書くことができる。さらに、汎用言語の場合と同様に、変数をメモリ上のデータとしてシンボル化する体系は崩していない。
 
 
-\begin{lstlisting}[float,floatplacement=Htb,language=Rust,caption=The code of sample counter in \mimium{}.,label=lst:counter]
+\begin{lstlisting}[float,floatplacement=Htb,language=Rust,caption=\mimium{}での1サンプルごとに1増加するカウンター関数の例。,label=lst:counter]
 fn counter(){
     return self+1
 }
@@ -334,7 +334,7 @@ fn counter(){
 $\mathit{self}$を用いると、これまでオブジェクトやクロージャといった例で見てきたUGenのphasorを\mimium{}上で定義することができる。例をコード\ref{lst:phasormimium}に示した。この例では、ユーザーは状態変数の宣言の必要も、関数を利用する際のインスタンス化の必要もないことがわかる。
 FaustでUGenの再帰的接続の表現のための中置演算子$\mathit{\sim}$が式の中で何度も利用できるのに比べて、\mimium{}では再帰接続の単位は自然と関数定義の単位に分割される。
 
-\begin{lstlisting}[float,floatplacement=H,language=Rust,caption=The code of phasor in \mimium{}.,label=lst:phasormimium]
+\begin{lstlisting}[float,floatplacement=H,language=Rust,caption=\mimium{}でのphasor関数の記述例。,label=lst:phasormimium]
 fn phasor(freq){
   res = self + freq/48000 // assuming the sample rate is 48000Hz
   return if (res > 1) 0 else res
@@ -350,7 +350,7 @@ fn dsp(input){
 
 これに相当するものを，Faustではコード\ref{lst:pipefaust}、Cycling'74 Maxでは図\ref{fig:maxexample}で示す。Faustの直列接続演算子($\mathit{:}$)の他にも、ChucK言語のChucK演算子($\mathit{=>}$)など、他の言語でも似たような機能を持つものはあるが、\mimium{}のパイプライン演算子は、セマンティクスとしては通常の関数呼び出しと等価であるという点が異なっている。
 
-\begin{lstlisting}[float,floatplacement=H,label=lst:pipeline,language=Rust,caption=Example of Pipeleine Operator in \mimium{}]
+\begin{lstlisting}[float,floatplacement=H,label=lst:pipeline,language=Rust,caption=\mimium{}でのパイプライン演算子の利用例。]
 fn scaleTwopi(input){
   return input* 2 * 3.141595
 }
@@ -362,7 +362,7 @@ fn osc(freq){ //pipeline operator version
 }
 \end{lstlisting}
 
-\begin{lstlisting}[float,floatplacement=H,label=lst:pipefaust,caption=Example of Sequential Composition in Faust]
+\begin{lstlisting}[float,floatplacement=H,label=lst:pipefaust,caption=Faustでの直列接続演算子（:）の利用例]
 scaleTwopi(input) = input * 2 * 3.141595;
 osc(freq) = freq:phasor:scaleTwopi : cos;
 \end{lstlisting}
@@ -370,14 +370,14 @@ osc(freq) = freq:phasor:scaleTwopi : cos;
 
 \begin{figure}[h]
   \includegraphics[width=\columnwidth]{img/max-osc-example.png}
-  \caption{Example of dataflow syntax in Max}
+  \caption{Maxでのデーターフロー型表現の例。}
   % \Description{Example of dataflow syntax in Max}
   \label{fig:maxexample}
 \end{figure}
 
 \subsubsection{状態付き関数のコンパイル手順}
 
-\begin{lstlisting}[float,floatplacement=Htb,label=lst:fbdelay,language=Rust,caption=Example of Feedback Delay in \mimium{} before state tree transformation.]
+\begin{lstlisting}[float,floatplacement=Htb,label=lst:fbdelay,language=Rust,caption= \mimium{}でのフィードバックディレイのコード例。]
   // delay is a built-in stateful function
   fn fbdelay(input,time,fb){
       return delay(input+self*fb,time) 
@@ -390,7 +390,7 @@ osc(freq) = freq:phasor:scaleTwopi : cos;
   }
 \end{lstlisting}
 
-\begin{lstlisting}[float,floatplacement=Htb,label=lst:fbdelayafter,language=Rust,caption=Pseudo-code of Feedback Delay in \mimium{} after state tree transformation.]
+\begin{lstlisting}[float,floatplacement=Htb,label=lst:fbdelayafter,language=Rust,caption=\ref{lst:fbdelay}の内部状態付き関数の変換処理後の疑似コード]
 // pseudo-code after lifting stateful function
 fn fbdelay(state,input,time,fb){
   //unpack state variables
@@ -411,7 +411,7 @@ fn dsp(state){
 変換は以下のように行われる。まず、$\mathit{dsp}$の関数定義に含まれるすべての関数呼び出しを順に検索し、その関数が\mimium{}のコード上で定義されている場合は、さらにその定義を再帰的に検索して、関数呼び出しの依存関係ツリーを作成する。最終的に、その関数定義で$\mathit{self}$を参照する、$\mathit{delay}$などの組み込み状態付き関数を呼び出す場合、その関数は状態付き関数となり、さらにユーザー定義の状態付き関数を呼び出す関数は再帰的に状態付き関数となる。ツリーを作成した後、状態付き関数の引数に、その関数で使用されるすべての状態変数を列挙したタプル型変数へのポインタを付け加えるように関数定義を書き換え、関数呼び出しの部分も同様に、状態変数が明示的な引数になるように書き換える。例として、組み込み状態付き関数であるdelayとselfを利用したフィードバックディレイである$\mathit{fbdelay}$関数を定義し、$\mathit{dsp}$の中で$\mathit{fbdelay}$を2つ、異なるパラメータで呼び出すようなコードをコード\ref{lst:fbdelay}に示す。
 
 
-この時の状態変数を明示的に引数として渡すように変換した後の疑似コードをコード \ref{lst:fbdelayafter}に示す。
+この時の状態変数を明示的に引数として渡すように変換した後の疑似コードをコード \ref{lst:fbdelayafter}に示す。$\mathit{fbdelay}$関数やそれを呼び出す$\mathit{dsp}$関数の引数の先頭にそれぞれ内部状態が渡されている。
 
 ## 言語仕様の整理、既存の言語との比較
 
@@ -438,7 +438,7 @@ Kronos(とMeta-Sequencer)も同様に自己拡張性を重視した言語であ�
 シンタックス上は[@lst:frp]のように、継時再帰とクロージャを組み合わせれば、離散的な値の変化を連続的な信号処理のスタイルと同様に表現することができる。だが、現在の実装ではこのコードは実現不可能である。mimiumの現在の実装では関数内部で定義されたローカル変数は本来のスコープを超えて生存することができないため、変数の参照を返り値として返却するようなこのコードを実行することができないためである。コンパイラが仮にライフタイム解析[@Ruggieri1988]などの静的解析を用いてコンパイル時に変数の寿命を決定（あるいは、プログラム実行中は永続的に解放されないことを静的に判定）できればこの時間方向に離散的なタイミングで変化する数値の抽象化が可能になる。
 
 
-\begin{lstlisting}[float,floatplacement=H,label=lst:frp,language=Rust,caption=Example of encapsulating a temporal discrete value not realized in current implementation of \mimium{}.]
+\begin{lstlisting}[float,floatplacement=H,label=lst:frp,language=Rust,caption=\mimium{}の現在の実装ではコンパイル不可能な、時間方向に離散的に変化する値を関数として抽象化するコードの例。]
 fn frp_constructor(period){
 	n = 0
 	modifier = |x|{
@@ -458,7 +458,7 @@ event_val = val()
 
 もう1つの問題は、現在の実装では`self`や`delay`を用いる状態付きの関数をパラメトリックに複製できないということだ。[@lst:filterbank]のような例を考えてみよう。関数`filterbank`は引数`N`の条件を基にして、別の引数として与えられる`filter`関数を再帰的に足し合わせるようなコードだ。この時、`filter`関数に用いられる状態変数の数と、そのためのメモリのサイズはコンパイル時に静的に決定されねばならない。しかしfilter関数が何回複製されるかは引数である`N`によって決定されるために、`filterbank`関数が実行されるタイミングになるまで状態変数の数の決定は不可能である。
 
-\begin{lstlisting}[float,floatplacement=H,label=lst:filterbank,language=Rust,caption=Example of parametric replication of signal processor that cannot be realized in current implementation of \mimium{}.]
+\begin{lstlisting}[float,floatplacement=H,label=lst:filterbank,language=Rust,caption=\mimium{}の現在の実装ではコンパイル不可能な、内部状態を持つ関数のパラメトリックな複製のコード例。]
 fn filterbank(N,input,lowestfreq, margin,Q,filter){
 	if(N>0){
 		return filter(input,lowestfreq+N*margin,Q)
