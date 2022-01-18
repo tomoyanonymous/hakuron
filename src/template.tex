@@ -5,6 +5,9 @@
 \usepackage{bm}
 \usepackage{ascmac}
 \usepackage{okumacro}
+\usepackage{epigraph}
+
+\setlength{\epigraphwidth}{0.6\textwidth}
 
 \usepackage[dvipdfmx]{color}
 \usepackage[dvipdfmx]{graphicx}
@@ -158,13 +161,38 @@
 
 \addbibresource{./ref.bib}
 
-
-\title{音楽土木工学を設計する―音楽のためのプログラミング言語\mimium{}の開発を通じて\\
-Designing Civil Engineering of Music through the development of \mimium{}, a programming language for music
+% カスタムタイトルを作る
+\makeatletter
+\renewcommand*{\maketitle}{%
+\begin{titlepage}
+    \let\footnotesize\small
+    \let\footnoterule\relax
+    \let\footnote\thanks
+    \null\vfil
+    \vskip 60\jsc@mpt
+    \begin{center}%
+      {\LARGE \@title \par}%
+      \vskip 24em%
+      {\large
+        \lineskip .75em
+        \begin{tabular}[t]{c}%
+          \@author
+        \end{tabular}\par}%
+      \vskip 1.5em
+      {\large \@date \par}%
+    \end{center}%
+    \par
+    \@thanks\vfil\null
+\end{titlepage}
 }
+\makeatother
 
+\title{音楽土木工学を設計する―\\音楽のためのプログラミング言語\mimium{}の開発を通じて\\
+\vskip 1.5em
+\Large{Designing Civil Engineering of Music\\ through the development of \mimium{}, a programming language for music}
+}
 \author{松浦 知也 \\
-        Matsuura Tomoya}
+        \normalsize{Matsuura Tomoya}}
 \date{2022年3月}
 
 \begin{document}
@@ -173,6 +201,7 @@ Designing Civil Engineering of Music through the development of \mimium{}, a pro
 
 \maketitle
 
+
 \addcontentsline{toc}{chapter}{概要}
 \begin{abstract}
 \chapter*{概要}
@@ -180,10 +209,6 @@ Designing Civil Engineering of Music through the development of \mimium{}, a pro
 \chapter*{Abstract}
     \input{abstract_en}
 \end{abstract}
-
-\addcontentsline{toc}{chapter}{謝辞}
-\chapter*{謝辞}
-\input{acknowledgement}
 
 \setcounter{tocdepth}{3}
 \tableofcontents
@@ -226,5 +251,9 @@ Designing Civil Engineering of Music through the development of \mimium{}, a pro
 
 \addcontentsline{toc}{chapter}{参考文献}
 \printbibliography[title = 参考文献]
+
+\addcontentsline{toc}{chapter}{謝辞}
+\chapter*{謝辞}
+\input{acknowledgement}
 
 \end{document}
