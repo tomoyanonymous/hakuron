@@ -1,16 +1,19 @@
-\documentclass[dvipdfmx,a4paper,openany]{jsbook}
+\documentclass[luatex,japanese,unicode,titlepage,pdfusetitle,a4paper,openany]{ltjsbook}
+\usepackage{luatexja}
+\usepackage{luatexja-preset}
+\usepackage{luatexja-otf}
+
 \usepackage[includeheadfoot,top=20truemm,bottom=20truemm, right=25truemm,left=25truemm]{geometry} % 余白を調製
 
 \usepackage{amsmath,amssymb}
 \usepackage{bm}
 \usepackage{ascmac}
-\usepackage{okumacro}
 \usepackage{epigraph}
 
 \setlength{\epigraphwidth}{0.6\textwidth}
 
-\usepackage[dvipdfmx]{color}
-\usepackage[dvipdfmx]{graphicx}
+\usepackage{color}
+\usepackage{graphicx}
 % \usepackage[draft]{graphicx} %コンパイルが遅い時はこれで枠だけにすると速くできる
 
 \usepackage{longtable} % 表組みに必要
@@ -18,42 +21,16 @@
 \usepackage{subfig} % 図の横並びに必要
 \usepackage{ulem} % 取り消し線に必要
 \usepackage{url}
-\usepackage{otf}
 
 \usepackage[font={sf,small}]{caption}
+\usepackage[language=japanese,backend=biber,nameorder=true,date=year,style=authoryear]{biblatex-japanese}
 
-\usepackage[backend=biber,backref=true,date=year,style=authoryear]{biblatex-japanese}
+
 % 引用にnodateを許す
 \renewbibmacro*{date}{%
   \iffieldundef{year}
     {\bibstring{nodate}}
     {\printdate}}
-% % 日本語文献の引用形式を普通にするためのマクロ。日本語文献はlanguage=japaneseを指定しておくこと
-% \newbibmacro*{finalnamedelim:{japanese}}{%
-%   \ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}%
-%   \addspace\multinamedelim
-% }
-
-% \renewcommand*{\finalnamedelim}{%
-%   \iflistundef{language}
-%   {\ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}%
-%   \addspace\bibstring{and}\space}
-%   {\usebibmacro*{finalnamedelim:\strlist{language}}}
-% }
-
-% \newbibmacro*{name:given-family:{japanese}}[4]{%
-%   \usebibmacro{name:delim}{#1#2}\usebibmacro{name:hook}{#1#2}#1\bibnamedelimc#2}
-
-% \DeclareNameFormat{given-family}{%
-%   \iflistundef{language}{%
-%     \ifgiveninits
-%       {\usebibmacro{name:given-family}{\namepartfamily}{\namepartgiveni}{\namepartprefix}{\namepartsuffix}}
-%       {\usebibmacro{name:given-family}{\namepartfamily}{\namepartgiven}{\namepartprefix}{\namepartsuffix}}
-%   }
-%   {\usebibmacro*{name:given-family:\strlist{language}}{\namepartfamily}{\namepartgiven}{\namepartprefix}{\namepartsuffix}}
-%   \usebibmacro{name:andothers}
-% }
-% % 
 
 
 \usepackage{xcolor}
@@ -61,8 +38,7 @@
 
 
 \usepackage{framed}
-\usepackage[dvipdfmx]{hyperref}
-\usepackage{pxjahyper} % ハイパーリンクに日本語が含まれる場合に必要
+\usepackage{hyperref}
 \hypersetup{% hyperrefのオプションリスト
     colorlinks=true,% カラーリンクを使用
     linkcolor=black,% 内部参照リンクの色
