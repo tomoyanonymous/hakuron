@@ -39,7 +39,7 @@ mimiumでは特に`@`演算子の実行を保証するのは基本的にはラ�
 
 [^wcalculus]: W計算はフィルタなどの線形時不変システムの実質的等価性などを形式的に証明することを1つの目的としているため、厳密に言うと基本的演算では式同士の加算と、式と定数の乗算（スケーリング）のみが許されている。しかし基本的な演算の項を追加すれば非線型システムにも対応はできる。
 
-\begin{lstlisting}[float,floatplacement=H,label=lst:wcalc,language=Rust,caption=\mimium{}での引数$\mathit{incl}$サンプルずつ増加するカウンター]
+\begin{lstlisting}[float,floatplacement=H,label=lst:wcalc,language=Rust,style=mystyle,caption=\mimium{}での引数$\mathit{incl}$サンプルずつ増加するカウンター]
 fn counter(incl:float){
     return self+incl
 }

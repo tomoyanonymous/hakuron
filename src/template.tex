@@ -32,20 +32,9 @@
     {\bibstring{nodate}}
     {\printdate}}
 
-
 \usepackage{xcolor}
 \usepackage{fvextra}
-
-
 \usepackage{framed}
-\usepackage{hyperref}
-\hypersetup{% hyperrefのオプションリスト
-    colorlinks=true,% カラーリンクを使用
-    linkcolor=black,% 内部参照リンクの色
-    citecolor=black,% 文献参照リンクの色
-    filecolor=black,% ローカルファイル参照リンクの色
-    urlcolor=blue % 外部参照URLの色
-}
 
 % 画像を記述された場所に挿入(デフォルトではページ上部に挿入されてしまう)
 \usepackage{float}
@@ -66,13 +55,12 @@
 
 \def\tightlist{\itemsep1pt\parskip0pt\parsep0pt} % これがないと\tightlistが動かない
 
-% ハイライトの設定、Rustのトークナイズあんまりうまく行ってない？
 
+% Pandoc用ハイライトの設定、Rustのトークナイズあんまりうまく行ってない？
 \newenvironment{Shaded}{\begin{shaded}}{\end{shaded}}
 \definecolor{shadecolor}{RGB}{240,240,240}
 \DefineVerbatimEnvironment{Highlighting}{Verbatim}
   {breaklines,breakanywhere,commandchars=\\\{\}}
-
 \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
 \newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
 \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
@@ -98,35 +86,50 @@
 \newcommand{\PreprocessorTok}[1]{\ImportTok{{#1}}}
 
 
-% listingsでhighlightする時の設定一応残しとく
+% 手動でlisting使うとき、行番号が付く
 \usepackage{listings,listings-rust}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.1,0.1,0.8}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.98,0.98,0.98}
+% 行番号がコピーされないためのマクロ
+\usepackage{accsupp}
+\newcommand{\noncopynumber}[1]{%
+    \BeginAccSupp{method=escape,ActualText={}}#1\EndAccSupp{}
+}
 \lstdefinestyle{mystyle}{
     backgroundcolor=\color{backcolour},   
     commentstyle=\color{codegreen},
     keywordstyle=\color{magenta},
-    numberstyle=\tiny\color{codegray},
     stringstyle=\color{codepurple},
+    numberstyle=\tiny\color{codegray}\noncopynumber,
     basicstyle=\ttfamily\footnotesize,
-    breakatwhitespace=true,         
+    breakatwhitespace=false,         
     breaklines=true,                 
-    captionpos=b,                    
+    captionpos=b,
+    columns=fullflexible,  
     keepspaces=true,                 
     numbers=left,        
-    xleftmargin=1em,
-    xrightmargin=0.6em,
+    xleftmargin=\dimexpr\fboxsep+\fboxrule\relax,
+    xrightmargin=\dimexpr\fboxsep+\fboxrule\relax,
     framexleftmargin=0.7em,       
-    numbersep=2pt,                  
+    numbersep=4pt,              
     showspaces=false,                
     showstringspaces=false,
     showtabs=false,                  
     tabsize=2
 }
+
 \lstset{style=mystyle}
+\usepackage{hyperref}
+\hypersetup{% hyperrefのオプションリスト
+    colorlinks=true,% カラーリンクを使用
+    linkcolor=black,% 内部参照リンクの色
+    citecolor=black,% 文献参照リンクの色
+    filecolor=black,% ローカルファイル参照リンクの色
+    urlcolor=blue % 外部参照URLの色
+}
 
 \renewcommand{\lstlistingname}{コード}
 
@@ -233,3 +236,4 @@
 \input{acknowledgement}
 
 \end{document}
+
