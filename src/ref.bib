@@ -464,7 +464,7 @@
 
 @article{Puckette2002,
   abstract = {Max is a computer environment for realizing live electronic music, named in honor of Max Mathews. The history of the Max paradigm is given, including background and influences; development of the three currently supported computer programs (Max/MSP, jmax, and Pd); design issues; scheduling; and programming. It is now possible to usefully assess what Max (the paradigm) does well, what it does less well, and what can be learned from the experience. The computer should ideally feel in the musician's hands like a musical instrument, needing only to be tuned and then played. Although Max has not completely reached this ideal (nor has any other piece of computer music software), it will hopefully prove to have been a step in a good direction.},
-  author   = {Puckette, Miller},
+  author   = {Puckette, Miller S.},
   doi      = {10.1162/014892602320991356},
   file     = {:Users/tomoya/Library/Application Support/Mendeley Desktop/Downloaded/Puckette - 2002 - Max at seventeen.pdf:pdf},
   issn     = {01489267},
@@ -528,7 +528,7 @@
 }
 @article{Puckette2015,
   abstract = {The fundamental principle of Computer Music is usually taken to be the Nyquist Theorem, which, in its usually cited form, states that a band-limited function can be exactly represented by sampling it at regular intervals. This paper will not quarrel with the theorem itself, but rather will test the assump-tions under which it is commonly applied, and endeavor to show that there are interesting approaches to computer music that lie outside the framework of the sampling theorem. As we will see in Section 3, sampling violations are ubiquitous in every-day electronic music practice. The severity of these violations can usually be mitigated either through various engineering practices and/or careful critical lis-tening. But their existence gives the lie to the popular understanding of digital audio practice as being " lossless " . This is not to deny the power of modern digital signal processing theory and its applications, but rather to claim that its underlying assumption—that the sampled signals on which we are operating are to be thought of as exactly rep-resenting band-limited continuous-time functions—sheds light on certain digital operations (notably time-invariant filtering) but not so aptly on others, such as classical synthesizer waveform generation. Digital audio practitioners cannot escape the necessity of representing contin-uous-time signals with finite-sized data structures. But the blanket assumption that such signals can only be represented via the sampling theorem can be unnecessarily limiting. In Sections 4 and 6 I'll describe investigations by two recent UCSD graduates that each adopt a distinct approach to audio manipu-lation outside the framework of the sampling theorem. A collection of accompanying patches that demonstrate some of these ideas can be downloaded from msp.ucsd.edu/ideas/icmc15-examples/. 1 1 The assumptions Band-limited functions are a vector space: you can scale one of them, or add two of them, to get another. But that is where closure ends. The trouble begins as soon as we even go so far as to multiply one signal by another. Suppose two sampled signals, X[n] and Y [n], are used to represent two continuous functions of time x(t), y(t), which we assume to be band-limited, containing only frequen-cies in the Nyquist frequency band, the interval (−R/2, R/2) where R is the sample rate. The values can either be real or complex, and for simplicity we'll assume the computer can exactly represent the numerical values. (It isn't true but that is usually a comparatively minor issue). There is, of course, a perfectly good continuous-time signal, call it z(t), that is represented by the computable product, Z[n] = X[n]Y [n]. But it's not in general the case that z(t) = x(t)y(t). We didn't in reality make the product of the two continuous-time signals we were representing when we multiplied their computer representations. At this point we can look ruefully back at every occurrence of the character " * " in all the Csound, Pd, SuperCollider, Kyma, 4X, or MUSIC 10 instruments we've ever built and reflect on the fact that the result isn't really correct, if we regard our sampled signals as representing continuous-time ones. Often it's a very serviceable approximation. If, for instance, the signals x(t) and y(t) have frequency limits whose sum is less than R/2, the multiplication is exact; and when not exact, it is often a very good approximation. But the approximation's accuracy or lack thereof is rarely worked out explicitly. We could always take action to band-limit two signals (by filtering them) before multiplying so that the multiplication itself doesn't yield frequencies out-side the Nyquist frequency band. But this would cause delays and/or phase distortion, not to mention the computational cost this would incur. One fundamental operation in electronic music practice (in my thinking, the most fundamental one) is table lookup, which is used in digital oscillators and samplers, and also in nonlinear techniques such as FM and waveshaping. Again sidestepping the comparatively minor issue of the accuracy limits of wavetable lookup, we instead again consider the possibility of frequency products landing outside the Nyquist band. Suppose the incoming signal is a sinusoid of frequency $\omega$ and that the wavetable lookup can be approximated as a power series, f (x) = a 0 + a 1 x + a 2 x 2 + {\textperiodcentered} {\textperiodcentered} {\textperiodcentered}},
-  author   = {Puckette, Miller},
+  author   = {Puckette, Miller S.},
   file     = {:Users/tomoya/Library/Application Support/Mendeley Desktop/Downloaded/Puckette - 2015 - The Sampling Theorem and Its Discontents.pdf:pdf},
   journal  = {International Computer Music Conference},
   pages    = {1--14},
@@ -2834,4 +2834,23 @@ publisher = {京都国立近代美術館}
 	author = {Lyon, Eric},
 	date = {2012},
 	file = {Table of Contents PDF:/Users/tomoya/Zotero/storage/7LXBMYY9/Lyon - 2012 - Designing audio objects for MaxMSP and Pd.pdf:application/pdf},
+}
+
+@online{mccartney_announcing_1996,
+	title = {{ANNOUNCING}: {SuperCollider} is now available},
+	url = {https://groups.google.com/g/comp.music.research/c/g2f9EcL1mUw#2ed9e3784bc66f55},
+	titleaddon = {comp.music.research@googlegroups.com},
+	author = {{McCartney}, James},
+	urldate = {2022-01-23},
+	date = {1996-03-21},
+	file = {ANNOUNCING\: SuperCollider is now available:/Users/tomoya/Zotero/storage/Z53NLXDE/g2f9EcL1mUw.html:text/html},
+}
+
+
+@online{qmul2009,
+	title = {World's first album of Twitter music},
+	url = {https://web.archive.org/web/20130221151624/https://www.qmul.ac.uk/media/news/items/se/20934.html},
+	urldate = {2022-01-23},
+	date = {2009-11-19},
+	file = {Snapshot:/Users/tomoya/Zotero/storage/H28L33G7/20934.html:text/html},
 }
