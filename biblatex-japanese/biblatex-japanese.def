@@ -246,13 +246,13 @@
      \ifdefvoid{#3}{}{%
        \mkbibnameprefix{#3}\isdot}%
      \ifdefvoid{#2}{}{\ifCJKstr{#2}{}{\bibfwcomma}}% For name like "R. J. バロー"
-     \mkbibnamefamily{#2}\isdot}%
+     \ \mkbibnamefamily{#2}\isdot}%
     {\usebibmacro{name:delim}{#2#3#1}%
      \usebibmacro{name:hook}{#2#3#1}%
      \ifdefvoid{#2}{}{\mkbibnamegiven{#2}\isdot}%
      \ifdefvoid{#3}{}{%
        \mkbibnameprefix{#3}\isdot}%
-     \mkbibnamefamily{#1}\isdot}%
+     \ \mkbibnamefamily{#1}\isdot}%
      \ifdefvoid{#4}{}{\bibnamedelimd\mkbibnameaffix{#4}\isdot}}%
 
 \newbibmacro*{name:japanese-last}[4]{% test
