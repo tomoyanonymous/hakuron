@@ -1,4 +1,4 @@
-\documentclass[luatex,japanese,unicode,titlepage,pdfusetitle,a4paper,openany]{ltjsbook}
+\documentclass[luatex,unicode,titlepage,pdfusetitle,a4paper,openany]{ltjsbook}
 \usepackage{luatexja}
 \usepackage{luatexja-preset}
 \usepackage{luatexja-otf}
@@ -12,6 +12,8 @@
 
 \setlength{\epigraphwidth}{0.6\textwidth}
 
+\newcommand{\msharp}{$^\sharp$}
+
 \usepackage{color}
 \usepackage{graphicx}
 % \usepackage[draft]{graphicx} %コンパイルが遅い時はこれで枠だけにすると速くできる
@@ -23,9 +25,11 @@
 \usepackage{url}
 
 \usepackage[font={sf,small}]{caption}
-\usepackage[language=japanese,backend=biber,nameorder=true,date=year,style=authoryear]{biblatex-japanese}
-
-
+\usepackage[language=japanese,backend=biber,backref=true,nameorder=true,date=year,style=authoryear]{biblatex-japanese}
+\DefineBibliographyStrings{english}{%
+  backrefpage = {p},% originally "cited on page"
+  backrefpages = {p},% originally "cited on pages"
+}
 % 引用にnodateを許す
 \renewbibmacro*{date}{%
   \iffieldundef{year}
