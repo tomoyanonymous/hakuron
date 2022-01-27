@@ -136,6 +136,7 @@
 }
 
 \renewcommand{\lstlistingname}{コード}
+\renewcommand{\lstlistlistingname}{コード例目次}
 
 \providecommand{\citep}{\parencite}
 \renewcommand{\emph}[1]{\textgt{\textit{#1}}}
@@ -202,34 +203,34 @@
 
 \addcontentsline{toc}{chapter}{図目次}
 \listoffigures
-\renewcommand\lstlistlistingname{コード例目次}
+
 \addcontentsline{toc}{chapter}{コード例目次}
 \lstlistoflistings
 
 \mainmatter
 
-\chapter{序論}
+\chapter{序論}\label{sec:chapter1}
 \input{chapter1}
 
-\chapter{歴史を記述しなおすデザインリサーチ}
+\chapter{歴史を記述しなおすデザインリサーチ}\label{sec:chapter2}
 \input{chapter2}
 
-\chapter{Why:PLfMをなぜ研究するか}
+\chapter{メタメディアとしてのコンピューター}\label{sec:chapter3}
 \input{chapter3}
 
-\chapter{What1:PLfMの歴史}
+\chapter{PLfMの歴史}\label{sec:chapter4}
 \input{chapter4}
 
-\chapter{What2:PLfMにおける諸用語と概念の整理}
+\chapter{PLfMにおける諸用語と概念の整理}\label{sec:chapter5}
 \input{chapter5}
 
-\chapter{最小限のPLfM:mimiumの設計と実装}
+\chapter{最小限のPLfM:mimiumの設計と実装}\label{sec:chapter6}
 \input{chapter6}
 
-\chapter{議論}
+\chapter{議論}\label{sec:chapter7}
 \input{chapter7}
 
-\chapter{結論:音楽土木工学に向けて}
+\chapter{結論:音楽土木工学に向けて}\label{sec:chapter8}
 \input{chapter8}
 
 \addcontentsline{toc}{chapter}{参考文献}
