@@ -1,6 +1,7 @@
 # 略記一覧 {-}
 
 - AST: Abstract Syntax Tree / 抽象構文木、プログラミング言語のソースコードをコンピューター上で表現するための（主に上流で用いられる）形式の一つ
+- BDA: Block Diagram Algebra / ブロックダイアグラム代数。Faustで導入された信号処理を表す形式的表現。
 - CST: Creativity Support Tools / 創造性の補助ツールおよびその研究領域
 - DMI: Digital Musical Instrument / コンピューターをシステムの中心とした楽器
 - DSL: Domain Specific Language / ドメイン固有言語、画像や音楽などある特定の領域や目的に特化したプログラミング言語

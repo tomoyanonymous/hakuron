@@ -1,7 +1,5 @@
 <!-- 第6章 音楽プログラミング言語mimiumの設計と実装 -->
 
-# mimiumの設計
-
 本章では、これまでの背景をもとに、実際に筆者が開発したプログラミング言語mimium(**mi**nimal-**m**usical-med**ium**)[^mimiumrepo]の具体的な実装について記す。
 
 [^mimiumrepo]: 開発時点でのバージョンは0.4.0をもとに解説している。ソースコードは<https://github.com/mimium-org/mimium>で公開されている。
@@ -369,8 +367,9 @@ osc(freq) = freq:phasor:scaleTwopi : cos;
 
 
 \begin{figure}[h]
-  \includegraphics[width=\columnwidth]{img/max-osc-example.png}
-  \caption{Maxでのデーターフロー型表現の例。}
+  \centering
+  \includegraphics[width=0.7\columnwidth]{img/max-osc-example.png}
+  \caption{Maxでのデーターフロー的表現の例。}
   % \Description{Example of dataflow syntax in Max}
   \label{fig:maxexample}
 \end{figure}
