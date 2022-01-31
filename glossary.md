@@ -9,6 +9,7 @@
 - EUP: End User Programming / ソフトウェアのユーザー自らがプログラミングを行う活動、及びそれを支援するツールの研究領域
 - FFT: Fast Fourier Transform / 高速フーリエ変換、計算機上で音声信号を時間領域から周波数領域の表現に変換する離散フーリエ変換（DFT）を高速に計算するためのアルゴリズムの総称
 - HCI: Human-Computer Interaction / コンピューターを使うインターフェースの研究領域の総称
+- ICMC: International Computer Music Conference / コンピューター音楽の国際会議の名称
 - MIDI: Musical Instrument Digital Interface / 電子楽器の相互運用のための共通規格
 - NIME: New Interfaces for Musical Expression / 音楽のための新しいインタフェース研究、及びその国際会議
 - OSC: Open Sound Control / Wrightによって提唱された音楽のための自由度の高い相互通信プロトコル
