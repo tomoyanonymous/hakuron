@@ -1,19 +1,35 @@
 {
     "filters": {
         "node-types": {
-            "nodeTypes": ["BlockQuote"]
+            "nodeTypes": [
+                "BlockQuote"
+            ]
         },
         "allowlist": {
             "allow": [
-                "/\"(.)*\"/g"
+                "/\"(.)*\"/g",
+                "ありえるかもしれない未来",
+                "超超短距離電信装置",
+                "……",
+                "/begin\\{figure\\}[\\s\\S]*?end\\{figure\\}/",
+                "/begin\\{lstlisting\\}[\\s\\S]*?end\\{lstlisting\\}/",
+                "/begin\\{table.\\}[\\s\\S]*?end\\{table.\\}/" ,
+                "/epigraph.*/"
             ]
         }
     },
     "rules": {
         "preset-ja-technical-writing": {
-            "severity" : "warning",
+            "no-exclamation-question-mark": false,
             "sentence-length": {
+                "severity": "warning",
                 "max": 150
+            },
+            "ja-no-redundant-expression":{
+                "severity": "warning"
+            },
+            "ja-no-weak-phrase": {
+                "severity": "warning"
             },
             "max-comma": {
                 "max": 4
@@ -24,8 +40,8 @@
             "max-kanji-continuous-len": {
                 "max": 10
             },
-            "no-mix-dearu-desumasu":false, //引用囲みの表記ゆれを検知できない
-        "no-zero-width-spaces":false //causes weird error
+            "no-mix-dearu-desumasu": false, //引用囲みの表記ゆれを検知できない
+            "no-zero-width-spaces": false //causes weird error
         }
     }
 }
