@@ -8,8 +8,11 @@
         "allowlist": {
             "allow": [
                 "/\"(.)*\"/g",
+                "/「[\\s\\S]*?」/",
                 "ありえるかもしれない未来",
                 "超超短距離電信装置",
+                "情報科学芸術大学院大学",
+                "九つの夕べ",
                 "……",
                 "/begin\\{figure\\}[\\s\\S]*?end\\{figure\\}/",
                 "/begin\\{lstlisting\\}[\\s\\S]*?end\\{lstlisting\\}/",
