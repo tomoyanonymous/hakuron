@@ -203,7 +203,7 @@ d1 $ sound "bd*4" # gain (every 3 (rev) $ "1 0.8 0.5 0.7")
 
 例えば、ブランドがChronicを開発するにあたってのモチベーションは音楽のための言語に存在する表現力の高さ（Expressiveness）と汎用性（Generality）のトレードオフの解消だった[@Brandt2002]。それを説明したのが[@fig:chronic-tradeoff]である。
 
-![ブランドがChronicを開発するにあたって説明した、ExpressivenessとGeneralityのトレードオフ。[@Brandt2002]より引用。](img/chronic-tradeoff.png){width=70% #fig:chronic-tradeoff}
+![ブランドがChronicを開発するにあたって説明した、ExpressivenessとGeneralityのトレードオフ。[@Brandt2002]より引用。](img/chronic-tradeoff.pdf){width=70% #fig:chronic-tradeoff}
 
 ブランドは文献中で、Expressivenessを「ユーザーが読みやすく書きやすい」、 Generalを「可能な表現の範囲が広い」という意味で用いられている。またChronicはOCamlというホスト言語の実行速度の問題もあり、リアルタイムで実行はできなかった。つまりChronicではGeneralとExpressiveの両立はできたが実行時パフォーマンスという新たなトレードオフが発生していたことがわかる。
 
