@@ -91,7 +91,7 @@
 
 
 % 手動でlisting使うとき、行番号が付く
-\usepackage{listings,listings-rust}
+\usepackage{listings,listings-rust,listings-scheme}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.1,0.1,0.8}
@@ -106,6 +106,10 @@
     backgroundcolor=\color{backcolour},   
     commentstyle=\color{codegreen},
     keywordstyle=\color{magenta},
+    keywordstyle=[2]\color[rgb]{0.75, 0, 0},% traits
+    keywordstyle=[3]\color[rgb]{0.5, 0.5, 0},% primitive types
+    keywordstyle=[4]\color[rgb]{0, 0.5, 0.75},% type and value constructors
+    keywordstyle=[5]\color[rgb]{0, 0, 0.75},% macros
     stringstyle=\color{codepurple},
     numberstyle=\tiny\color{codegray}\noncopynumber,
     basicstyle=\ttfamily\footnotesize,
