@@ -1,6 +1,7 @@
 figureTitle: "図"
 tableTitle: "表"
 listingTitle: "コード"
+equationTitle: "式"
 figPrefix: "図"
 eqnPrefix: "式"
 tblPrefix: "表"
