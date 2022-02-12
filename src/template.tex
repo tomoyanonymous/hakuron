@@ -189,7 +189,8 @@
 
 \maketitle
 
-
+\cleardoublepage
+\phantomsection
 \addcontentsline{toc}{chapter}{概要}
 \begin{abstract}
 \chapter*{概要}
@@ -198,16 +199,21 @@
     \input{abstract_en}
 \end{abstract}
 
+\phantomsection
+\addcontentsline{toc}{chapter}{目次}
 \setcounter{tocdepth}{2}
 \tableofcontents
 
+\phantomsection
 \addcontentsline{toc}{chapter}{用語集}
 \chapter*{用語集}
 \input{glossary}
 
+\phantomsection
 \addcontentsline{toc}{chapter}{図目次}
 \listoffigures
 
+\phantomsection
 \addcontentsline{toc}{chapter}{コード例目次}
 \lstlistoflistings
 
@@ -234,12 +240,13 @@
 \chapter{結論：音楽土木工学とは何なのか、どこへ向かうのか}\label{sec:chapter7}
 \input{chapter7}
 
-% \chapter{結論:音楽土木工学に向けて}\label{sec:chapter8}
-% \input{chapter8}
+\backmatter
 
+\phantomsection
 \addcontentsline{toc}{chapter}{参考文献}
 \printbibliography[title = 参考文献]
 
+\phantomsection
 \addcontentsline{toc}{chapter}{謝辞}
 \chapter*{謝辞}
 \input{acknowledgement}
