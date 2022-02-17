@@ -333,7 +333,7 @@ MIDIは確かに音楽のデジタル化の過程で大きな功績を残して�
 [^appstore2]:https://9to5mac.com/2011/10/21/jobs-original-vision-for-the-iphone-no-third-party-native-apps/ 2022年1月5日最終閲覧。
 [^rjdjend]: https://web.archive.org/web/20130126021852/http://blog.rjdj.me/more-than-an-app 2022年1月26日最終閲覧。
 
-## 「失敗の美学」の失敗
+## 「失敗の美学」の失敗 {#sec:failure}
 
 ソフトウェアとしての音楽という、正統な方法でコンピューターを音楽に用いる方法と対照的なのが**ベンディング的**アプローチである。
 
