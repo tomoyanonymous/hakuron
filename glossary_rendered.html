@@ -1,0 +1,114 @@
+---
+title: 用語集
+layout: single
+highlight: true
+---
+<h1>用語集</h1>
+
+<h2 class="unnumbered" id="略記一覧">略記一覧</h2>
+<ul>
+<li>ANT: Actor Network Theorey /
+アクターネットワーク理論。ミシェル・カロンやブルーノ・ラトゥールらによって提唱された科学論の中のアプローチの1つ。生物/非生物や人間/非人間の区別を付けずあらゆる要素をアクターとして扱うことで、技術決定論と社会構築論のどちらにも偏りすぎない立場を取る。</li>
+<li>ADC: Analog-Digital Converter /
+アナログ電圧を2進数の数値の列データへと変換する装置。DACの逆。</li>
+<li>AST: Abstract Syntax Tree /
+抽象構文木。プログラミング言語のソースコードをコンピューター上で表現するための（主に上流で用いられる）形式の1つ。</li>
+<li>BDA: Block Diagram Algebra /
+ブロックダイアグラム代数。Faustで導入された信号処理を表す形式的表現。</li>
+<li>CST: Creativity Support Tools /
+創造性の補助ツールおよびその研究領域</li>
+<li>DAC: Digital-Analog Converter /
+2進数の数値をアナログの電圧に変換するための装置。ADCの逆。</li>
+<li>DMI: Digital Musical Instrument /
+コンピューターをシステムの中心とした楽器</li>
+<li>DSL: Domain Specific Language /
+ドメイン固有言語、画像や音楽などある特定の領域や目的に特化したプログラミング言語</li>
+<li>DSP: Digital Signal Processing / デジタル信号処理</li>
+<li>EUP: End User Programming /
+ソフトウェアのユーザー自らがプログラミングを行う活動、及びそれを支援するツールの研究領域</li>
+<li>FFT: Fast Fourier Transform /
+高速フーリエ変換、計算機上で音声信号を時間領域から周波数領域の表現に変換する離散フーリエ変換（DFT）を高速に計算するためのアルゴリズムの総称</li>
+<li>HCI: Human-Computer Interaction /
+コンピューターを用いるインターフェースの研究領域の総称</li>
+<li>ICMC: International Computer Music Conference /
+コンピューター音楽の国際会議の名称</li>
+<li>MIDI: Musical Instrument Digital Interface /
+電子楽器の相互運用のための共通規格</li>
+<li>NIME: New Interfaces for Musical Expression /
+音楽のための新しいインタフェース研究、及びその国際会議</li>
+<li>OSC: Open Sound Control /
+マシュー・ライトらによって提唱された音楽のための自由度の高い相互通信プロトコル</li>
+<li>PCM: Pulse Code Modulation /
+音圧波形を一定時間ごとに標本化（Sampling）、量子化（Quantization）することで数値の列として音声信号を表現する方式</li>
+<li>PLfM: Programming Language for Music /
+音楽のためのプログラミング言語（本稿で独自に定義、<a
+href="../chapter4_rendered#sec:plfmdef">4章</a>を参照）</li>
+<li>RtD: Research through Design / デザイン実践を通じた研究</li>
+<li>UGen: Unit Generator /
+音楽のためのプログラミング言語で広く用いられる、フィルターやオシレーターなどDSPの基礎的な要素の総称</li>
+<li>VM: Virtual Machine / ソフトウェア上で定義された仮想機械</li>
+</ul>
+<h2 class="unnumbered"
+id="音楽プログラミング言語一覧">音楽プログラミング言語一覧</h2>
+<p>（太字は現在も利用可能なもの）</p>
+<ul>
+<li><strong>ChucK</strong> :
+ゲ・ワンが開発した、サンプル単位での正確な処理を可能にするstrongly-timedというコンセプトの言語。ライブコーディング演奏が可能で、miniAudicleという統合開発環境を用いることが多い。</li>
+<li><strong>Csound</strong> : MUSIC Nシリーズの派生、MUSIC
+11からさらに派生して開発された音楽プログラミング環境。実装言語をFortranからCに移したのでこの名前になっている。MUSICシリーズ同様、Score、Orchestra、Instrumentというレイヤー分けされた内部言語を持つ構造と、Blueなど複数の統合開発環境が存在する。</li>
+<li><strong>Extempore</strong> :
+アンドリュー・ソレンセンが開発した、LISPベースのライブコーディングに特化した言語。前身としてSchemeをベースにしたImpromptuがある。Extempore自体はSchemeとxtlangと呼ばれる独自の拡張言語の2つで構成される。</li>
+<li><strong>Faust</strong> : Functional Audio
+Stream/フランスの研究所GRAMEで開発されているブロック・ダイアグラム代数（Block
+Diagram
+Algebra）という抽象化形式に基づくDSP特化言語。様々な言語でUGenとして利用できたり、Webブラウザやマイクロコントローラ上でも動作する</li>
+<li><strong>Gwion</strong>:
+ジェレミー・アストールが開発する、ChucKを発展させた言語。第一級関数が使えるなど、プログラミング言語としての抽象度を高めている。</li>
+<li><strong>Kronos</strong> :
+ヴェサ・ノリロが開発する、Faustをより読みやすく高度な抽象化を可能にしたような言語。Faust同様Webなど広い環境で動作するほか、非同期的な処理も実現できる。Veneerというビジュアルプログラミング環境も備えている。</li>
+<li>LC :
+西野裕樹が開発した、ChucKを発展させたmostly-strongly-timedというコンセプトの言語。同期/非同期の処理をユーザーが明確に制御できるほか、処理が間に合わなかった際のタイムアウト処理が記述できるといった特徴がある。</li>
+<li><strong>Max</strong> :
+IRCAMでミラー・パケットにより開発され、現在デヴィッド・ジカレリによるCycling’74が販売する、音や映像処理のためのビジュアルプログラミング環境。</li>
+<li>MUSIC N:
+ベル研究所でマックス・マシューズらによって開発された最初期のノンリアルタイムなコンピューター音楽プログラミング環境で、IからVまでのシリーズの総称。単にMUSICとも。IVの派生バージョンである4B、4BF、360、10、11を含めることもある（本項では派生を含めるときは明示する）。</li>
+<li>MUSIGOL: バージニア大学のドナルド・イニスが制作した、ALGOL
+60ベースのノンリアルタイムな音楽プログラミング環境。インストゥルメントやスコアをすべてALGOLの関数として記述する。</li>
+<li><strong>mimium</strong>:
+筆者が開発している、ラムダ計算を基盤にしたミニマルな音楽のためのプログラミング言語。</li>
+<li><strong>Nyquist</strong> :
+ロジャー・ダネンバーグが90年代に開発した関数型ライクな記述ができる音声処理言語。現在単体ではほぼ使われていないが、オープンソースの音声編集ソフトウェアAudacityの中でスクリプティング言語として利用できる。</li>
+<li><strong>Puredata</strong> :
+ミラーパケットがMaxの後にオープンソース・ソフトウェアとして1990年代に開発し、現在まで続いているビジュアルプログラミング環境。</li>
+<li><strong>SAOL</strong> : Structured Audio Orchestra
+Language。CsoundをベースにC言語ライクなシンタックスを持つ言語。MPEG4
+Structured Audio規格の一部。</li>
+<li><strong>SuperCollider</strong> :
+ジェームズ・マッカートニーによって開発された、Smalltalk等に影響を受けた言語。バージョン3以降はサーバー/クライアントがネットワークを介して連携する構造を取ることで、他の言語からプログラマブルに制御できる音声合成エンジンとしても用いられている。</li>
+<li><strong>Sonic Pi</strong> :
+サム・アーロンによって開発された、教育を1つの主眼においたライブコーディング環境。Rubyで記述できるSuperColliderクライアント。</li>
+<li>Soul : 音楽制作ソフトウェア用のフレームワークJUCEを開発したJulian
+Storerを中心に、JUCEを保有していたROLI社が開発する信号処理記述に特化した言語。2021年5月で開発が停止している。</li>
+<li><strong>TidalCycles</strong> :
+アレックス・マクリーンによって開発された、Haskell上でリズムや音程、グラフィックなどあらゆるものをパターンとして抽象化するライブコーディング環境。元々はTidalという名前。SuperColliderクライアントの1つ。</li>
+<li><strong>Vult</strong> :
+レオナルド・ルイーズが開発する組み込みをターゲットとした信号処理記述のための言語。OCamlで記述されている。</li>
+</ul>
+<h2 class="unnumbered"
+id="汎用プログラミング言語一覧">汎用プログラミング言語一覧</h2>
+<ul>
+<li>ALGOL :
+1958年ごろ作られた、FORTRANよりも高度な構造化が行える初期のプログラミング言語。1960年に作られたALGOL
+60を用いてMUSIGOLというシステムが作られた。</li>
+<li>C : 1972年ごろに開発された汎用プログラミング言語。</li>
+<li>C++ :
+C言語にオブジェクト指向の機能を追加する形で作られた言語。C言語と並んでリアルタイム信号処理用途のプログラミングに多く用いられる。</li>
+<li>FORTRAN : 1956年に作られた、最初期の高級プログラミング言語。MUSIC
+Vの実装などに用いられる。</li>
+<li>LISP :
+1960年代にマッカーシーらによって作られた、関数やデータを含めたあらゆる表現をS式と呼ばれる括弧で括る表現をする言語、およびその系列の言語。代表的なものとしてCommon
+LispやScheme、Racket、Clojureなどがある。</li>
+<li>Smalltalk：1970年代にゼロックス社PARCで開発されたオブジェクト指向のプログラミング言語。暫定版Dynabookのシステムの中核に用いられた。</li>
+</ul>
+
+<style></style>

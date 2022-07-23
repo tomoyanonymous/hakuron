@@ -1,0 +1,47 @@
+---
+title: 付録
+layout: single
+highlight: true
+---
+<h1>付録</h1>
+
+<p>以下に、mimium言語（バージョン0.4.0時点）のシンタックス定義をEBNF記法で示した。
+ここでは演算子の優先順位をつけていないが、実際の優先順位は一般的なプログラミング言語の優先順位に準じた上で、<code>@</code>演算子が一番低い優先順位となっている。</p>
+<pre><code>  number ::= ?numbers?
+  symbol ::= ?all_alnum_and_underscore?
+  string ::= ?double_quote?&lt;symbol&gt;?double_quote?
+
+  rvar ::= &lt;symbol&gt;
+  lvar ::= &lt;symbol&gt; (&quot;:&quot;&lt;type&gt;)?
+  lvar_args ::= &lt;lvar&gt; | &lt;lvar_args&gt; &quot;,&quot; &lt;lvar&gt; 
+  binop ::= &quot;+&quot;|&quot;-&quot;|&quot;*&quot;|&quot;/&quot;|&quot;^&quot;|&quot;==&quot;| &quot;!=&quot;|&quot;&gt;=&quot;|&quot;&lt;=&quot;|&quot;&gt;&quot;|&quot;&lt;&quot;|&quot;&amp;&amp;&quot;| &quot;||&quot;
+  uniop ::= &quot;-&quot; | &quot;!&quot; 
+  infix ::= &lt;expr&gt; &lt;binop&gt; &lt;expr&gt; | &lt;uniop&gt; &lt;expr&gt;
+  field ::= &lt;expr&gt;&quot;.&quot;&lt;symbol&gt;
+  app ::= &lt;expr&gt;&quot;(&quot; &lt;expr_args&gt; &quot;)&quot;
+  lambda ::= &quot;|&quot; &lt;lvar_args&gt; &quot;|&quot; (&quot;-&gt;&quot; &lt;type&gt;)? &lt;expr&gt;
+
+  if ::=  &quot;if&quot; &quot;(&quot;&lt;expr&gt;&quot;)&quot; &lt;expr&gt; (&quot;else&quot; &lt;expr&gt;)?
+  block ::= &quot;{&quot;&lt;statements&gt;&quot;}&quot;
+  expr ::= &quot;self&quot;|&quot;now&quot;|&lt;number&gt;|&lt;string&gt;|&lt;rvar&gt;| &lt;infix&gt;|&lt;field&gt;|&lt;app&gt;| &lt;lambda&gt;|&lt;if&gt;|&lt;block&gt;
+  expr_args ::= &lt;expr&gt; | &lt;expr_args&gt; &quot;,&quot; &lt;expr&gt;
+  statements ::= &lt;statement&gt; | &lt;statements&gt; ?linebreak? &lt;statement&gt;
+  statement ::= &lt;app&gt;|&lt;schedule&gt;|&lt;fndef&gt;| &lt;assign&gt;|&lt;lettuple&gt;|&lt;return&gt;| &lt;typealias&gt;
+  schedule ::= expr &quot;@&quot; expr
+  fndef ::=  &quot;fn&quot; &lt;symbol&gt; &quot;(&quot;&lt;lvar_args&gt;&quot;)&quot; (&quot;-&gt;&quot; &lt;type&gt;)? &lt;block&gt;
+  assign ::= &lt;lvar&gt; &quot;=&quot; &lt;expr&gt;
+  lettuple ::= &lt;lvar_args&gt; &quot;=&quot; &lt;expr&gt;
+  return ::= &quot;return&quot; &lt;expr&gt;
+
+  type ::= &quot;void&quot;|&quot;float&quot;|&quot;string&quot;|&lt;symbol&gt;| &lt;tupletype&gt;|&lt;fntype&gt;|&lt;recordtype&gt;
+  types ::= &lt;type&gt; | &lt;types&gt;&quot;,&quot;&lt;type&gt;
+  tupletype ::= &quot;()&quot; | &quot;(&quot;&lt;types&gt;&quot;)&quot;
+  fntype ::= &lt;tupletype&gt;&quot;-&gt;&quot;&lt;type&gt;
+  recordtype ::= &quot;{&quot;&lt;typekeyvals&gt;&quot;}&quot;
+  typekeyvals ::= &lt;typekeyval&gt; | &lt;typekeyvals&gt;&quot;,&quot;&lt;typekeyval&gt;
+  typekeyval ::= &lt;string&gt;&quot;:&quot;&lt;type&gt;
+  typealias ::= &quot;type&quot; &lt;symbol&gt; &quot;=&quot; &lt;type&gt;
+
+  program ::= &lt;statements&gt;</code></pre>
+
+<style></style>

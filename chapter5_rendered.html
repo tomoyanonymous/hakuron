@@ -1,0 +1,620 @@
+---
+title: 第5章 - PLfMに関する諸用語と概念の整理
+layout: single
+highlight: true
+---
+<h1>第5章 - PLfMに関する諸用語と概念の整理</h1>
+
+<p>第4章では時間軸に沿って、PLfMの歴史的変遷を追いかけてきた。PLfMは歴史的に、Unit
+GeneratorやMIDIなど、特定の音楽様式を言語仕様そのものに埋め込みながら発展してきた。しかし、2000年以後は、ブラックボックスとして与えられていたUGen自体をより一般的な代数的表現で記述するFaustのような試みや、SuperColliderを音声合成エンジンに使いながらも、これまでと異なる抽象化を試みるTidalCyclesのような試みが立ち上がってきた。当初はコンピューターを用いた音楽表現に十分可能な範囲の表現の広さを提供してくれると思われたUGenも、その抽象化方法自体を物理化したハードウェアが現れたり、UGenをベースにしたプログラミング作業の効率化を図ることによって、それ以外の抽象化方法の提示を妨げるインフラストラクチャとしての性質を持つようになっている。</p>
+<p>本章ではそうした状況を踏まえつつ、PLfMを新しく設計、開発する際の設計方針や、実装のパターンの類型化を試みる。本章で検討するテーマを一言で表すなら、言語設計が内包する音楽様式や、言語を用いて作られた音楽といった、表現の性質に触れることなしにPLfMの設計方針や評価は可能だろうか、ということだ。</p>
+<p>プログラミング言語の中で音楽という特定の目的に特化した言語を作ろうとしているのに、表現の性質の話に触れないのはおかしな話に聞こえるかもしれない。しかし、第4章で見たように、MUSIC
+Nの派生系で作られたMUSIGOLやMUS10が、それを用いて可能な表現は同じであっても、その設計思想には大きな違いがあったように、現状のPLfMの研究に関する評価や主張はその使い方と応用例に偏りすぎている。MUSIC
+Iが作られた1950年代には音楽生成のためのプログラムを作ることと、そのために言語を作るということは同じ行為を意味していた。しかし現在ではDAWのような音楽のためのソフトウェアを作る作業と、プログラミング言語を作るという作業は、そのための設計の理論やツールなど、必要な知識があまりに異なりすぎる。結果として、PLfMの使い方の解説や、それを用いた様々な信号処理、アルゴリズミックコンポジションなどに関する文献は充実している一方で、PLfM自体を実装するための知見は、自力で汎用プログラミング言語設計のための資料から探し出してくるしかない。もしくはSuperColliderを開発したマッカートニーやVultを開発したルイーズ<a
+href="#fn1" class="footnote-ref" id="fnref1"
+role="doc-noteref"><sup>1</sup></a>のように、音楽とは関係のない部分で言語処理系の知識に触れる機会があった者に限られてくる。</p>
+<p>加えて、PLfMを設計するという作業は、換言すれば時間に伴って変化するデータを、どのように人間が解釈可能な形で表現するかを考えることである。その意味では、マシューズのGROOVEシステムのような、目的や音楽様式にとらわれないシステムの設計に関する知見は、PLfMに限らず汎用プログラミング言語の理論や、映像などの音楽以外の時間軸を扱うマルチメディア表現のためのシステムなどの分野にも存在しているはずである。</p>
+<p>本章での整理は、デザインパターンを類型化することによってPLfMの開発の参入障壁を下げよう、という意図だと考えてもらって基本的には問題ない。しかし、デザインパターンを用いてデザインの効率化と普遍化を図ることは2章における、デザインサイエンスのムーブメントにおいて批判されたことではないかという疑問については言及しておく必要があるだろう。本章の整理は、普遍的な「良い」PLfMについての設計方針を与えるものではない。むしろ、言語設計と実装に実質的に回避できないトレードオフが存在することを指摘することで、各々が作った言語の立ち位置の選択とその理由をはっきりさせることによって、様々な思想の言語の存在意義を肯定しやすくすることを目的としている。</p>
+<section id="ダネンバーグによるplfmを特徴づける要素" data-number="0.1">
+<h2 data-number="5.1"><span class="header-section-number">5.1</span>
+ダネンバーグによるPLfMを特徴づける要素</h2>
+<p>本章で検討するような、表現よりも言語の構造や実装方法という観点で言語の特徴づける要素や言語同士を比較した研究としては、第4章でも参照した、Nyquistを開発したロジャー・ダネンバーグの『Languages
+for Computer Music』がある<span class="citation"
+data-cites="Dannenberg2018">(Dannenberg 2018)</span>。</p>
+<p>ダネンバーグはコンピューター音楽のためのプログラミング言語を特徴づける要素として以下の6つの要素を挙げた。</p>
+<ul>
+<li>シンタックス</li>
+<li>セマンティクス</li>
+<li>ランタイムシステム</li>
+<li>ライブラリ</li>
+<li>開発環境</li>
+<li>コミュニティやドキュメントなどの資料</li>
+</ul>
+<p>以下、それぞれの項目について簡単に解説する。プログラミング言語についての「言語仕様」と言った時には、<strong>シンタックス（Syntax：統語論）</strong>と<strong>セマンティクス（Semantics：意味論）</strong>という2つのことを同時に指している。</p>
+<p>シンタックスとは言語の表面的な仕様のことであり、セマンティクスとはよりプログラムの意味に直接関わる言語仕様のことを指す。</p>
+<p>具体例でこの違いを説明する。JavaScriptという言語で、入力を2乗して返す関数powerを定義すると次のようになる。</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">power</span>(input){</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> input<span class="op">*</span>input<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>このソースコードにおいて<code>function</code>という単語はJavaScriptの中であらかじめ定められている用語（いわゆる予約語）だ。</p>
+<p>例えばJavaScriptの言語仕様が変更され、「予約語<code>function</code>を<code>fn</code>に変える」となったとしても、エディタなどでテキスト一括置換を使って<code>function</code>を<code>fn</code>に入れ替えればすぐに対応できることが想像できる。一方で、「演算子<code>*</code>は整数同士の掛け算を表すもので、小数点同士の掛け算を表すには<code>*.</code>という演算子を使用しなければエラーとする」という仕様変更の場合はそうはいかなくなる<a
+href="#fn2" class="footnote-ref" id="fnref2"
+role="doc-noteref"><sup>2</sup></a>。プログラムを修正しようと思ったら実際にその関数が小数点の計算に使われているのか整数の計算に使われているのかを判断して置換する必要があり、先ほどのように一括置換というわけにはいかない。</p>
+<p>前者のように、プログラムの意味そのものに影響を与えない言語仕様をシンタックス、後者のように意味論に影響を与えるものをセマンティクスと考えて貰えば良い。もちろんシンタックスも、たとえ意味論に影響は与えなくとも、予約語が短ければ必要なタイピングの回数が減りプログラムを素早く書けるかもしれない、というように言語の使い勝手に大きく影響する。</p>
+<p><strong>ランタイムシステム</strong>、もしくは単にランタイムとは、コンパイラやインタプリタによって、ソースコードからより抽象的なデータ構造に変換されたデータを実際に評価するプログラムや、コンピューターそのもののことを指す。汎用言語の例で考えると、CやRustのような低レベルの操作を行う言語は直接的に機械語を出力するために、ランタイムシステムに相当するものは基本的にコンピューターそのものである。それに対して、JavaScriptなどの高級言語は、実行時にメモリの自動確保と解放を管理するガベージコレクターなどのランタイムプログラムを要とする。PLfMにおいては、例えばFaustは、C++などのソースコードを経て直接機械語に変換されるため同様に依存する特定のランタイムプログラムが存在しない。MaxやPureData、SuperColliderなどのUGenベースのPLfMは、例えばフィルターや発振器の内部の実装に関しては言語の意味論の中に含まれておらず、C++などで実装されたUGen定義をブラックボックスとして扱う。この時のUGenはランタイムプログラムである。また並行して発生するイベントの実行タイミングを管理するスケジューラーの機能もPLfMにおけるランタイムプログラムの中の代表的なものである。</p>
+<p><strong>ライブラリ</strong>は、その言語を用いて作られた関数定義や、MaxやPureDataにおけるサブパッチなどの、再利用可能な要素の集合である。例えばMaxではフィルターはランタイムシステムの一部だったのに対して、Faustにおけるフィルターは、Faustの言語上で定義されたライブラリの一部として提供される。</p>
+<p><strong>開発環境</strong>は、その言語を用いたプログラミング作業を支援するためのプログラムと定義できる。MaxやPureDataのようなビジュアルプログラミング環境では、開発環境を作ることそのものが言語開発の作業の中で必須の要素になる。テキストベースの言語であれば、基本的にはテキストエディタが開発環境に相当する。しかし、近年では単にテキストを編集するだけでなく、テキストを統語論的に意味のある単位で色分け（シンタックスハイライト）したり、エラー表示をエディタ上に直接表示したり、入力中に必要なカッコやライブラリ上の関数の名前などを自動的に補完する機能などが利用できる。Vim、Emacs、AtomやVisual
+Studio
+Codeといった、ユーザーによって機能拡張可能なエディタでは、Language
+Server Protocol（LSP）<a href="#fn3" class="footnote-ref" id="fnref3"
+role="doc-noteref"><sup>3</sup></a>というプロトコルに応じてハイライトや補完の情報をホストエディタに渡すサーバープログラムを作ることで、専用のエディタを丸ごと作ることなく特定の言語に特化した編集モードを作ることができる。こうした機能はその言語のコンパイラの機能を部分的に借りて作ることで、その言語の意味論に応じた高度な補完などが行えるようになるため、言語開発の中でも重要な作業になりつつある。しかし、こうした汎用エディタはWebブラウザ向けの技術をベースに作られていることが多いので、PLfMの用途においては、例えば編集中の音声信号波形のリアルタイム表示などを行うことが難しいと言った難点もある。そのため例えばSuperColliderやSonic
+Piなど、テキストベースの言語でも専用のIDEが同時に開発されているものも多く存在する。</p>
+<p>また、<strong>コミュニティやドキュメントなどの資料</strong>の充実もプログラミングの体験に当然大きな影響を与える。多くの環境では言語のエディタから直接サンプルプログラムやチュートリアル、リファレンスドキュメントを参照できるようになっていることも多い。</p>
+<section id="言語を設計することとコンパイラを作ることの違い"
+data-number="0.1.1">
+<h3 data-number="5.1.1"><span class="header-section-number">5.1.1</span>
+言語を設計することと、コンパイラを作ることの違い</h3>
+<p>ここから、現代の状況において、そもそもプログラミング言語を作る、という作業が具体的にどのようなものなのかを整理する。</p>
+<p>プログラミング言語を作るという作業には、観念的に大きく分けて2つの作業が存在する。1つ目は言語仕様を定義する設計の作業であり、2つ目は仕様に従って実際にその言語を読み込み、実行できるプログラムを実装する作業である。ところが、現実的には（特定のドメインに特化した言語であればなおのこと）言語の仕様は厳密に定義されているとは限らず、曖昧に定義された言語を実行できるプログラムのみが存在していて、実装やリファレンスドキュメントのみが言語仕様を表すものになっているケースも少なくない。</p>
+<p>では言語の仕様を形式的に厳密に定義するとどのようなメリットがあるのか。例えば、何かプログラムにバグが起きた場合のことを考えると、次のような複数のケースがありうる。</p>
+<ol type="1">
+<li>プログラマが言語仕様で未定義動作になっているコードを書いている</li>
+<li>コンパイラが言語仕様に沿っていない実装をしている</li>
+<li>言語仕様そのものの定義に曖昧さがあるため、プログラマも正しく言語仕様に沿ったコードを書いていて、コンパイラも言語仕様に沿ってコンパイルしたが、予期しない動作が発生している</li>
+</ol>
+<p>言語仕様を厳密に定義すれば、C言語のような低レイヤーに近いプログラムを記述する言語では、セキュリティ関連の重大なインシデントが起きた場合などに、問題の原因と責任がどこにあるのかをはっきりさせられるといった利点が考えられる。しかし一方で厳密さを追い求めすぎると、ISOで規格化されたC言語の仕様書が700ページ以上あるように<a
+href="#fn4" class="footnote-ref" id="fnref4"
+role="doc-noteref"><sup>4</sup></a>、そもそもプログラマが正しい仕様を覚えること自体が困難になってしまうという問題もある。</p>
+<p>PLfMにおいては、何かしら予期しない動作が起きたとしてもせいぜいプログラムがクラッシュする程度の問題にしかならないことに加えて、音楽のための言語に必須ともいえる、オーディオ入出力のようなペリフェラルを形式的に定義することはあまり一般的でないこと、また言語自体が特定の開発/実行環境のプログラムとセットになって設計されており、形式的に言語仕様を定義するよりも、その実装におけるコメントや、ドキュメンテーションの充実で言語仕様らしい情報を補完する方が現実的であるため、言語仕様＝唯一の実装となっているものが大多数である。</p>
+<p>ただし、テキストベースの言語において、意味論はともかく統語論の形式的定義に関しては、バッカス・ナウア記法に代表される文脈自由文法による形式的な記法が存在している。かつ、これに似せた記法で統語論、ソースコードをパース（文字列から抽象構文木など基礎的なデータ構造）するためのプログラムを自動で出力できる、コンパイラ・コンパイラと呼ばれるツールが存在している。こうしたツールを用いれば実装による仕様定義ではあっても、ある程度形式的定義が可能だ。実際コンパイラコンパイラの代表的ツールであるbison（yaccというツールの拡張版）はSuperCollider、ChucK、Faustといった多くの言語の実装で用いられており、筆者の実装したmimiumもこれを用いている。</p>
+<p>また音楽向け言語において意味論を形式的に定義する方法、形式的意味論での定義を用いている代表的な例としてはFaustが挙げられる。Faustは形式的意味論の中でも表示的意味論（Denotational
+Semantics）という、ある項を別の言語の項へと変換する論理的規則を定義する意味論を採用している<a
+href="#fn5" class="footnote-ref" id="fnref5"
+role="doc-noteref"><sup>5</sup></a><span class="citation"
+data-cites="Orlarey2004">(Orlarey, Fober, and Letz 2004)</span>。</p>
+</section>
+</section>
+<section id="ドメイン固有言語のデザインパターン" data-number="0.2">
+<h2 data-number="5.2"><span class="header-section-number">5.2</span>
+ドメイン固有言語のデザインパターン</h2>
+<p>次に、プログラミング言語全般における言語仕様の定義方法の話から、より特定の応用領域（ドメイン）に向けたプログラミング言語、いわゆるドメイン固有言語（Domain-Specific-Language：DSL）の実装方法に関する議論を概観する。</p>
+<p>DSLは音楽に限らず、例えばProcessingやGLSLのようなグラフィック生成のための言語や、ArduinoやHDLのようなハードウェアの操作に特化した言語が存在する。先ほど挙げたbisonのようなシンタックス定義のためのコンパイラ・コンパイラも、バッカス・ナウア記法風に書かれたテキストデータからパースプログラムのソースコードを出力する、いわばプログラミング言語実装のためのDSLである。</p>
+<p>一般的にプログラミング言語のコンパイラ、インタプリタの基本的な構造はテキストというデータを次々と機械語へと近い形のデータ構造へと変換し続けるパイプラインのような構造を取っている。ところが、ProcessingやArduinoといったツールは、実装の方法からするとJavaやC++といった汎用言語上に構築されたライブラリとほとんど見分けがつかない構造を持っているが、DSLに分類されることもある。音楽のためのプログラミング言語も同様に、独自に文法が定義され、テキストデータの構文解析から行う必要があるもの、汎用プログラミング言語のライブラリとして実装されているもの、また両者をハイブリッド的に用いるものなど複数のアプローチが存在している。第4章で見たように、例えばMUSIC
+Nは独自に文法を定義しており、一方MUSIGOLは、実行プログラムもALGOL上のライブラリとして実装され、ユーザーもALGOLのコードを書くのだった。</p>
+<p>プログラミング言語研究の分野で、スピネリスはこのような実装のアプローチの違いをデザインパターンとして整理した<span
+class="citation" data-cites="Spinellis2001">(Spinellis
+2001)</span>。そのうち、実装方針に関わる一部を以下に列挙する。</p>
+<ul>
+<li>文字列解析</li>
+<li>言語特殊化</li>
+<li>言語拡張</li>
+<li>Piggyback(おんぶ)</li>
+<li>ソースtoソース変換</li>
+<li>パイプライン</li>
+</ul>
+<p><strong>文字列解析</strong>は、すでに説明した、テキストデータを直接読み込んで抽象構文木のようなデータ構造へ変換するプログラムを書く方法だ。これは当然、文法の設計の自由度が一番高い代わりに、構文解析という比較的煩雑になりやすいプログラムを自ら実装する必要がある。</p>
+<p><strong>言語特殊化</strong>というのは、汎用言語のうちの一部の機能だけを使うような構造をとる言語である。先程の例で言えば、ProcessingやArduinoがあてはまる。Processingでは画面上に四角形を描画する<code>rect(100,100,200,200)</code>関数のように、画像描画のための関数を呼び出せる。このときProcessingのホスト言語（ライブラリ実装に用いているプログラミング言語）はJavaという言語で、関数定義などの意味論に関わる文法やその呼び出しの仕組みはJavaの仕様と実行環境に準ずる。このようにライブラリとしてDSLを実装する大きな利点は、ホスト言語上で実装されているライブラリの資産を活用できる点である。例えば、Processingの中で音声信号処理のライブラリを用いたければ、Java言語のために実装されたライブラリをそのまま使うことも可能である。もちろん、そのライブラリ内ではいかにJavaのより高度な言語仕様が用いられていても、問題なく実行できる。</p>
+<p>では、普通のライブラリと、言語特殊化を用いたDSLとはどのように異なるのだろうか。通常、特定の目的に特化した関数をライブラリとして実装する場合は、例えば関数の名前がライブラリ間で重複しないように、名前空間のような、言語仕様に存在する様々な構造化のための機能を用いて、グローバル名前空間の中で関数の名前が重複することを避けるようにする。一方で言語特殊化を用いるDSLは、例えばProcessingではグローバル名前空間で定義された<code>rect</code>関数を利用するように、名前重複のリスクや、構造化された状態の読みやすさよりも、より初心者が関数定義や実行といった、基本的言語仕様のみを使って記述できることを重視する。Processing上でJava言語で書かれたライブラリを使うことは簡単でも、Java言語のプロジェクトの中で一部分だけProcessingを使用する、といったユースケースを想定していない、とも表現できる。</p>
+<p><strong>言語拡張</strong>とは、言語制限と同様ホスト言語上のライブラリとしての実装をする点では共通しているが、ホスト言語自体に意味論を自己拡張できるような機能が存在していると、ライブラリでありながらまるで別の言語を用いているかのようにDSLを実装することが可能になる。これは次の節で詳しく説明する。</p>
+<p><strong>Piggyback（おんぶ）</strong>とは、構文解析を行うようなDSL、とライブラリとしてのDSLの中間的アプローチとも言える方法だ。例えば、bisonというコンパイラ・コンパイラは、その構文の仕様自体は独自に定義されている。しかし文を解析した後に行う処理、アクションと呼ばれる部分の記述は、後に変換されるC言語やC++言語の記法をそのまま用いることができる。このような別の言語仕様をある言語上に埋め込むようなパターンがPiggybackだ。このアプローチを用いることで、言語の構文の自由度を高めつつも、部分的には別の言語を借りることができ、実装のコストを減らすことができる。</p>
+<p><strong>ソースtoソース変換</strong>は、ある言語のソースコードを別のホスト言語へ変換する方法のことだ。これはPiggybackとの違いが分かりにくいかもしれない。例えば典型的なソース変換を行う言語であるFaustは自身の言語内で意味体系が完結している。そのため、元々はC++のソースコードに変換する機能がメインの言語であるものの、現在はC言語、Rust、D言語、Java、LLVM
+IRなどさまざまな言語に変換することができるようになっている。一方で、bisonのような言語の場合には初めからアクションの部分はC言語の仕様に頼ることになっているので、バックエンドをC++に変更したいときに同じソースコードをそのまま流用することができない。ソースtoソース変換アプローチの利点は1つのホスト言語に縛られないながらもホスト言語の持つインフラストラクチャ（ビルド、デプロイのためのツール群等）を活用することができる点だと言える。</p>
+<p><strong>パイプライン</strong>は、様々なツールを組み合わせてデータ構造を変換していくデザインパターンである。これは、SuperColliderをホストとして動くSonic
+PiやTidalCyclesのことを考えればわかりやすい。起源を辿ればMUSIC
+Nも基本的に、テキストデータをバイナリ表現に変換するPass1、ノートの情報を整理し時間軸に沿って並べ直すPass2、最終的にPCMの波形を実行するPass3の3つの処理のパイプラインで作られていた。</p>
+<section id="言語拡張と自己反映性coffeecolliderを例に"
+data-number="0.2.1">
+<h3 data-number="5.2.1"><span class="header-section-number">5.2.1</span>
+言語拡張と自己反映性：CoffeeColliderを例に</h3>
+<p>ライブラリとしてのDSL実装の中でも、ホスト言語の機能が拡張性がある場合はかなり構文の自由度がある言語設計を行うことが可能だ。</p>
+<p>その例を、mohayonaoによるCoffeeColliderというWebブラウザ上で動作するPLfMを例にして見ていこう。CoffeeColliderは、音楽プログラミング言語の中でも代表的な言語であるSuperColliderの構文を模した、CoffeeScriptという言語のライブラリとして実装されているDSLである<span
+class="citation" data-cites="mohayonao">(mohayonao
+2015)</span>。なお、CoffeeScript自体はブラウザ上で動作する唯一の言語であるJavaScriptへと変換されることで動作する、AltJSと呼ばれる言語の1つである。</p>
+<p>本来SuperColliderは構文解析から行う言語であり、ネイティブアプリケーションとして動作するがWebブラウザでは動作しない。</p>
+<p>CoffeeColliderはSuperCollider上におけるUnit Generatorの接続をWeb
+Audio
+APIという、Webブラウザに近年標準的に組み込まれるようになった音声合成のためのインターフェースを用いることで実現している。CoffeeColliderは文字列解析を自分では行っておらず、特定のオブジェクトに対する<code>+</code>演算子や<code>*</code>演算子の挙動をオーバーロードすることで、CoffeeScriptの文法で可能な範囲の表現でシンタックスをSuperColliderへと模している。</p>
+<div id="lst:coffeecollider" class="listing coffeescript">
+<p>コード 1: CoffeeColliderのコードサンプル。</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode coffeescript"><code class="sourceCode coffee"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="fu">-&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  noise <span class="kw">=</span> PinkNoise<span class="kw">.</span>ar<span class="kw">(</span><span class="fl">0.2</span><span class="kw">)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  noise <span class="kw">=</span> Mix <span class="ot">Array</span><span class="kw">.</span>fill <span class="dv">10</span><span class="kw">,</span> <span class="fu">(i)-&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    Resonz<span class="kw">.</span>ar<span class="kw">(</span>noise<span class="kw">,</span> i <span class="kw">*</span> <span class="dv">800</span> <span class="kw">+</span> <span class="dv">200</span><span class="kw">,</span> <span class="fl">0.05</span><span class="kw">)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  noise <span class="kw">=</span> <span class="kw">(</span>noise <span class="kw">*</span> <span class="fl">0.2</span> <span class="kw">+</span> noise <span class="kw">*</span> Decay<span class="kw">.</span>kr<span class="kw">(</span>Dust<span class="kw">.</span>kr<span class="kw">(</span><span class="fl">0.5</span><span class="kw">),</span> <span class="dv">10</span><span class="kw">))</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  noise <span class="kw">=</span> RHPF<span class="kw">.</span>ar<span class="kw">(</span>noise<span class="kw">,</span> LFNoise0<span class="kw">.</span>kr<span class="kw">(</span><span class="fl">0.5</span><span class="kw">).</span>range<span class="kw">(</span><span class="dv">220</span><span class="kw">,</span> <span class="dv">880</span><span class="kw">),</span> rq<span class="kw">:</span><span class="fl">0.001</span><span class="kw">)</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  CombL<span class="kw">.</span>ar<span class="kw">(</span>noise<span class="kw">,</span> delaytime<span class="kw">:</span><span class="fl">0.5</span><span class="kw">,</span> decaytime<span class="kw">:</span><span class="dv">25</span><span class="kw">).</span>dup<span class="kw">()</span> <span class="kw">*</span> <span class="fl">0.5</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">).</span>play<span class="kw">()</span></span></code></pre></div>
+</div>
+<div id="lst:supercollider" class="listing smalltalk">
+<p>コード 2: SuperColliderのコードサンプル。</p>
+<pre class="smalltalk"><code>{
+   var noise = PinkNoise.ar(0.2);
+   noise = Mix.new(Array.fill(10, {arg i;
+     Resonz.ar(noise, i * 800 + 200, 0.05)}));
+   noise = (noise * 0.2 + noise * Decay.kr(Dust.kr(0.5),10));
+   noise = RHPF.ar(noise, LFNoise0.kr(0.5).range(220, 880), rq:0.001);
+   CombL.ar(noise, delaytime:0.5, decaytime:25).dup() * 0.5
+}.play;</code></pre>
+</div>
+<p>コード 1とコード 2にSuperColliderとCoffeeColliderで、等価な音を出すサンプルコードの比較を示す。2つのコードを見比べると、SuperColliderでの<code>{}</code>で囲むことでオブジェクトを生成するシンタックスを、CoffeeScriptにおける無名関数<code>(-&gt; statements)</code>を利用して似せていることがわかる。CoffeeColliderの実装は、<strong>演算子のオーバーロード</strong>というホスト言語にある機能を積極的に活用することで、テキストをパースするプログラムを書くことなく、かつ、CoffeeScriptのシンタックスの中で可能な限り記法をSuperColliderに近づけている。</p>
+<p>演算子のオーバーロードとは、たとえば<code>+</code>や<code>*</code>などの二項演算を数値の加算乗算やテキストの結合などの言語組み込みの型だけではなく、ユーザーの定義したカスタム型に対して新しく振る舞いを定義できる機能のことだ。たとえば、Number型2つで構成されるの2次元ベクトルの型を定義した時に、<code>+</code>演算子を使ったら要素同士をそれぞれ加算できたり、<code>*</code>演算子を使ったら直積、内積や外積を計算できるようにしたらコードの記述が短くできたり、一般的に数学で使われるような記法と近づけられることでソースコードを直感的に読めるようにできる。</p>
+<p>演算子のオーバーロードができるようになっている汎用的な言語としては、たとえばC++、Scala、Haskellなどがある。特にHaskellでは、あらゆる関数を中置演算子のように使える上に<code>!  #  $  %  &amp;  *  +  .  /  &lt;  =  &gt;  ?  @  \  ^  |  -  ~</code>などの文字から任意の文字を組み合わせて演算子を作ることもでき、<code>~~&lt;=&gt;||</code>演算子のような、存在しない独自の演算子を作ることもできてしまう。</p>
+<p>JavaScriptの言語仕様には演算子オーバーロードの機能がない。そのため例えばTone.js<span
+class="citation" data-cites="tonejs">(<span>“<span
+class="nocase">Tone.js</span>”</span>
+2021)</span>といったJavaScript上で構築される音声信号処理ライブラリでは、信号処理プロセッサのようなユーザー（Tone.js自体の開発者という、JavaScriptのユーザー）によって定義されたデータ型同士を組み合わせるためには関数呼び出し<code>f(arg)</code>やオブジェクトのメソッド呼び出し<code>A.callmethod()</code>のような記法を用いて表現するしかなくなる。一方、CoffeeScriptには演算子オーバーロードがついているので、SuperColliderという全く関連性のない言語体系の言語であっても、ある程度表面上のシンタックスを近づけることができる。</p>
+<p>演算子オーバーロード以外に、こうした言語自体の記法を自己拡張できるような機能は他にも、KotlinのType-Safe
+Builder<a href="#fn6" class="footnote-ref" id="fnref6"
+role="doc-noteref"><sup>6</sup></a> やF#のApplicative Computation
+Expression<a href="#fn7" class="footnote-ref" id="fnref7"
+role="doc-noteref"><sup>7</sup></a>などがある。また、C言語など多くの言語で一般的に使えるマクロのような、言語本体の処理より前にテキストや抽象構文木をユーザーが定義したルールを用いて置き換える記法もシンタックスを変えることができる構文拡張の1つとみなせる。</p>
+<p>こうした言語の意味を拡張していくような言語機能は、場合によっては自然な記述を可能にする一方、場合によっては同じ言語で書かれているのにソースコードの見た目が全く異なってしまい、かえって読みにくくしてしまうような効果も持つ。そのため、言語設計として意図的にオーバーロードを禁止することで、ソースコードの見た目に一貫性を持たせる方針を取る言語も少なくない（例えばgo言語など）。その意味ではLISPの系列の言語では、シンタックスを敢えてS式と呼ばれる括弧で括る記法に統一してしまうことで、マクロなどで機能を拡張し続けても、結果的にソースコードの見た目の一貫性は保つことができる。</p>
+<p>極端な言語の一例としては、コンパイラの挙動を実行コード側からかなり自由に変更できるようにすることで、ライブラリや利用目的ごとに言語のシンタックスを大きく変えられてしまうRacket<span
+class="citation" data-cites="Racket">(Culpepper et al.
+2019)</span>がある。Racketそのものは本来S式のシンタックスを持つLISP系列の言語だが、<code>#lang slideshow</code>のようなシンタックス指定の命令を記述することによってその行以下で利用する言語をスライドショーを作る機能に特化した言語に切り替えられるように、ライブラリを切り替える感覚で言語の表面的な見た目までを切り替えられてしまう。この設計思想は、解きたい問題のドメインに合わせてまずそのドメインに特化した言語を作る、<em>Language-Oriented
+Programming</em>と呼ばれている。実装面から見れば、マクロにしてもRacketのような高度なコンパイラの挙動変更にしても、ソースコードをコンパイルしながら適宜その内容によってコンパイラ自体も変更されるというフィードバックプロセスが、言語の自由度を高めるほどに複雑化していくため、単に入力されたテキストデータを低レベルのデータまで変換していくパイプ的な構造から遠ざかっていくことになり、実装の難易度も一般的に上がっていく。</p>
+</section>
+<section id="tidalcycles---ハイブリッドなアプローチ"
+data-number="0.2.2">
+<h3 data-number="5.2.2"><span class="header-section-number">5.2.2</span>
+TidalCycles - ハイブリッドなアプローチ</h3>
+<p>さらに、文字列解析、言語拡張、言語特殊化など複数のパターンを組み合わせて実装するハイブリッドなアプローチもありうる。例としてはTidalCycles<span
+class="citation" data-cites="McLean2014">(McLean
+2014)</span>が挙げられる。</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>d1 <span class="op">$</span> sound <span class="st">&quot;bd*4&quot;</span> <span class="op">#</span> gain (every <span class="dv">3</span> (rev) <span class="op">$</span> <span class="st">&quot;1 0.8 0.5 0.7&quot;</span>)</span></code></pre></div>
+<p>この1行において、<code>#</code>はホスト言語であるHaskellにおける中置演算子の機能をオーバーロード（<strong>言語拡張</strong>）したものである。<code>$</code>は<code>()</code>のように、関数実行の順番と単位を明示する役割を持つ、Haskellで標準的に使われる演算子そのものである。<code>sound</code>や<code>gain</code>、<code>every</code>などはHaskell上でTidalCyclesライブラリとして定義された関数の名前である。また同時に、ユーザーはHaskellの関数定義や型宣言など高度な文法を知る必要はない（<strong>言語特殊化</strong>）。</p>
+<p>そのためTidalCyclesはおおむねライブラリとしてのDSLの性質を備えている一方、ダブルクォートで囲まれた部分はHaskellの意味論の上ではただの文字列であり、ParsecというHaskellの<strong>字句解析</strong>ライブラリで内部的にパースしている。この記法はBol
+Processorという表記法をベースに独自に定義されたものである。また最終的にTidalCyclesはSuperColliderという音声合成エンジンに対してOSC（Open
+Sound
+Control）というネットワークコマンドを送ることで音を出している（<strong>パイプライン</strong>）。</p>
+</section>
+<section id="ライブラリとしてのplfmの限界" data-number="0.2.3">
+<h3 data-number="5.2.3"><span class="header-section-number">5.2.3</span>
+ライブラリとしてのPLfMの限界</h3>
+<p>それでは、TidalCyclesのように、自己反映性の高いホスト言語があれば音楽のために1からテキスト解析をする言語の実装は必要ないのだろうか。</p>
+<p>実際、マッカートニーはSuperColliderの設計についての論文で、究極的には音楽のために言語をゼロから開発する必要はないと述べていた。</p>
+<blockquote>
+<p>コンピュータ音楽に特化した言語は実際必要なのだろうか？少なくとも理論的には、私はそうではないと思う。今日の汎用プログラミング言語で利用できる抽象化方法は、コンピュータ音楽を便利に表現するフレームワークを構築するのには十分なものだ。ただ残念なことに、実用的には、今すぐ使える言語の実装としては欠けている部分もある。多くの場合、ガベージコレクションはリアルタイムでは実行されず、引数の受け渡しはあまり柔軟でない。遅延評価がないと、パターンやストリームの実装がより複雑になる。SuperColliderを書いたのは、コンピュータ音楽のために柔軟に使えるような抽象化方法を持たせたいと思ったからだ。将来的には他の言語の方が適しているかもしれない。SC
+Serverの合成エンジンと言語を分離する目的の一つは、SuperCollider言語とクラスライブラリで表現されている概念を他の言語で実装することを模索可能にすることだ。他にも、将来的にコンピュータ音楽のために面白い可能性を秘めた言語として、
+OCaml (www.ocaml.org)、Dylan (www.gwydiondylan.org)、 GOO
+(www.googoogaga.org)、そして、偶然にも文法規則の多くに似た仕様を持つスクリプト言語であるRuby
+(www.ruby-lang.org)がある。<span class="citation"
+data-cites="McCartney2002">(McCartney 2002,筆者訳)</span></p>
+</blockquote>
+<p>4章で見たように、SuperColliderのサーバー・クライアントモデルは実際にTidalCycles（Haskell）やSonic
+Pi（Ruby）のような多くのクライアント言語の誕生に寄与した。しかし、SuperColliderそれ自体にあたる言語を既存の言語のライブラリで完全に置き換えられるかというと、難しい現状がある。</p>
+<p>その大きな要因として、ハードウェアについて意識する必要がないスクリプティング言語に近づくほど、実行タイミングの制御の不確定さが増すことがある。多くのスクリプティング言語では変数のためのメモリ確保と解放はガベージコレクターというランタイムシステムの機能によって行われる。この時、リアルタイム動作を厳密に想定していない環境では一時的に全ての処理を停止して使われなくなったメモリの解放などを行うSTW（Stop-the-World）と呼ばれる処理が挟まれる。オーディオ処理が行われている最中にこのSTWが挟まれてしまうと処理がリアルタイム実行に間に合わなくなってしまい音が途切れる可能性が出てくる。SuperColliderのガベージコレクターはあらかじめこうした事情を考慮した設計になっているが、大抵の汎用スクリプティング言語は音声合成のようなリアルタイム性を想定した作りにはなっていない。</p>
+<p>そもそも、ガベージコレクターの作りがリアルタイム動作を考慮できていたとしても、Faustで記述するような低レベルのDSPのプログラムでは、OSが提供するAPIを経由したメモリの確保（<code>malloc</code>関数など）自体、実行時間が非決定的になるために避けるべきこととされている<span
+class="citation" data-cites="Bencina2011">(Bencina
+2011)</span>。多くのスクリプティング言語では変数を宣言しただけでこのOSのAPIを経由したメモリ確保が行われる。そのため、スクリプティング言語での直接的なDSPの記述には、単に実行性能がC言語などの低級言語に劣るという問題ではなく、言語がOSの仕組みに依存することで発生する構造的な問題があり、ほとんど解決不可能である。</p>
+<p>また、汎用OSの上で並行処理を実現しようとすると、多くのOSが採用しているプリエンプティブ・スケジューリングと呼ばれるマルチタスク管理の方法も実行タイミングの非決定性につながる。多くのOSでは、実際のCPUのコア数よりもはるかに多くのプロセスが並行して動作する。これは、OSが多くのアプリケーションの実行を適切にCPUに割り振り、さらに1つのCPUの中でも細かくそれぞれのプロセスを時分割して実行しているからである。プリエンプティブスケジューリングの特徴は、このOSが時分割を行うタイミングに、分割される側のユーザープログラム（e.g. PLfMのランタイム）が関与できないことである<a
+href="#fn8" class="footnote-ref" id="fnref8"
+role="doc-noteref"><sup>8</sup></a>。</p>
+<p>ライブラリとしてのPLfMを実現している数少ない例外としては、Lua言語上で、コードをメモリ上でネイティブバイナリへとコンパイルし即時利用するJIT（Just-In-Time）コンパイルするLuaJITの機能を活用した音声、映像のライブコーディング環境LuaAVがある<span
+class="citation" data-cites="Wakefield2010">(Wakefield, Smith, and
+Roberts
+2010)</span>。LuaAVはライブラリでありながら論理時間ベースのサンプル単位の制御を保証したスケジューラーを搭載している。LuaAVというライブラリとしてのPLfMの実現にはLuaという言語自体が様々な言語やアプリケーションに埋め込んで用いることを想定した作りになっていることが反映されている（例えば、音楽制作ソフトウェアではオープンソースのDAWであるArdourが機能拡張のためにLuaを採用している）。</p>
+<!-- 
+## ビジュアル言語のシンタックスと保存フォーマット
+
+一般的には中間表現を低次へ変換していくほどより抽象的な操作に近づいていくので言語処理系の実装が汎用言語の実装に近くなっていく。
+
+またMaxやPuredataのようなビジュアル言語の場合は、保存されているテキスト/バイナリデータを解釈してビジュアルインターフェースとして表示する評価と、音声処理のためのデータ構造としての評価と2方向の評価が行われていると解釈することができる。この時の保存されているデータ形式は例えばMaxではJSONというJavascriptのための汎用データ表現形式を用いているように、その言語のSemanticsとは関係のない汎用的なデータ構造を利用している場合もある。
+ -->
+</section>
+</section>
+<section id="plfmの特徴を表す語彙の整理" data-number="0.3">
+<h2 data-number="5.3"><span class="header-section-number">5.3</span>
+PLfMの特徴を表す語彙の整理</h2>
+<p>ここまで、PLfMを特徴づける要素と実装の方法の違いについて概観してきた。では実際のところ、これらの要素がそれぞれの言語を<strong>どのように特徴づける</strong>のだろうか？</p>
+<p>これまで、PLfMの実装に関する論文では、<strong>汎用的（General）</strong>、<strong>効率的（Efficient）</strong>、<strong>表現力が高い（Expressive）</strong>という3つの語がそのシステムの特徴を形容するために頻繁に使われてきた。</p>
+<p>しかし実際には、これらの語が用いられる意図は文献ごとにかなりのばらつきがある。</p>
+<p>例えば、ブランドがChronicを開発するにあたってのモチベーションは音楽のための言語に存在する表現力の高さ（Expressiveness）と汎用性（Generality）のトレードオフの解消だった<span
+class="citation" data-cites="Brandt2002">(Brandt
+2002)</span>。それを説明したのが図 1である。</p>
+<figure>
+<img src="../img/chronic-tradeoff.png" id="fig:chronic-tradeoff"
+style="width:70.0%"
+alt="図 1: ブランドがChronicを開発するにあたって説明した、ExpressivenessとGeneralityのトレードオフ。(Brandt 2002)より引用。" />
+<figcaption aria-hidden="true">図 1:
+ブランドがChronicを開発するにあたって説明した、ExpressivenessとGeneralityのトレードオフ。<span
+class="citation" data-cites="Brandt2002">(Brandt
+2002)</span>より引用。</figcaption>
+</figure>
+<p>ブランドは文献中で、Expressivenessを「ユーザーが読みやすく書きやすい」、
+Generalを「可能な表現の範囲が広い」という意味で用いられている。またChronicはOCamlというホスト言語の実行速度の問題もあり、リアルタイムで実行はできなかった。つまりChronicではGeneralとExpressiveの両立はできたが実行時パフォーマンスという新たなトレードオフが発生していたことがわかる。</p>
+<p>一方、ラッザリーニはMusic
+N系列やCsoundの設計の、Multi-Languageパラダイムに関して以下のように述べている。</p>
+<blockquote>
+<p>音楽プログラミングにおいて多言語アプローチを取ると、ユーザは<strong>汎用性〔Generality〕</strong>と<strong>効率性〔Efficiency〕</strong>のバランスを取りやすくなる。<span
+class="citation" data-cites="Lazzarini2013">(Lazzarini 2013,
+p103、筆者訳、強調は筆者による)</span></p>
+</blockquote>
+<p>ここでの語用の意図は、続く以下の説明を参照するとわかる。</p>
+<blockquote>
+<p>タスクに応じてプログラマは異なる複雑度のエントリーポイントを選択することが可能になる。一般には、より低く、より一般的な〔general〕レベルでは、複雑なコードの設計が必要だが広い範囲の結果をもたらす。一方、より高い、特殊化、具体化されたレベルで操作できるなら、プログラミングに必要な労力という観点からプロセスはより効率的〔efficient〕になるだろう。（ibid.）</p>
+</blockquote>
+<p>つまり、ラッザリーニの説明においては、generalに関してはブランドと同じく、可能な表現の範囲が広いという意味で用いている。一方で、ここでのEfficiencyとは、実行コストのことではなく、<strong>ユーザーが目的のプログラムを構築するまでの効率</strong>のことを指している。</p>
+<p>さらに、ダネンバーグのサーベイでは以下のような表現がある。</p>
+<blockquote>
+<p>この論文では音楽プログラミングでとりわけ重要な計算モデルについて、これらのモデルがどのようにプログラミング言語の中でサポートされているか、そしてどのようにこれらが<strong>表現力が高く〔expressive〕</strong>、<strong>効率的〔efficient〕</strong>なプログラムを導くかについて検討する。<span
+class="citation" data-cites="Dannenberg2018">(Dannenberg 2018,
+p1、筆者訳、強調は筆者による)</span></p>
+</blockquote>
+<p>ここでのefficientはprogramsに掛かっているのでラッザリーニとは異なり実行コストのことを指していると推察できる。このように、同じefficiencyというワードでも計算機が負担するコストと、ユーザーが負担するコストという異なる事項を指している場合とがあることがわかる。</p>
+<p>実のところ、音楽に限らずプログラミング言語という分野自体、1960年頃から長く学術的研究がされている中でその貢献をどう主張するか、特に作った言語をどのように評価すればよいかという話題は2009年のACM
+SIGPLAN<a href="#fn9" class="footnote-ref" id="fnref9"
+role="doc-noteref"><sup>9</sup></a>主催の<em>PLATEAU: Evaluation and
+Usability of Programming Languages and
+Tools</em>が開催されるまであまり触れられてこなかった。2010年のPLATEAUでマークストラムは新しい言語の実装や設計などのアイデアを論文として提示する際の正当化の方法として、<strong>主張と根拠の整合性（Claim-Evidence-Correspondense）</strong>という見方を提示した<span
+class="citation" data-cites="Markstrum2010">(Markstrum
+2010)</span>。</p>
+<p>マークストラムによれば、プログラミング言語の論文で提示される主張は大きく分けて3種類あるという。1つ目はこれまで存在しなかった新機能を作ったというもの、2つ目はすでにある既存の機能の効率性を上げるような内容、3つ目は望ましい言語の特徴（property）、つまりこの言語は直感的である、読みやすい、効率的であるといったような内容だ。しかしこれまでのプログラミング言語の提案の論文には、1と2、つまり新機能と機能の増強に関しては論文が査読されたものであるならば十分認められるものであるが、望ましい言語の特徴に関してはその主張と、それを支える根拠は両方とも提示されているが論理的な結びつきは不十分なものが多数あるとしたのだ。</p>
+<p>主張と根拠の整合性を証明する方法論は、統計的な評価実験のような実証主義的方法だけでは不十分とマークストラムは警鐘を鳴らしている。こうした流れを引き継いで、近年では2018年にコブレンツらによって、ベンチマークや評価実験など工学的手法に限らない学際的なプログラミング言語デザインについての提言がなされたり<span
+class="citation" data-cites="Coblenz2018">(Coblenz et al.
+2018)</span>、2020年のミュラーとリングラーの修辞的フレームワーク<span
+class="citation" data-cites="Muller2020">(Muller and Ringler
+2020)</span>のように、論文中で主張された表現の変遷などを人文学的手法で辿ることで明らかにするような研究が進んでいる。またPLfMに関しては、マクファーソンらが言語設計者へのインタビューを通じて、言語設計者がそれぞれどのような価値観を持って機能実装をしているかを分析している<span
+class="citation" data-cites="Mcpherson2020">(McPherson and Tahlroǧlu
+2020)</span>。</p>
+<p>そこで、次の項ではコブレンツらやマクファーソンの分類を参考にしながら、改めて評価のための語彙を整理する。そのためにまずは、音楽プログラミング言語を評価、また設計の指針となるための指標を、ユーザーがソースを編集し、実行し、そのフィードバックが帰ってくるHuman-in-the-Loopシステムとしてモデル化することで、その際に考えられるコストや自由度をユーザー、コンピューターそれぞれの観点で分類するという方針をとる。</p>
+</section>
+<section id="音楽プログラミング行為のモデル化と評価語彙の提示"
+data-number="0.4">
+<h2 data-number="5.4"><span class="header-section-number">5.4</span>
+音楽プログラミング行為のモデル化と評価語彙の提示</h2>
+<figure>
+<img src="../img/Anderson-model.png" id="fig:andersonmodel"
+style="width:75.0%"
+alt="図 2: アンダーソンとキビラによる音楽プログラミングのモデル。" />
+<figcaption aria-hidden="true">図 2:
+アンダーソンとキビラによる音楽プログラミングのモデル。</figcaption>
+</figure>
+<p>音楽プログラミングのプロセスをその表現の様式によらずモデル化したものとして、アンダーソンとキビラによるコンピューターを用いる音楽パフォーマンスのためのシステムを、彼らが開発したFORMULA（FORTH言語上に構築されたPLfM）を中心に分析した研究がある<span
+class="citation" data-cites="Anderson1990">(Anderson and Kuivila
+1990)</span>。アンダーソンらは論文内で図 2のように、コンピューターを用いた音楽生成を人間とコンピューターが作り出すフィードバックループ、いわゆるHuman
+In the Loopモデルとして捉えた。</p>
+<figure>
+<img src="../img/humanintheloop_model.png" id="fig:humanintheloop"
+style="width:100.0%"
+alt="図 3: Human In the Loopとしての音楽プログラミング言語の利用モデルを、言語を特徴付ける各要素、実際に現れる特徴で表した図。" />
+<figcaption aria-hidden="true">図 3: Human In the
+Loopとしての音楽プログラミング言語の利用モデルを、言語を特徴付ける各要素、実際に現れる特徴で表した図。</figcaption>
+</figure>
+<p>このアンダーソンらのモデルにおいて、Computer
+Systemに相当する部分がコンパイラ、Synthesizerに相当する部分がランタイムシステムだと捉えれば、ライブコーディングのような近年の対話的プログラミングの実行モデルとしてもよく当てはまるように思える。</p>
+<p>そこで、PLfMの実行モデルとしてより説明しやすくなるように、アンダーソンらのモデルを参考にしつつ、ダネンバーグが提示したPLfMを特徴づける要素の語彙も参照することで、新しいモデルを提示する。図 3にそれを示した。そして、この実行モデルの各要素において、評価の指標となる言葉を当てはめることで、その意味の明確化を図ることにする。なおこのモデルは議論が英語で中心的に行われており、かつその中で意味合いの不明瞭なものを問題視しているため語彙は英語で示している。</p>
+<p>まず、ソフトウェアとしてのPLfMの実行環境は大きく分けて<strong>開発のための環境（Developing
+Environment）</strong>と、実際に音を鳴らす<strong>実行環境（Running
+Environment）</strong>の2つに分けられる。もちろん、実際のソフトウェアとしてはこれら2つの環境は同じソフトウェアの中に同居しているケースが多い。</p>
+<p>開発のための環境に属する要素としては、その言語で書かれた<strong>ソース（Source）</strong>が存在する。これを特徴づける要素として、言語のシンタックスとセマンティクスが関わってくる。また、ダネンバーグの指摘のように、開発環境の特徴づけには<strong>ドキュメンテーション（Documentation）</strong>の充実や<strong>コミュニティ（Community）</strong>の活発さといった要素も関係してくる。</p>
+<p>実行環境には、ソースコードのデータを受け取り解釈する<strong>コンパイラ（Compiler）</strong>が存在する。コンパイラは何かしらの<strong>中間表現（Intermediate
+Representation）</strong>、、例えばUGenのネットワーク、仮想機械の命令列、BDA、etc…を出力し、<strong>ランタイム（Runtime）</strong>がそれを実行し音声を出力する。</p>
+<p>コンパイラやランタイムは最終的に音を出力するだけではなく、時に実行結果や実行エラーなどの付加的情報をプログラマーに伝える。こうした情報はエディタのような<strong>フロントエンド（Frontend）</strong>プログラムを介して伝えられる。フロントエンドは当然エラーのような情報だけでなく、ソースコードの情報そのものを表示する仕事も受け持つため、開発のための環境と実行環境にまたがってプログラマとの情報のやり取りを引き受ける。Maxやプログラマのようなビジュアル言語であれば、必ずしもソースコードの保存されている状態のデータのテキスト表現と、プログラマがソースコードとして実際に認識する視覚的なオブジェクト同士の接続の表現は大きく異なる。例えば、Maxはバージョン5で採用された保存フォーマット（<code>.maxpat</code>形式）は、JSONと呼ばれる、JavaScript言語で使われるデータ表現フォーマットを流用している。そのためテキストファイルとしても編集可能だが、テキストとしての<code>.maxpat</code>ファイルからそのパッチの内容を読み取ることはほとんど不可能である。つまり、こうしたビジュアル言語においてフロントエンドはある種のビジュアライザとしての役割を果たしている。極論を言えば、テキストを表示するエディタプログラムも、既存の利用できるライブラリが多いというだけで、本質的にはUnicodeやAsciiなどの特定の文字コードで保存されたバイナリデータを解釈し人間が解釈可能な形に視覚化するプログラムと言える。</p>
+<p>ユーザーはこのフロントエンドを通じて、ソースコードのデータを編集し、プログラムを実行した結果得られた実行結果/エラーメッセージ/音声などを確認し、再度編集するというループを繰り返すことになる。</p>
+<p>図の中で角丸かつ斜体になっている部分が評価のための語彙となる要素である。以下に改めて列挙する。</p>
+<ol type="1">
+<li>汎用性（可能な表現の広さ） / Generality (Possible Expressions)</li>
+<li>プラットフォーム非依存性 / Platform Independency</li>
+<li>学習しやすさ / Learnability</li>
+<li>動的変更 / Live Modification</li>
+<li>コーディングコスト / Coding Cost</li>
+<li>コンパイルのコスト / Compilation Cost</li>
+<li>実行コスト / Execution Cost</li>
+<li>開発のコスト / Development Cost</li>
+</ol>
+<p><strong>汎用性（Generality）</strong>はブランドの用いていた意味合いと同じ、可能な表現の範囲が広い/狭いの観点である。</p>
+<p><strong>プラットフォーム非依存性（Platform
+Independency）</strong>は、ソースコードの実行に特定のハードウェアやアーキテクチャ、OSなどの環境に依存するかどうか、という視点である。</p>
+<p>また、ソースコードの編集、実行の繰り返しのしやすさという視点で2つの指標を導入できる。開発環境側に関わる繰り返しのしやすさとしては、<strong>学習のしやすさ（Learnability）</strong>がある。これには文法規則はもちろん、ドキュメンテーションやコミュニティといった要素も大きく関わってくる。学習のしやすさにはシンタックスやセマンティクスに加え言語の核となる抽象化モデルがどの程度一般に馴染み深いものであるかも影響してくるため、同じ言語であっても相対的かつ時代によって変化もするものである。また実行環境に関わる繰り返しのしやすさには、プログラムの<strong>動的変更（Live
+Modification）</strong>のしやすさが影響する。ライブコーディングが可能な言語のように、変更したコードの内容が即時反映されれば編集-実行のフィードバックプロセスは一層スムーズになる。</p>
+<p><strong>コーディングコスト（Coding
+Cost）</strong>はプログラマが自らの意図通りの表現をいかにスムーズに記述できるかという点である（ブランドがExpressivenessと表現していたものに相当する）。コーディングコストは、同じ言語でも意図した表現に素早く辿り着けるかどうかにはエディタによる補完機能やライブラリの充実度合いによっても影響してくるため、開発のための環境全体が作用する指標である。このコーディングコストは学習のしやすさと区別することが難しいかもしれない。だが例えばTidalCyclesとSuperCollider両方に熟練したからといって、TidalCyclesで作りやすい複雑なリズムパターンを、SuperColliderで同じようには作り難いことを考えれば理解できるだろう。</p>
+<p>また、同じアルゴリズムをどの程度高速に実行できるかという観点は、<strong>コンパイル時のコスト（Compilation
+Cost）</strong>と<strong>実行時のコスト（Execution
+Cost）</strong>の2つにさらに分類できる。</p>
+<p>最後に、その言語自体の開発にかかる手間、<strong>開発のコスト（Development
+Cost）</strong>が存在する。</p>
+<!--
+綺麗な切り分けじゃなかったのでやめた
+![各特徴を編集時-実行時という観点と、空間的自由度-時間的自由度-効率性という観点で分類した図。](../img/diagram2.png){width=80% #fig:diagram2} -->
+<section id="各特徴間のトレードオフ" data-number="0.4.1">
+<h3 data-number="5.4.1"><span class="header-section-number">5.4.1</span>
+各特徴間のトレードオフ</h3>
+<figure>
+<img src="../img/tradeoff.png" id="fig:tradeoff1" style="width:90.0%"
+alt="図 4: 図 3の図における特徴間に存在するトレードオフを表した図。" />
+<figcaption aria-hidden="true">図 4:
+図 3の図における特徴間に存在するトレードオフを表した図。</figcaption>
+</figure>
+<p>これら8つの特徴全てを同時に改善することは根本的に難しい。少なくとも、全ての要素を改善しようと思えばそれだけ開発のコストは増大してしまうことは直感的に納得できるだろう。それ以外に存在するトレードオフには、コンパイラからランタイムに渡される中間表現の抽象度が大きく影響してくる。</p>
+<p>図 4でそれを説明する。この中で、学習のしやすさとコーディングコストについてはシンタックスとセマンティクスのデザイン、ドキュメンテーションやコミュニティの充実度合いに大きく影響を受け中間表現の粒度からは独立したものであるため除外して考えている。また、コンパイル時や実行時、開発時のコストに関する矢印の向きに関しては、一般的に少なくできる方が良いためLowの側に矢印を向けていることに注意されたい。</p>
+<figure>
+<img src="../img/tradeoff2.png" id="fig:tradeoff2" style="width:90.0%"
+alt="図 5: UGenインタプリタのような、粒度の大きい中間表現を用いる言語の特性を表した図。" />
+<figcaption aria-hidden="true">図 5:
+UGenインタプリタのような、粒度の大きい中間表現を用いる言語の特性を表した図。</figcaption>
+</figure>
+<figure>
+<img src="../img/tradeoff3.png" id="fig:tradeoff3" style="width:90.0%"
+alt="図 6: 粒度の大きい中間表現のプラットフォーム非依存性を上げようとすると開発コストが増大することを示した図。" />
+<figcaption aria-hidden="true">図 6:
+粒度の大きい中間表現のプラットフォーム非依存性を上げようとすると開発コストが増大することを示した図。</figcaption>
+</figure>
+<p>まず、コンパイル時のコストと実行時コストは一般的には相補的な関係にある。なぜなら、実行時のコストの低下は一般的に、実行するプログラムの形式を機械語に近い形式へと変換する作業によってなされるためである。そのため、中間表現の粒度が大きいほどコンパイルコストは下がり、代わりに実行時のコストが嵩む。中間表現の粒度が上がるほど、コンパイル-実行という区別が付きづらいインタプリタ型の言語に近付いていくという表現もできる。</p>
+<p>また、中間表現の粒度が小さくなるほどプラットフォーム非依存性は一般的に上がっていく。例えばFaustはブロックダイアグラム代数のデータをC言語やRust、LLVM
+IR、WebAssemblyと言った様々な形式に変換できるため、同じコードを幅広いプラットフォームで動作させることができる。</p>
+<figure>
+<img src="../img/tradeoff4.png" id="fig:tradeoff4"
+alt="図 7: Faustのような、粒度の細かい中間表現を用いる言語の特性を表した図。" />
+<figcaption aria-hidden="true">図 7:
+Faustのような、粒度の細かい中間表現を用いる言語の特性を表した図。</figcaption>
+</figure>
+<figure>
+<img src="../img/tradeoff5.png" id="fig:tradeoff5"
+alt="図 8: 粒度の小さな中間表現の言語で動的変更をしやすくしようとすると開発コストが増大することを示した図。" />
+<figcaption aria-hidden="true">図 8:
+粒度の小さな中間表現の言語で動的変更をしやすくしようとすると開発コストが増大することを示した図。</figcaption>
+</figure>
+<p>例えばPureDataをWeb上で動作させようとすると、ソースファイルの読み込み機能や様々な種類のUGenそれぞれをJavaScriptやWebAssemblyを用いてゼロから実装し直すという方法と、Emscriptenというツールを利用して、C言語で書かれたPureDataのソースコードをそのまま利用してWebAssemblyのフォーマットとして改めてビルドするという2種類の方法がありうる。実際、前者はWebPd<a
+href="#fn10" class="footnote-ref" id="fnref10"
+role="doc-noteref"><sup>10</sup></a>、後者はempd<a href="#fn11"
+class="footnote-ref" id="fnref11"
+role="doc-noteref"><sup>11</sup></a>というプロジェクトで実際に行われている。しかしWebPdのような方針の場合は実質PureDataというソフトウェアそのものを別の言語で作り直しているに等しいので開発のコストは非常に大きい。同様に、Emscriptenを経由してWebAssemblyを出力する場合、OSの機能を含め、C言語のソースコードではなく、ビルド済みのバイナリ形式のライブラリを利用している部分はやはり何らかの形で補う必要がある。また、どちらの場合にしても、多くのユーザーによって作られたエクスターナルオブジェクトはそのソースコードを手に入れ、改めてWebAssembly向けにビルドし直さなければ利用できない。</p>
+<p>つまり、図 5から図 6の変化のように、中間表現の粒度が大きな言語をプラットフォーム非依存的にするためには必然的に開発コストが増大することになる。逆に、中間表現の粒度が下がるとプログラムの動的変更は難しくなっていく。Extemporeのような、低レベル部分へのアクセス性を残しつつ、かつライブコーディングを想定したシステムを作るためには、図 7から図 8への変化のように、やはり開発コストが同時に増大してしまうというトレードオフが存在している。</p>
+<p>この各間のトレードオフの難しいところは、実行エンジンのパフォーマンスのような、量的に測定可能な指標と、動的変更のしやすさのような量として表しづらい指標が同時に関係しているという、<strong>量的特徴と質的特徴間のトレードオフ</strong>の存在である。</p>
+<p>単に実行コストのような量的な指標だけを取ってみても、第4章で見たように、音楽プログラミング初期の一度信号処理の結果をテープに書き込んでから再生する方式と、1980年代以降のリアルタイムに信号処理ができる環境とでは作られる音楽の質やプログラミングの体験の質も大きく異なる。一見単純な実行速度という量的な指標もある段階から質を大きく左右するものへと転化するのだ。</p>
+<p>そのため、PLfMを設計する際には、その言語がトレードオフのどのポジションに位置付けられるのかを認識することが重要な点になる。</p>
+</section>
+</section>
+<section id="小括" data-number="0.5">
+<h2 data-number="5.5"><span class="header-section-number">5.5</span>
+小括</h2>
+<p>本章では音楽プログラミング言語を主に設計、実装の視点から検討し、音楽プログラミングという行為と計算機内で発生するプロセスをHuman-in-the-Loopモデル化し提示することでを改めて整理した。その上で音楽のための言語の特性や、評価するための語彙について検討した。</p>
+<p>まず音楽プログラミング言語を実行するソフトウェアとは、通常のプログラミング言語と同じようにテキストデータがコンパイラによって様々な中間表現を経てより低次なデータ構造へと変換され、ランタイムへと渡されるという大まかな構造を持っている。</p>
+<p>この時、実装方法としてはテキストデータを直接解析せずとも、あるプログラミング言語の自己反映性（演算子オーバーロードやマクロ）が高ければ、その言語自体の機能を変化させる形でライブラリとして言語を実装もできる。ただし、多くの自己反映性の高い言語は、リアルタイムでの動作をあまり考慮しないメモリ自動解放機能のような、信号処理を行う上では障害となる言語機能を同時に備えおり、楽譜レベルの記述やリズムパターンのような比較的抽象度が高く、発生する時間間隔が大きい表現の記述にその対象が絞られるという問題点がある。</p>
+<p>そして、中間表現の粒度をUnit
+Generatorのグラフ構造、仮想機械のバイトコード、Block Diagram
+Algebra、LLVM
+IRというようにより機械語へ近いレベルへ下げていくと、一般的に表現可能な範囲が広まり、実行性能が良くなるといった利点があるが、コンパイルの過程がより汎用プログラミング言語のそれに近づき複雑化する、コードのプラットフォームをまだいだ可搬性が下がる、コードを動的に部分変更することが難しくなるといった根本的トレードオフが存在する。</p>
+<p>このトレードオフを両立することは不可能ではないが、必然的に言語の構造そのものが複雑化することに繋がる他、その言語の実装過程そのものに音楽的要素が無くなることから、開発者にとってはドメイン固有言語を実装モチベーションを下げることにも繋がるという問題があった。</p>
+<div id="refs" class="references csl-bib-body hanging-indent"
+role="doc-bibliography">
+<div id="ref-Anderson1990" class="csl-entry" role="doc-biblioentry">
+Anderson, David P., and Ron Kuivila. 1990. <span>“<span class="nocase">A
+System for Computer Music Performance</span>.”</span> <em>ACM
+Transactions on Computer Systems (TOCS)</em> 8 (1): 56–82. <a
+href="https://doi.org/10.1145/77648.77652">https://doi.org/10.1145/77648.77652</a>.
+</div>
+<div id="ref-Bencina2011" class="csl-entry" role="doc-biblioentry">
+Bencina, Ross. 2011. <span>“Programming 101: Time Waits for
+Nothing.”</span> 2011. <a
+href="http://www.rossbencina.com/code/real-time-audio-programming-101-time-waits-for-nothing">http://www.rossbencina.com/code/real-time-audio-programming-101-time-waits-for-nothing</a>.
+</div>
+<div id="ref-Brandt2002" class="csl-entry" role="doc-biblioentry">
+Brandt, Eli. 2002. <span>“<span class="nocase">Temporal type
+constructors for computer music programming</span>.”</span> PhD Thesis,
+School of Computer Science, Carnegie Mellon University.
+</div>
+<div id="ref-Coblenz2018" class="csl-entry" role="doc-biblioentry">
+Coblenz, Michael, Jonathan Aldrich, Brad A Myers, Joshua Sunshine, and
+Joshua Sun. 2018. <span>“<span>Interdisciplinary Programming Language
+Design</span>.”</span> In <em>Proceedings of the 2018 ACM SIGPLAN
+International Symposium on New Ideas, New Paradigms, and Reflections on
+Programming and Software</em>, 14. New York, NY, USA: ACM.
+</div>
+<div id="ref-Racket" class="csl-entry" role="doc-biblioentry">
+Culpepper, Ryan, Matthias Felleisen, Matthew Flatt, and Shriram
+Krishnamurthi. 2019. <span>“<span class="nocase">From macros to DSLs:
+The evolution of racket</span>.”</span> In <em>Leibniz International
+Proceedings in Informatics, LIPIcs</em>. Vol. 136. Schloss Dagstuhl-
+Leibniz-Zentrum fur Informatik GmbH, Dagstuhl Publishing. <a
+href="https://doi.org/10.4230/LIPIcs.SNAPL.2019.5">https://doi.org/10.4230/LIPIcs.SNAPL.2019.5</a>.
+</div>
+<div id="ref-Dannenberg2018" class="csl-entry" role="doc-biblioentry">
+Dannenberg, Roger B. 2018. <span>“<span class="nocase">Languages for
+Computer Music</span>.”</span> <em>Frontiers in Digital Humanities</em>
+5 (November). <a
+href="https://doi.org/10.3389/fdigh.2018.00026">https://doi.org/10.3389/fdigh.2018.00026</a>.
+</div>
+<div id="ref-Lazzarini2013" class="csl-entry" role="doc-biblioentry">
+Lazzarini, Victor. 2013. <span>“<span class="nocase">The Development of
+Computer Music Programming Systems</span>.”</span> <em>Journal of New
+Music Research</em> 42 (1): 97–110. <a
+href="https://doi.org/10.1080/09298215.2013.778890">https://doi.org/10.1080/09298215.2013.778890</a>.
+</div>
+<div id="ref-Markstrum2010" class="csl-entry" role="doc-biblioentry">
+Markstrum, Shane. 2010. <span>“<span class="nocase">Staking claims: A
+history of programming language design claims and evidence: A positional
+work in progress</span>.”</span> <em>Evaluation and Usability of
+Programming Languages and Tools, PLATEAU’10</em>. <a
+href="https://doi.org/10.1145/1937117.1937124">https://doi.org/10.1145/1937117.1937124</a>.
+</div>
+<div id="ref-McCartney2002" class="csl-entry" role="doc-biblioentry">
+McCartney, James. 2002. <span>“<span class="nocase">Rethinking the
+computer music language: SuperCollider</span>.”</span> <em>Computer
+Music Journal</em> 26 (4): 61–68. <a
+href="https://doi.org/10.1162/014892602320991383">https://doi.org/10.1162/014892602320991383</a>.
+</div>
+<div id="ref-McLean2014" class="csl-entry" role="doc-biblioentry">
+McLean, Alex. 2014. <span>“<span class="nocase">Making programming
+languages to dance to: Live coding with tidal</span>.”</span> In
+<em>FARM 2014 - Proceedings of the 2014 ACM SIGPLAN International
+Workshop on Functional Art, Music, Modelling and Design</em>, 63–70. New
+York, New York, USA: Association for Computing Machinery. <a
+href="https://doi.org/10.1145/2633638.2633647">https://doi.org/10.1145/2633638.2633647</a>.
+</div>
+<div id="ref-Mcpherson2020" class="csl-entry" role="doc-biblioentry">
+McPherson, Andrew, and Koray Tahlroǧlu. 2020. <span>“<span
+class="nocase">Idiomatic Patterns and Aesthetic Influence in Computer
+Music Languages</span>.”</span> <em>Organised Sound</em> 25 (1): 53–63.
+<a
+href="https://doi.org/10.1017/S1355771819000463">https://doi.org/10.1017/S1355771819000463</a>.
+</div>
+<div id="ref-mohayonao" class="csl-entry" role="doc-biblioentry">
+mohayonao. 2015. <span>“<span>CoffeeCollider</span>.”</span> <a
+href="http://mohayonao.github.io/CoffeeCollider/">http://mohayonao.github.io/CoffeeCollider/</a>.
+</div>
+<div id="ref-Muller2020" class="csl-entry" role="doc-biblioentry">
+Muller, Stefan K., and Hannah Ringler. 2020. <span>“<span
+class="nocase">A Rhetorical Framework for Programming Language
+evaluation</span>.”</span> In <em>Onward! 2020 - Proceedings of the 2020
+ACM SIGPLAN International Symposium on New Ideas, New Paradigms, and
+Reflections on Programming and Software, Co-Located with SPLASH
+2020</em>, 187–94. New York, NY, USA: Association for Computing
+Machinery, Inc. <a
+href="https://doi.org/10.1145/3426428.3426927">https://doi.org/10.1145/3426428.3426927</a>.
+</div>
+<div id="ref-Orlarey2004" class="csl-entry" role="doc-biblioentry">
+Orlarey, Yann, Dominique Fober, and Stéphane Letz. 2004. <span>“<span
+class="nocase">Syntactical and semantical aspects of
+Faust</span>.”</span> <em>Soft Computing</em> 8 (9): 623–32. <a
+href="https://doi.org/10.1007/s00500-004-0388-1">https://doi.org/10.1007/s00500-004-0388-1</a>.
+</div>
+<div id="ref-Spinellis2001" class="csl-entry" role="doc-biblioentry">
+Spinellis, Diomidis. 2001. <span>“<span class="nocase">Notable design
+patterns for domain-specific languages</span>.”</span> <em>Journal of
+Systems and Software</em> 56 (1): 91–99. <a
+href="https://doi.org/10.1016/S0164-1212(00)00089-3">https://doi.org/10.1016/S0164-1212(00)00089-3</a>.
+</div>
+<div id="ref-tonejs" class="csl-entry" role="doc-biblioentry">
+<span>“<span class="nocase">Tone.js</span>.”</span> 2021. <a
+href="https://tonejs.github.io/">https://tonejs.github.io/</a>.
+</div>
+<div id="ref-Wakefield2010" class="csl-entry" role="doc-biblioentry">
+Wakefield, Graham, Wesley Smith, and Charles Roberts. 2010.
+<span>“<span>LuaAV</span>: Extensibility and Heterogeneity for
+Audiovisual Computing.”</span> In <em>Proceeding of Linux Audio
+Conference</em>.
+</div>
+<div id="ref-UnderstandingComputation" class="csl-entry"
+role="doc-biblioentry">
+スチュアートトム. 2014.
+<em><span>アンダースタンディングコンピュテーション
+―単純な機械から不可能なプログラムまで</span></em>. Translated by
+笹田耕一 and 笹井崇司. オライリー.
+</div>
+</div>
+</section>
+<section class="footnotes footnotes-end-of-document"
+role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"
+role="doc-endnote"><p>Vult言語はルイーズが元々コンピューターサイエンスの専攻だったこともあり、コンパイラがPLfMの中では珍しく、汎用言語処理系の入門などでよく使われる関数型言語OCamlで記述されている。<a
+href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"
+role="doc-endnote"><p>この整数と小数点の変数に対して算術演算子を使い分ける仕様は実際にOCamlに代表されるML系言語で用いられている。もっともその目的は静的型付け言語においてユーザーが整数と小数点の計算を混同しないようにすることもあるが、そうすることで単に実装を簡略化できるという理由の方が大きい。<a
+href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p><a
+href="https://microsoft.github.io/language-server-protocol/"
+class="uri">https://microsoft.github.io/language-server-protocol/</a>
+2022年2月16日最終閲覧。<a href="#fnref3" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p><a
+href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf"
+class="uri">http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf</a>
+2021年1月4日最終閲覧。<a href="#fnref4" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn5" role="doc-endnote"><p>この他に、操作的意味論（Operational
+Semantics）、公理的意味論（Axiomatic
+Semantics）といった種類が存在する。<span class="citation"
+data-cites="UnderstandingComputation">(スチュアート 2014,
+p56)</span>を参照。<a href="#fnref5" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn6" role="doc-endnote"><p><a
+href="https://kotlinlang.org/docs/type-safe-builders.html"
+class="uri">https://kotlinlang.org/docs/type-safe-builders.html</a>
+2022年1月28日最終閲覧。<a href="#fnref6" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn7" role="doc-endnote"><p><a
+href="https://docs.microsoft.com/ja-jp/dotnet/fsharp/whats-new/fsharp-50#applicative-computation-expressions"
+class="uri">https://docs.microsoft.com/ja-jp/dotnet/fsharp/whats-new/fsharp-50#applicative-computation-expressions</a>
+2022年1月28日最終閲覧。<a href="#fnref7" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"
+role="doc-endnote"><p>Linuxカーネルの場合にはユーザーはプロセスのスケジューリングポリシーをいくつかの種類から選択できる。
+https://linuxjm.osdn.jp/html/LDP_man-pages/man7/sched.7.html
+2022年1月31日最終閲覧。またそもそもLinuxの場合はOSがオープンソースなため、Bela（<a
+href="../chapter1_rendered#sec:intro">第1章</a>参照）で用いられていたXenomaiのように、ユーザーアプリケーションがメインのスケジューラーをバイパスして動作するカーネル拡張を利用する選択肢もある。<a
+href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"
+role="doc-endnote"><p>筆者の投稿したFARMなどの国際会議を主催する団体。<a
+href="../chapter2_rendered#sec:researchfield">第2章</a>を参照。<a
+href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10" role="doc-endnote"><p><a
+href="https://github.com/sebpiq/WebPd"
+class="uri">https://github.com/sebpiq/WebPd</a>
+2022年1月29日最終閲覧。<a href="#fnref10" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn11" role="doc-endnote"><p><a href="https://mathr.co.uk/empd/"
+class="uri">https://mathr.co.uk/empd/</a> 2022年1月29日最終閲覧。<a
+href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+<style>pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #2a211c;
+    color: #bdae9d;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #bdae9d;  padding-left: 4px; }
+div.sourceCode
+  { color: #bdae9d; background-color: #2a211c; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ffff00; } /* Alert */
+code span.an { color: #0066ff; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #44aa43; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #43a8ed; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #049b0a; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #0066ff; font-weight: bold; font-style: italic; } /* Comment */
+code span.do { color: #0066ff; font-style: italic; } /* Documentation */
+code span.dt { text-decoration: underline; } /* DataType */
+code span.dv { color: #44aa43; } /* DecVal */
+code span.er { color: #ffff00; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #44aa43; } /* Float */
+code span.fu { color: #ff9358; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #0066ff; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #43a8ed; font-weight: bold; } /* Keyword */
+code span.op { } /* Operator */
+code span.pp { font-weight: bold; } /* Preprocessor */
+code span.sc { color: #049b0a; } /* SpecialChar */
+code span.ss { color: #049b0a; } /* SpecialString */
+code span.st { color: #049b0a; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #049b0a; } /* VerbatimString */
+code span.wa { color: #ffff00; font-weight: bold; } /* Warning */</style>
