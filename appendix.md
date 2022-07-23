@@ -1,8 +1,13 @@
-[@lst:bnfdef]に、mimium言語（バージョン0.4.0時点）のシンタックス定義をEBNF記法で示した。
+---
+title: 付録
+draft: true
+---
+
+以下に、mimium言語（バージョン0.4.0時点）のシンタックス定義をEBNF記法で示した。
 ここでは演算子の優先順位をつけていないが、実際の優先順位は一般的なプログラミング言語の優先順位に準じた上で、`@`演算子が一番低い優先順位となっている。
 
 
-\begin{lstlisting}[float,floatplacement=h,caption=mimiumのシンタックスのEBNFによる定義。,label=lst:bnfdef]
+```
   number ::= ?numbers?
   symbol ::= ?all_alnum_and_underscore?
   string ::= ?double_quote?<symbol>?double_quote?
@@ -39,4 +44,4 @@
   typealias ::= "type" <symbol> "=" <type>
 
   program ::= <statements>
-\end{lstlisting}
+```
