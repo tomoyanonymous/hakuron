@@ -25,6 +25,12 @@ mktexlsr
 kpsewhich biblatex-japanese.sty ＃これでチェックできる
 ```
 
+## Web向けリポジトリの切り出し作業
+
+```bash
+git subtree split --prefix src --onto subtree-src/master -b subtree-src/master
+```
+
 ## その他
 
 `./charcount.sh`でpandocのプレーンテキスト出力を使って文字数カウント
