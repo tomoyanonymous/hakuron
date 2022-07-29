@@ -1,3 +1,8 @@
+---
+title: 概要
+draft: true
+---
+
 This dissertation aims to present Civil Engineering of Music（CEoM） as an alternative research field for technology and music through the practice in the development of mimium, a programming language for music(PLfM).
 
 In chapter 1, an overall structure of the dissertation and the concept of  CEoM are presented. CEoM is an approach for research that rethinks fundamental technologies which are not built for music but that have a significant impact on the technological environment of music, such as programming languages, operating systems, and computer architectures. Today, it is difficult to make or listen to music without any intervention of the electronic computer that can, theoretically, do anything. Nevertheless, the computer as a Meta-Medium(Kay and Golderg 1977), the original idea of personal computing that the users make programs for their own tools, is still not a straightforward way and the technological environment of music always depends on technical infrastructures. This dissertation draws a view of CEoM, an action to push a change of such environments through the circulation between a speculation and a practice in the design and development of PLfM.

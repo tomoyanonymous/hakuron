@@ -1,3 +1,8 @@
+---
+title: 付録
+draft: true
+---
+
 <!-- # mimiumのEBNFによるシンタックス定義 -->
 
 [@lst:bnfdef]に、mimium言語（バージョン0.4.0時点）のシンタックス定義をEBNF記法で示した。

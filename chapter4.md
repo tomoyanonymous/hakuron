@@ -1,3 +1,7 @@
+---
+title: 第4章 - PLfM史の再考
+draft: true
+---
 
 \epigraph{コンピューターは「器楽的」な音楽の演奏を、作曲家を補助するために、もしくは誰の補助もなく作曲するように、プログラム可能である。}{『\citefield{Mathews1963}{title}』\\ \citep[筆者訳。]{Mathews1963}}
 
