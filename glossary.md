@@ -21,7 +21,7 @@ draft: true
 - NIME: New Interfaces for Musical Expression / 音楽のための新しいインタフェース研究、及びその国際会議
 - OSC: Open Sound Control / マシュー・ライトらによって提唱された音楽のための自由度の高い相互通信プロトコル
 - PCM: Pulse Code Modulation / 音圧波形を一定時間ごとに標本化（Sampling）、量子化（Quantization）することで数値の列として音声信号を表現する方式
-- PLfM: Programming Language for Music / 音楽のためのプログラミング言語（本稿で独自に定義、[@sec:plfmdef]を参照）
+- PLfM: Programming Language for Music / 音楽のためのプログラミング言語（本稿で独自に定義[第4章](../chapter4_rendered#plfmdef)を参照）
 - RtD: Research through Design / デザイン実践を通じた研究
 - UGen: Unit Generator / 音楽のためのプログラミング言語で広く用いられる、フィルターやオシレーターなどDSPの基礎的な要素の総称
 - VM: Virtual Machine / ソフトウェア上で定義された仮想機械
