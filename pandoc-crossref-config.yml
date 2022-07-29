@@ -7,3 +7,4 @@ eqnPrefix: "式"
 tblPrefix: "表"
 lstPrefix: "コード"
 secPrefix: "章"
+codeBlockCaptions: true

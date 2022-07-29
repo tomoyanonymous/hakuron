@@ -1,0 +1,14 @@
+---
+$if(title)$
+title: $title$
+$endif$
+layout: single
+highlight: true
+---
+$if(title)$
+<h1>$title$</h1>
+$endif$
+
+$body$
+
+<style>$highlighting-css$</style>
