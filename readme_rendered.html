@@ -1,0 +1,10 @@
+---
+layout: single
+highlight: true
+---
+
+<p>コードの置き換え</p>
+<pre class="regex"><code>\\begin\{lstlisting\}\[(.*)caption=(.*),label=(.*)\]\n([\s\S]*?)\\end\{lstlisting\}
+```rust\n$4\n\n: $2 {#$3}</code></pre>
+
+<style></style>

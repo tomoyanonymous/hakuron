@@ -1,0 +1,875 @@
+---
+title: 第6章 - 最小限のPLfM：mimiumの設計と実装
+layout: single
+highlight: true
+---
+<h1>第6章 - 最小限のPLfM：mimiumの設計と実装</h1>
+
+<!-- 第6章 音楽プログラミング言語mimiumの設計と実装 -->
+<p>本章では、これまでの背景をもとに、実際に筆者が開発したプログラミング言語mimium(<strong>mi</strong>nimal-<strong>m</strong>usical-med<strong>ium</strong>)<a
+href="#fn1" class="footnote-ref" id="fnref1"
+role="doc-noteref"><sup>1</sup></a>の具体的な実装について記す。</p>
+<p>なお、本章は、プログラミング言語に関する最大規模の学会、ACM
+SIGPLANにおける関数型プログラミング言語をテーマにした国際会議International
+Conference of Functional Programming（ICFP）の中で行われたFunctional,
+Art, Music, Modeling and
+Design（FARM）という、関数型プログラミング言語のアートやデザインへの応用を主題としたワークショップで発表した内容<span
+class="citation" data-cites="Matsuura2021">(Matsuura and Jo
+2021)</span>を実装部分を中心として日本語化したものである。そのため、他の章と比べると幾分文体が工学系論文の慣習に従った硬いものになっているが、プログラミング言語を扱う学会に参加することをある種の参与観察と捉え、その文体自体も、ある種特殊なコミュニティの性質のディテールを伝える要素として残すべきだと判断しそのままにしている。</p>
+<section id="mimiumの設計" data-number="0.1">
+<h2 data-number="6.1"><span class="header-section-number">6.1</span>
+mimiumの設計</h2>
+<p>本セクションでは、mimiumの言語仕様と実行環境の詳細を記述する。</p>
+<p>第4章では、歴史のなかでPLfMの設計のなかでUGenモデルが所与のものとされて受け入れられる過程を描いた。また、PLfM設計はケイが目指したようなメタメディア的な、自己拡張可能なツールとしての性質よりも、個別の需要に合わせて各レイヤーに特化した言語を作るMulti-Languageパラダイムの方向に進んできた。</p>
+<p>mimiumでは改めて、音楽に特化した言語ではあるが、プログラミングにおけるメタメディアとしての自己拡張性を重視した設計を試みる。具体的には、汎用プログラミング言語の設計に最小限音楽のための使用を追加するという設計方針を取る。ここでは、汎用性を重視しつつもChronicなどと異なりあくまでリアルタイムでの動作を想定する。また、汎用言語の設計をベースにした構造ではあるものの、たとえばExtemporeの中のxtlangでポインターの記法やユーザーによるメモリ確保など、ハードウェア操作に関係する部分の理解が必要なのと異なり、mimiumでこれらの概念は言語仕様として隠蔽するという選択をした。</p>
+<p>加えて、汎用言語をベースにした設計ではあるが、既存音楽のためのプログラミング言語を使っている人も参入しやすいように、UGenの概念に近い記法を可能にすることを目指した。</p>
+<p>第5章では音楽プログラミング言語の実装方法の観点から、中間表現の粒度とそれに伴う可能な表現の範囲、実行コスト、コンパイルコスト、動的変更のしやすさ、開発コストなどの要素にトレードオフの関係があることを示した。この中でmimiumは中間表現の粒度が比較的細かく、そのためにライブコーディングのような動的変更の機能は実装の難易度が上がることが予想されたため、あらかじめ重視しないで作っている（mimiumの選択が<a
+href="../chapter5_rendered#tradeoff4">第5章のトレードオフの図4つ目</a>だとすれば、相対的にExtemporeが<a
+href="../chapter5_rendered#tradeoff5">5つ目の図</a>にあたる）。</p>
+<div id="tbl:langcomparison">
+<table style="width:100%;">
+<caption>表 1: mimiumと既存の言語の仕様比較。</caption>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: center;">Pd/SC</th>
+<th style="text-align: center;">ChucK</th>
+<th style="text-align: center;">Extempore</th>
+<th style="text-align: center;">Faust</th>
+<th style="text-align: center;">Vult</th>
+<th style="text-align: center;">Kronos</th>
+<th style="text-align: center;">mimium</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">スケジューラ</td>
+<td style="text-align: center;">◯</td>
+<td style="text-align: center;">○</td>
+<td style="text-align: center;">○</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">○</td>
+<td style="text-align: center;">○</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">サンプル精度スケジューリング</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">○</td>
+<td style="text-align: center;">○</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">○</td>
+<td style="text-align: center;">○</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">低レベルなUGenの定義</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">○</td>
+<td style="text-align: center;">○</td>
+<td style="text-align: center;">○</td>
+<td style="text-align: center;">○</td>
+<td style="text-align: center;">○</td>
+<td style="text-align: center;">○</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DSPコードのJITコンパイル</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">○</td>
+<td style="text-align: center;">○</td>
+<td style="text-align: center;">○</td>
+<td style="text-align: center;">○</td>
+<td style="text-align: center;">○</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">UGen内部状態の関数型表現</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">Graph</td>
+<td style="text-align: center;">λ計算</td>
+<td style="text-align: center;">Graph</td>
+<td style="text-align: center;">λ計算</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>表 1
+はmimiumと既存の主要な音楽プログラミング言語の仕様を比較したものである。mimiumは時間方向に離散的な制御の記述と、信号処理と1つのセマンティクスで実現している。信号処理の実行速度はJIT（実行時）コンパイルを用いることでC++などの低レベル言語での記述と同等にしている。またユーザーはメモリーの確保、開放のようなハードウェアの意識をする必要がない。</p>
+<p>また低レベルなUGenの定義が言語上で可能ではあるものの、その内部表現はFaustやKronosの採用するグラフ表現と異なり、ラムダ計算をベースにしたフォーマットである。</p>
+<p>本節ではまず、基本的な構文を紹介し、メモリ管理などのハードウェアを意識する必要がないこと、型推論により変数の型アノテーションを省略できることを示す。次に、mimiumの実行環境（コンパイラとランタイム）の一般的なアーキテクチャを紹介し、信号処理であっても、LLVMを介してすぐにネイティブバイナリにコンパイルして実行することができることを示す。</p>
+<p>さらに、連続的な信号処理と離散的な制御処理を統一されたセマンティクスで記述することを可能にする、mimiumの2つの特徴的な機能について説明する。一つ目は、サンプルレベルで決定的なタスクスケジューリングのためのシンタックスと、スケジューラーの実装である。2つ目は、信号処理用のUGenを言語上で定義するために用いられるセマンティクスとそのコンパイルプロセスについて、関数と内部状態変数のペアのデータ構造という点で既存のパラダイムと比較しながら説明する。</p>
+<p>議論のセクションでは、2つの問題を取り上げる。（1）mimiumは離散的な制御と信号処理を統一的なセマンティクスで記述できるが、離散的な処理の記述方法は命令的なものが多く、信号処理に用いられる関数パラダイムは互いに大きく異なること、（2）現在の実装では、FaustやKronosと異なり、信号処理のためのステートフル関数のパラメトリックな複製を表現できないこと。また、前述の問題を解決する方法として、多段階計算の利用可能性についても説明する。</p>
+<section id="基本的な文法" data-number="0.1.1">
+<h3 data-number="6.1.1"><span class="header-section-number">6.1.1</span>
+基本的な文法</h3>
+<p>mimiumの基本的なシンタックスは、Rust<span class="citation"
+data-cites="Klabnik2020">(Klabnik, Steve and Nichols
+2020)</span>をベースにした。シンタックスの選択は常に<strong>すでにある程度普及している言語体系</strong>を眺めた上で設計せざるを得ない。Rustの構文は予約語が比較的短いので音楽のように素早くプロトタイピングを行う分野に適していることが主な理由である。また、既存の言語の構文と似せると、既存の言語のためのシンタックスハイライト（ソースコードを色分けして見やすくするためのツール）を再利用しやすいという副次的効果も得られる。</p>
+<div id="lst:mimiumbasic" class="listing rust">
+<p>コード 1: mimiumの基本的なシンタックスの説明。</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">//コメントはダブルスラッシュ</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">//新しい名前の変数への代入が変数宣言になる</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>mynumber <span class="op">=</span> <span class="dv">1000</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">//現在のところ全て変数はmutable</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>mynumber <span class="op">=</span> <span class="dv">2000</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">//型注釈もできる</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>myvariable<span class="op">:</span>float <span class="op">=</span> <span class="dv">10</span> </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">//型エイリアス</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> FilterCoeffs <span class="op">=</span> (float<span class="op">,</span>float<span class="op">,</span>float<span class="op">,</span>float<span class="op">,</span>float) </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">//文字列型は現在のところリテラルでのみ利用され、音声ファイル読み込みなどに用いられる</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>mystring <span class="op">=</span> <span class="st">&quot;somefile.wav&quot;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">//配列型</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>myarr <span class="op">=</span> [<span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span><span class="op">,</span><span class="dv">4</span><span class="op">,</span><span class="dv">5</span><span class="op">,</span><span class="dv">6</span><span class="op">,</span><span class="dv">7</span><span class="op">,</span><span class="dv">8</span><span class="op">,</span><span class="dv">9</span><span class="op">,</span><span class="dv">10</span>]</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co">//配列アクセス</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>arr_content <span class="op">=</span> myarr[<span class="dv">0</span>] </span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>myarr[<span class="dv">4</span>] <span class="op">=</span> <span class="dv">20</span> <span class="co">//配列書き込み</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>mytup <span class="op">=</span> (<span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span>) <span class="co">//タプル型</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>one<span class="op">,</span>two<span class="op">,</span>three <span class="op">=</span> mytup <span class="co">//タプルの展開</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> add(x<span class="op">,</span>y)<span class="op">{</span> <span class="co">//関数定義</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> x<span class="op">+</span>y</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>add <span class="op">=</span> <span class="op">|</span>x<span class="op">,</span>y<span class="op">|{</span> x<span class="op">+</span>y <span class="op">}</span><span class="co">//無名関数</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co">//{}で囲った複数の文を1つの式として扱える</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> <span class="op">{</span> x <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>        y <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> x<span class="op">+</span>y <span class="op">}</span> <span class="co">//z should be 3.</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co">//条件分岐と再帰関数</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> fact(input)<span class="op">{</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(input<span class="op">&gt;</span><span class="dv">0</span>)<span class="op">{</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span><span class="cf">else</span><span class="op">{</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> input <span class="op">*</span> fact(input<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="co">// if文は式としても使える</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>fact <span class="op">=</span> <span class="op">|</span>input<span class="op">|{</span> <span class="cf">if</span>(input<span class="op">&gt;</span><span class="dv">0</span>) <span class="dv">1</span> <span class="cf">else</span> input <span class="op">*</span> fact(input<span class="op">-</span><span class="dv">1</span>) <span class="op">}</span></span></code></pre></div>
+</div>
+<div id="lst:dsp" class="listing rust">
+<p>コード 2:
+mimiumでの、1chの入力を2chに複製して返却する<code>dsp</code>関数の例。</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> dsp(input<span class="op">:</span>(float<span class="op">,</span>float)) <span class="op">-&gt;</span>(float<span class="op">,</span>float)<span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    left<span class="op">,</span>right <span class="op">=</span> input</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    out <span class="op">=</span> (left<span class="op">+</span>right)<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (out<span class="op">,</span>out)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+<p>コード 1に基本的な言語仕様を示す。BNFによる形式的な言語仕様定義は付録にて示した。
+変数の宣言は、関数のスコープ内で新しい名前の変数に何らかの値を代入することで自動的に行われる。変数を宣言する際には、コロンの後に型名を記述することで、値の型を明示的に指定できる。型名が省略された場合は、文脈から型を推測可能である。データ型には、<code>void</code>（空の値の型）、<code>float</code>（整数、浮動小数点型の区別はなく、内部的にはデフォルトで64bit-float）、<code>string</code>といったプリミティブな型のほか、任意の型の値を受け取り任意の型の値を返す<code>function</code>、任意の型を列挙する型である<code>tuple</code>、任意の型の有限長配列<code>array</code>といった合成型がある。また、ユーザー定義の型エイリアスを宣言もできる。</p>
+<p>基本的な構文には、関数定義、関数呼び出し、<code>if-else</code>文を使った条件分岐などがある。また、関数型のパラダイムを取り入れ、if文を直接値を返す式として使用することができる。これは、複数の文（代入構文や関数実行）を{}で
+囲み、最終行の<code>return</code>式の値を式として返す構文（Block）を持つことで実現している（<code>return</code>を省略することも可能）。同様に、関数定義は、無名関数を変数に代入する構文のシンタックスシュガーとして定義されている。</p>
+<p>mimiumは静的型付け言語で、すべての変数と関数の型がコンパイル時に決定される。型推論（現在は単相）はHindley-Milnerのアルゴリズムに基づく。</p>
+<p>また、DSP処理の高速化のために、メモリの割り当てと解放はコンパイル時に静的に決定され、ランタイムではガベージコレクションが行われない。</p>
+</section>
+</section>
+<section id="mimiumでの信号処理" data-number="0.2">
+<h2 data-number="6.2"><span class="header-section-number">6.2</span>
+mimiumでの信号処理</h2>
+<p>mimiumでは、<code>dsp</code>という関数をユーザーが定義すると、オーディオドライバーと音声の入出力に仕様される。例をコード 2に示す。この場合、<code>dsp</code>関数の型は、<em>1つ以上の<code>float</code>型からなる<code>tuple</code>型</em>を取り、かつ、<em>1つ以上の<code>float</code>型からなる<code>tuple</code>型</em>を返す関数型にする必要がある。タプルの各要素が、オーディオドライバの入力チャンネルと出力チャンネルに対応する。例では、オーディオドライバから2つのチャンネルの入力を受け取り、それらをミックスして、左右それぞれのチャンネルに複製して返している。</p>
+<p>mimiumには組み込み関数として、基本的な算術演算、libcの
+<em>math.h</em>で定義されている三角関数や指数関数などの数学関数、<code>delay</code>や<code>mem</code>（1サンプルの遅延）などの組み込みの状態を持つ関数(後述)、libsndfile<span
+class="citation" data-cites="Lopo">(Lopo
+1990)</span>を使ってwavファイルを読み込むための<code>loadwav</code>関数、デバッグのための<code>print</code>関数などがある。フィルターやオシレーターは、これらの関数を組み合わせることで、すべてライブラリとして定義することになる。</p>
+</section>
+<section id="アーキテクチャ" data-number="0.3">
+<h2 data-number="6.3"><span class="header-section-number">6.3</span>
+アーキテクチャ</h2>
+<p>図図 1にmimiumの実行環境（コンパイラとランタイム）のアーキテクチャを示す。</p>
+<p>コンパイラの構造は、一般的な関数型言語の構造に近く、mincaml<span
+class="citation" data-cites="Sumii2005">(Sumii
+2005)</span>をベースに、C++を用いて実装されている。またバックエンドにはKronosやExtemporeでも用いられている、汎用コンパイラ基盤LLVM<span
+class="citation" data-cites="Lattner2004">(Lattner and Adve
+2004)</span>を利用する。</p>
+<p>ソースコードのテキストデータは、まず抽象構文木（AST）に解析され、シンタックスシュガーを変換した後、ASTはラムダ計算ベースの木構造に変換される。次に、型推論、型検査を行い、すべての変数の型を決定する。ASTは、型情報とともに、すべての変数が一度だけ割り当てられる静的単一代入（SSA）形式の中間表現に変換される。この段階ではまだ関数の入れ子定義が可能になっているので、関数定義から自由変数を取り除くためにクロージャ変換が行われる。</p>
+<p>クロージャ変換と低レベルコード（LLVM
+IR：LLVMで利用される、C言語とアセンブリ言語の中間程度の抽象度を持つ形式）の生成器の間には、mimiumの独自仕様である状態を伴う関数（章 0.4.2.2）のための状態変数の検出を行う。この変換では、<code>dsp</code>関数を信号処理のエントリポイントとして、関数が使用する状態変数を、呼び出された状態付き関数名のノードと関数内で使われる状態変数の型を持つ木構造（図中の<em>State
+Tree</em>）のデータとして出力する。最後に、クロージャ変換されたIRとState
+TreeをもとにLLVM IRを生成する。</p>
+<figure>
+<img src="../img/mimium-arch-v4-affinity.png" id="fig:arch"
+style="width:100.0%"
+alt="図 1: mimiumのコンパイラとランタイムのアーキテクチャの構成。" />
+<figcaption aria-hidden="true">図 1:
+mimiumのコンパイラとランタイムのアーキテクチャの構成。</figcaption>
+</figure>
+<p>ランタイムは、LLVM
+IRを受け取り、メモリ上でネイティブバイナリにコンパイルするJIT実行エンジン、オーディオデバイスとの入出力通信を行うオーディオドライバ、時間指定実行された関数とその論理時間の情報を保持するスケジューラの3つの部分で構成される。現在、オーディオドライバーには、オーディオデバイスをOSのAPIで抽象化したC++用のクロスプラットフォームライブラリRtAudio<span
+class="citation" data-cites="Scavone2002">(Scavone
+2002)</span>を使用している。実行エンジンは、信号処理のエントリーポイントである<code>dsp</code>関数をオーディオドライバーに渡す。オーディオドライバーは、ハードウェアからの要求を基にスケジューラーに論理時間を進めるように命令し、スケジューラは、論理時間に基づいてタスクを実行したり、実行されているプログラムからタスクの登録の要求への応答、内部時間(<code>now</code>)をプログラムへ返す役割を担う。</p>
+<p>LLVM
+IRまで変換されたコードの中では、タスクの登録と、内部時間の取得という2つの機能だけがランタイムに依存する。それ以外のコードは、メモリ上でコンパイルされて実行されるため、C言語などの低レベル言語で書かれた処理と同等の実行速度を実現できる。</p>
+</section>
+<section id="mimium固有の言語仕様" data-number="0.4">
+<h2 data-number="6.4"><span class="header-section-number">6.4</span>
+mimium固有の言語仕様</h2>
+<section id="演算子によるスケジューリング" data-number="0.4.1">
+<h3 data-number="6.4.1"><span class="header-section-number">6.4.1</span>
+<code>@</code>演算子によるスケジューリング</h3>
+<div id="lst:tr-mimium" class="listing rust">
+<p>コード 3: mimiumにおける継時再帰のサンプル</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ntrigger <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> setN(val<span class="op">:</span>float)<span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    ntrigger <span class="op">=</span> val</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> playN(duration<span class="op">:</span>float)<span class="op">-&gt;</span>void<span class="op">{</span> </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  setN(<span class="dv">1</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  setN(<span class="dv">0</span>)<span class="op">@</span>(now<span class="op">+</span>duration)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> Nloop(period<span class="op">:</span>float)<span class="op">-&gt;</span>void<span class="op">{</span> </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    playN(<span class="dv">50</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    nextperiod <span class="op">=</span> <span class="cf">if</span>(random()<span class="op">&gt;</span><span class="dv">0</span>) period<span class="op">/</span><span class="dv">2</span> <span class="cf">else</span> period</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    Nloop(period)<span class="op">@</span>(now<span class="op">+</span>nextperiod) </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>Nloop(<span class="dv">12000</span>)</span></code></pre></div>
+</div>
+<p>mimiumで時間方向に離散的に発生するイベントを記述するには、Impromptu（Extemporeの前身）で導入され、Overtone<span
+class="citation" data-cites="Aaron2013">(Aaron and Blackwell
+2013)</span>やKronos Meta-Sequener<span class="citation"
+data-cites="Norilo2016">(Norilo
+2016a)</span>といった言語などでも利用されてきた、継時再帰（<strong>Temporal
+Recursion</strong><span class="citation"
+data-cites="Sorensen2010">(Sorensen and Gardner
+2010)</span>）と呼ばれるデザインパターンを用いる。継時再帰は、一定時間後に関数を呼び出す機能を用いて、ある関数の中で自分自身を一定の遅延とともに再帰的に呼び出すことで、時間とともに繰り返すイベント処理の記述を可能にするものである。</p>
+<p>コード 3に具体的な例を挙げる。関数呼び出しに続けて<code>@</code>演算子、さらにその後ろに数値型の式を置くと、その関数はすぐには実行されない。代わりに、時間をキーとした優先順位付きタスクキューに登録され、実行コンテキストは次の文に移る。ランタイムは、オーディオドライバのクロックを基にして、各サンプルを処理する前にタスクキューをチェックし、先頭の要素のキーが現在の論理時間に達していれば、それらを先に実行する。時刻は、ランタイム実行を開始を0とした絶対時刻（単位は現在のところサンプル）となっているが、キーワード<code>now</code>を用いてランタイムから現在の論理的な時間を取得し相対的な時間を記述できる。</p>
+<div id="lst:tr-extempore" class="listing lisp">
+<p>コード 4: コード 3と等価なコードをExtemporeで記述したもの</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode lisp"><code class="sourceCode commonlisp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>(define ntrigger <span class="dv">1</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>(define setN</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    (<span class="kw">lambda</span> (val)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        (!set ntrigger <span class="dv">1</span>)))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>(define playN</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    (<span class="kw">lambda</span> (duration)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>            (setN <span class="dv">1</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>            (callback (<span class="op">+</span> now duration) &#39;setN <span class="dv">0</span>)))</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>(define Nloop</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  (<span class="kw">lambda</span> (period)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        (playN <span class="dv">50</span>)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        (callback (<span class="op">+</span> (now) (<span class="kw">if</span> (<span class="kw">random</span> <span class="op">&gt;</span> <span class="dv">0</span>) (<span class="op">/</span> period <span class="dv">2</span>) period)) &#39;Nloop period)))</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>(Nloop <span class="dv">12000</span>)</span></code></pre></div>
+</div>
+<p>コード 3の場合、<code>ntrigger</code>という変数は、<code>Nloop</code>という関数が呼ばれるたびに書き換えられる。
+<code>Nloop</code>は自分自身を乱数によって不定期な間隔で再帰的に実行し続けるようになっている。継時再帰はこのように、言語仕様への最小限の機能追加で、様々なタイミングでのイベント実行を可能にする機能である。</p>
+<p>mimiumでの例に対してExtemporeで等価なコードをコード 4に示す。Extemporeは<code>callback</code>という特殊な関数を使って一時的な再帰を行うが、mimiumは可読性を高めるために中置演算子<code>@</code>を導入している。</p>
+<p>mimiumはChucKなどと同様に論理時間に基づいた同期的なスケジューリング戦略をとる。これは計算プロセスが変数を書き換えたりするだけで言語の中に閉じたIOを介さない処理の場合、サンプル単位での実行順序が正確に保証される。また実装が単純かつ実行コストが比較的少ない、OSのスケジューラに関与しないため移植性が高いなどの利点がある。一方で、標準入出力、MIDIやネットワークなどの信号を受けたり送ったりするIO処理をスケジューリングして実行した際に、指定した時間が実時間とは必ずしも正確には一致しないというデメリットがある。</p>
+<p>Extemporeはこれと対照的な、非同期的スケジューリングを行う。これはIO処理を含めてスケジュールした関数の実行タイミングを実時間に近づけることができるが、実装に各OSごとのスケジューラへの対応が必要だったり、実行コストが論理時間ベースに比べると比較的高いというトレードオフが存在している。</p>
+<p>mimiumは現状、実装の単純さを重視して論理時間ベースのスケジューラを用いているが、これは言語仕様と紐づいたものではなくあくまでランタイム上の実装次第である。そのため今後の実装によってはスケジューラの戦略をオプションで切り替え可能にもできるだろう。</p>
+</section>
+<section id="状態付き関数を利用した信号処理" data-number="0.4.2">
+<h3 data-number="6.4.2"><span class="header-section-number">6.4.2</span>
+状態付き関数を利用した信号処理</h3>
+<p>本セクションでは、まず信号処理のためのUGenを表現するための適切なセマンティクスとデータ構造について検討する。</p>
+<section id="ugenに仕様されるデータ構造の比較" data-number="0.4.2.1">
+<h4 data-number="6.4.2.1"><span
+class="header-section-number">6.4.2.1</span>
+UGenに仕様されるデータ構造の比較</h4>
+<p>UGenは、入力データ（もしくはその配列）を受け取り、何らかの処理をして出力するものだ。これは一見すると純粋な関数として表現できるように見えるが、実際には関数と状態変数のペアというデータ構造を使う必要がある。</p>
+<p>例えば、入力を加算・乗算するだけなら純粋な関数で十分だが、フィードバックを持つフィルターや、非線形発振器のように、時間<code>t</code>から<code>f(t)</code>の写像として表現できない処理を表現する時には、UGenは内部状態を持つ。</p>
+<!-- エフェクターの図入れるといいかも -->
+<p>したがって、汎用言語上でUGenを表現するためには、典型的にはオブジェクトやクロージャなどの関数と内部状態を組み合わせたデータ構造を利用する。ただし、オブジェクトやクロージャでは複数のプロセッサを用いる時に、一度インスタンス化してから実際の処理を呼び出す必要がある。</p>
+<p>mimiumは信号処理専用のデータ型を作らなくても、UGenを通常の関数のように使うことができる文法を持たせている。</p>
+<p>以降では例として0から1まで一定の割合で増加し、再び0に戻るノコギリ波のようなUGen：<code>phasor</code>の表現方法を、オブジェクト、クロージャ、さらにFaust、Vultにおける関数型の表現という異なる体系間で比較し、最終的にmimiumでUGenを状態を持つ関数として表現するセマンティクスおよびそのコンパイル手順について解説する。</p>
+<section id="オブジェクト" data-number="0.4.2.1.1">
+<h5 data-number="6.4.2.1.1"><span
+class="header-section-number">6.4.2.1.1</span> オブジェクト</h5>
+<p>オブジェクトとは、メンバー変数のセットと、変数を変更したり他のオブジェクトにメッセージを送ったりするメンバー関数（メソッド）のセットを含むデータ構造である。オブジェクトの場合、内部状態はメンバ定数として定義されている。これを利用するには、あらかじめインスタンス化した上で、メインの処理メソッドを呼び出す必要がある。コード 5にC++言語でのオブジェクトを用いたphasorの表現の例を示す。</p>
+<div id="lst:cppexample" class="listing rust">
+<p>コード 5: phasorをC++のオブジェクトを用いて表現した例.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>class Phasor<span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  double out_tmp<span class="op">=</span><span class="dv">0</span><span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  double process(double freq)<span class="op">{</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    out_tmp <span class="op">=</span> out_tmp<span class="op">+</span>freq<span class="op">/</span><span class="dv">48000</span><span class="op">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(out_tmp<span class="op">&gt;</span><span class="dv">1</span>)<span class="op">{</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>      out_tmp <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> out_tmp<span class="op">;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">//Instantiation</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>Phasor phasor1<span class="op">;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>Phasor phasor2<span class="op">;</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>double something()<span class="op">{</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="co">//use instantiated objects</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> phasor1<span class="op">.</span>process(phasor2<span class="op">.</span>process(<span class="dv">10</span>) <span class="op">+</span> <span class="dv">1000</span>)<span class="op">;</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+</section>
+<section id="クロージャ" data-number="0.4.2.1.2">
+<h5 data-number="6.4.2.1.2"><span
+class="header-section-number">6.4.2.1.2</span> クロージャ</h5>
+<p>クロージャとは、レキシカルスコープを持つ（≒関数の中で関数を定義可能な）言語で利用できる記法である。例えば、関数<code>A</code>の中で複数のローカル変数<code>a, b, c</code>が定義されており、さらに関数<code>B</code>が関数<code>A</code>のなかでネストして定義されている状況を考える。<code>B</code>の定義の中では、変数<code>a,b,c</code>が参照し、何らかの変更を加える操作を行なっている。このとき<code>a,b,c</code>は関数<code>B</code>にとってはローカル変数ではなく、自由変数と呼ばれる。<code>A</code>の定義が最終的に<code>B</code>を返り値として返却するような高階関数だったとすると、関数<code>A</code>の処理が一通り終わった後も、返却された<code>B</code>が実行されることによって<code>a,b,c</code>の値に何らかの変更が加えられることになる。言い換えると、この時<code>a,b,c</code>に変更を加えられるのは返却された<code>B</code>の処理のみである。このように、ある関数のローカル変数を、ネストされた関数の中に閉じ込めることを閉包、クロージャ（closure）と呼ぶ。このとき<code>A</code>を実行し<code>B</code>を何かの変数に格納する処理は、オブジェクトのインスタンスを生成することに相当する。</p>
+<p>信号処理をクロージャで記述する場合、コンパイル時に変数の寿命を決めることが難しくなるという問題がある。クロージャが使える言語では、ガベージコレクション（GC）を実装して、変数へのメモリの割り当てと解放を動的に行うことが一般的だが、1秒間に48000回もの関数がリアルタイムで実行されるDSPのための言語にGCを導入することは困難である<span
+class="citation" data-cites="Dannenberg2005">(Dannenberg and Bencina
+2005)</span>。クロージャを利用できる数少ない言語として、SuperColliderでは、リアルタイムシステムで動作可能な複雑なGCをランタイムに実装しており、Extemporeでは、ユーザーが手動でメモリと変数の寿命の管理することで解決している。言うなれば、クロージャを用いると、ユーザーか開発者のどちらかが大きな実装コストを負担しなければならない。</p>
+<p>コード 6にクロージャを用いたphasorの表現をJavaScriptでの疑似コードで示す。変数<code>out_tmp</code>は最終的に返却される関数<code>process</code>の中に閉じ込められている。<code>makePhasor</code>関数を実行することはC++における<code>Phasor</code>クラスの初期化処理（コンストラクタ）の実行に相当している。JavaScriptは内部的にガベージコレクションなどを利用する言語のため実際にこのコードを利用することは難しいが、命令型ベースの読みやすいシンタックスを持ち、かつクロージャを利用可能な言語であるため例示のために用いている。</p>
+<div id="lst:closure" class="listing js">
+<p>コード 6:
+phasorのクロージャを用いた表現をJavaScriptによる疑似コードで表したもの</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">//pseudo-code in javascript</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">makePhasor</span>(tmpinit){</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> out_tmp <span class="op">=</span> tmpinit<span class="op">;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> <span class="bu">process</span> <span class="op">=</span> (freq) <span class="kw">=&gt;</span> {</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>   out_tmp <span class="op">=</span> out_tmp<span class="op">+</span>freq<span class="op">/</span><span class="dv">48000</span><span class="op">;</span><span class="co">//referring free variable out_tmp</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(out_tmp<span class="op">&gt;</span><span class="dv">1</span>){</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>      out_tmp <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> out_tmp<span class="op">;</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="bu">process</span><span class="op">;</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">//instantiation</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> phasor1 <span class="op">=</span> <span class="fu">makePhasor</span>(<span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> phasor2 <span class="op">=</span> <span class="fu">makePhasor</span>(<span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">something</span>(){</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fu">phasor1</span>(<span class="fu">phasor2</span>(<span class="dv">10</span>) <span class="op">+</span> <span class="dv">1000</span>)<span class="op">;</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</section>
+<section id="関数型の表現" data-number="0.4.2.1.3">
+<h5 data-number="6.4.2.1.3"><span
+class="header-section-number">6.4.2.1.3</span> 関数型の表現</h5>
+<p>FaustやKronosの信号処理の記述では、一時変数の読み書きなしにUGenの代数的な組み合わせ表現を、内部状態を状態変数の代わりに遅延（<code>delay</code>）関数のような最小セットを組み込みの状態付き関数と、信号の1サンプル遅延を伴う再帰的な接続表現を用意することで可能にしている。</p>
+<p>コード 7のFaustの例では、オブジェクトやクロージャのように、最初にインスタンス化する必要はなく、phasor用の状態変数は、コンパイル後に個別の関数呼び出しごとに自動的に確保される。</p>
+<p>これらの言語ではそれぞれ、Faustではそれぞれ0以上の入出力を持つUGen（定数は入力0、出力が1つの関数、<code>+</code>演算子は入力が2つで出力が1つの関数、のように）、KronosではUGenの入出力がリストとしてシンボル化されており、通常の言語のように、記号が特定のメモリアドレス上のデータに対応しているわけではない。そのためこれらの言語に汎用言語と同等の自己拡張性を期待することは難しい。</p>
+<div id="lst:faust" class="listing rust">
+<p>コード 7: Faustでのphasor関数の定義の例。</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>phasor(freq) <span class="op">=</span> <span class="op">+</span>(freq<span class="op">/</span><span class="dv">4800</span>) <span class="op">~</span> out_tmp</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    with<span class="op">{</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        out_tmp <span class="op">=</span> _ <span class="op">&lt;:</span> select2(<span class="op">&gt;</span>(<span class="dv">1</span>)<span class="op">,</span>_<span class="op">,</span><span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a> <span class="op">};</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">// no need to instantiate.</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>something <span class="op">=</span> phasor(phasor(<span class="dv">10</span>)<span class="op">+</span><span class="dv">1000</span>)<span class="op">;</span></span></code></pre></div>
+</div>
+<p>Vult言語<span class="citation" data-cites="Ruiz2020">(Ruiz
+2020)</span>では、関数定義において、通常の変数宣言である<code>var</code>ではなく、キーワード<code>mem</code>で変数を宣言すると、破壊的変更された値が時系列で保持され、UGenの内部状態を表現できる。この機能により、Faustと同じくあらかじめインスタンス化しておく必要がなく、通常の関数適用として、内部状態を持つUGenの接続を表現できる。</p>
+<div id="lst:vult" class="listing rust">
+<p>コード 8: Vult言語でのphasor関数の定義の例。</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fun phasor(freq)<span class="op">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    mem out_tmp<span class="op">;</span><span class="co">//&quot;mem&quot; variable holds its value over times</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  out_tmp <span class="op">=</span> out_tmp<span class="op">+</span>freq<span class="op">/</span><span class="dv">48000</span><span class="op">;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(out_tmp<span class="op">&gt;</span><span class="dv">1</span>)<span class="op">{</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    out_tmp <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span> </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> out_tmp<span class="op">;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>fun something(input)<span class="op">{</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">// no need to instantiate.</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> phasor(phasor(<span class="dv">10</span>)<span class="op">+</span><span class="dv">1000</span>)<span class="op">;</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+<p>Faust、Vultともに、内部状態を持つ関数は、最初にインスタンスを作成することなく仕様できる。その代わり、内部状態の初期化は関数定義時に決定され、インスタンス作成時にコンストラクタを介して初期値を決定するような操作はできない。</p>
+<p>逆に言えば、内部状態の初期値がほとんどの場合0または0の配列であるという信号処理のドメイン固有知識を利用することで、インスタンス化のための文法をコンパイラ側で省略し通常の関数定義、関数適用と同じように扱える、とも言えるだろう。</p>
+</section>
+</section>
+<section id="sec:statefulfun" data-number="0.4.2.2">
+<h4 data-number="6.4.2.2"><span
+class="header-section-number">6.4.2.2</span>
+内部状態つき関数による信号処理</h4>
+<div id="lst:counter" class="listing rust">
+<p>コード 9: mimiumでの1サンプルごとに1増加するカウンター関数の例。</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> counter()<span class="op">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">self</span><span class="op">+</span><span class="dv">1</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+<p>こうした様々なUGenの内部表現の例を基に、mimiumでは、内部状態付き関数をUGenのように利用できる文法を導入した。これらの関数は、Vultと同じように、通常の関数適用<code>f(x)</code>と同じシンタックスで呼び出せる。その上でFaustのように<code>delay</code>などの限られた組み込み状態付き関数を使うことで、ユーザーは内部状態の変数の宣言を行う必要がない。さらに、汎用言語の場合と同様に、変数をメモリ上のデータとしてシンボル化する体系は崩していない。</p>
+<p>また、関数定義の中でキーワード<code>self</code>を使うことで、1サンプル前の時刻でその関数が返した戻り値を参照することができ、UGenの再帰的な接続を表現することを可能にしている。<code>self</code>は、関数定義の中でのみ使用できる予約語で、時刻0では0で初期化され、関数の前回の戻り値を得ることができる。コード 9に最もシンプルな<code>self</code>の使い方として、1サンプルごとに1増加するようなカウンターの関数の例を示した。</p>
+<div id="lst:phasormimium" class="listing rust">
+<p>コード 10: mimiumでのphasor関数の記述例。</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> phasor(freq)<span class="op">{</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  res <span class="op">=</span> <span class="kw">self</span> <span class="op">+</span> freq<span class="op">/</span><span class="dv">48000</span> <span class="co">// assuming the sample rate is 48000Hz</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="cf">if</span> (res <span class="op">&gt;</span> <span class="dv">1</span>) <span class="dv">0</span> <span class="cf">else</span> res</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> dsp(input)<span class="op">{</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> phasor(<span class="dv">440</span>)<span class="op">+</span>phasor(<span class="dv">660</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+<p><code>self</code>を用いると、これまでオブジェクトやクロージャといった例で見てきたUGenの<code>phasor</code>をmimium上で定義することができる。例をコード 10に示した。この例では、ユーザーは状態変数の宣言の必要も、関数を利用する際のインスタンス化の必要もないことがわかる。
+FaustでUGenの再帰的接続の表現のための中置演算子<code>~</code>が式の中で何度も利用できるのに比べて、mimiumでは再帰接続の単位は自然と関数定義の単位に分割される。</p>
+<p>さらに、データフローや関数型言語に慣れているユーザーのために、パイプライン演算子<code>|&gt;</code>を用意し、状態付き関数の呼び出しをプロセッサ間の接続として解釈しやすくする構文を持つ。パイプライン演算子は、F#<span
+class="citation" data-cites="Microsoft2020">(Microsoft
+2020)</span>などの関数型言語で使われており、ネストした関数呼び出し<code>h(g(f(arg)))</code>を<code>arg |&gt; f |&gt; g |&gt; h</code>と書き換えることができる。</p>
+<p>コード 11に通常の関数呼び出しとパイプライン演算子の両方を使って正弦波発振器を定義した例を示す。</p>
+<p>これに相当するものを、Faustではコード 12、Cycling’74
+Maxでは図図 2で示す。Faustの直列接続演算子(<code>:</code>)の他にも、ChucK言語のChucK演算子(<code>=&gt;</code>)など、他の言語でも似たような機能を持つものはあるが、パイプライン演算子は、セマンティクスとしては通常の関数呼び出しと区別されない点が特徴である。</p>
+<div id="lst:pipeline" class="listing rust">
+<p>コード 11: mimiumでのパイプライン演算子の利用例。</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> scaleTwopi(input)<span class="op">{</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> input<span class="op">*</span> <span class="dv">2</span> <span class="op">*</span> <span class="dv">3.141595</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> osc(freq)<span class="op">{</span> <span class="co">//normal function call</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> cos(scaleTwipi(phasor(freq)))</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> osc(freq)<span class="op">{</span> <span class="co">//pipeline operator version</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> freq <span class="op">|&gt;</span> phasor <span class="op">|&gt;</span> scaleTwopi <span class="op">|&gt;</span> cos</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+<div id="lst:pipefaust" class="listing rust">
+<p>コード 12: Faustでの直列接続演算子（:）の利用例</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>scaleTwopi(input) <span class="op">=</span> input <span class="op">*</span> <span class="dv">2</span> <span class="op">*</span> <span class="dv">3.141595</span><span class="op">;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>osc(freq) <span class="op">=</span> freq<span class="op">:</span>phasor<span class="op">:</span>scaleTwopi <span class="op">:</span> cos<span class="op">;</span></span></code></pre></div>
+</div>
+<figure>
+<img src="../img/max-osc-example.png" id="fig:maxexample"
+alt="図 2: Maxでのデータフロー的表現の例。" />
+<figcaption aria-hidden="true">図 2:
+Maxでのデータフロー的表現の例。</figcaption>
+</figure>
+<!-- \begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\columnwidth]{img/max-osc-example.png}
+  \caption{Maxでのデーターフロー的表現の例。}
+  % \Description{Example of dataflow syntax in Max}
+  \label{fig:maxexample}
+\end{figure} -->
+</section>
+<section id="状態付き関数のコンパイル手順" data-number="0.4.2.3">
+<h4 data-number="6.4.2.3"><span
+class="header-section-number">6.4.2.3</span>
+状態付き関数のコンパイル手順</h4>
+<p>状態付き関数は、図図 1にあるように、コンパイラにおけるクロージャ変換と低レベルコード生成の間で、状態変数を隠れ引数として渡す純粋な関数へと変換される。</p>
+<p>変換は以下のように行われる。まず、<code>dsp</code>の関数定義に含まれるすべての関数呼び出しを順に検索し、その関数がmimiumのコード上で定義されている場合は、さらにその定義を再帰的に検索して、関数呼び出しの依存関係ツリーを作成する。最終的に、その関数定義で<code>self</code>を参照する、<code>delay</code>などの組み込み状態付き関数を呼び出す場合、その関数は状態付き関数となり、さらにユーザー定義の状態付き関数を呼び出す関数は再帰的に状態付き関数となる。ツリーを作成した後、状態付き関数の引数に、その関数で使用されるすべての状態変数を列挙したタプル型変数へのポインタを付け加えるように関数定義を書き換え、関数呼び出しの部分も同様に、状態変数が明示的な引数になるように書き換える。例として、組み込み状態付き関数である<code>delay</code>と<code>self</code>を利用したフィードバックディレイである<code>fbdelay</code>関数を定義し、<code>dsp</code>の中で<code>fbdelay</code>を2つ、異なるパラメータで呼び出すようなコードをコード 13に示す。</p>
+<p>この時の状態変数を明示的に引数として渡すように変換した後の疑似コードを
+コード 14に示す。<code>fbdelay</code>関数やそれを呼び出す<code>dsp</code>関数の引数の先頭にそれぞれ内部状態が渡されている。</p>
+<div id="lst:fbdelay" class="listing rust">
+<p>コード 13: mimiumでのフィードバックディレイのコード例。</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">// delay is a built-in stateful function</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> fbdelay(input<span class="op">,</span>time<span class="op">,</span>fb)<span class="op">{</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> delay(input<span class="op">+</span><span class="kw">self</span><span class="op">*</span>fb<span class="op">,</span>time) </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> dsp()<span class="op">{</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// mix 2 feedback delay with different parameters</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    src <span class="op">=</span> random()<span class="op">*</span><span class="dv">0.1</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    out <span class="op">=</span> fbdelay(src<span class="op">,</span><span class="dv">1000</span><span class="op">,</span><span class="dv">0.8</span>)<span class="op">+</span> fbdelay(src<span class="op">,</span><span class="dv">2000</span><span class="op">,</span><span class="dv">0.5</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (out<span class="op">,</span>out)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+<div id="lst:fbdelayafter" class="listing rust">
+<p>コード 14: コード 13の内部状態付き関数の変換処理後の疑似コード</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">// pseudo-code after lifting stateful function</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> fbdelay(state<span class="op">,</span>input<span class="op">,</span>time<span class="op">,</span>fb)<span class="op">{</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">//unpack state variables</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">self</span><span class="op">,</span>delay_mem <span class="op">=</span> state</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> delay(delay_mem<span class="op">,</span> input<span class="op">+</span><span class="kw">self</span><span class="op">*</span>fb<span class="op">,</span>time) </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> dsp(state)<span class="op">{</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// unpack state variables</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    s_fbdelay0<span class="op">,</span> s_fbdelay1 <span class="op">=</span> state</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    src <span class="op">=</span> random()<span class="op">*</span><span class="dv">0.1</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    out <span class="op">=</span> fbdelay(s_fbdelay0<span class="op">,</span>src<span class="op">,</span><span class="dv">1000</span><span class="op">,</span><span class="dv">0.8</span>) <span class="op">+</span>fbdelay(s_fbdelay1<span class="op">,</span>src<span class="op">,</span><span class="dv">2000</span><span class="op">,</span><span class="dv">0.5</span>)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (out<span class="op">,</span>out)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="言語仕様の整理既存の言語との比較" data-number="0.4.3">
+<h3 data-number="6.4.3"><span class="header-section-number">6.4.3</span>
+言語仕様の整理、既存の言語との比較</h3>
+<p>まとめると、mimiumは、UGenを状態付きな関数として表現でき、時間離散的な制御や信号処理を統一的なセマンティクスで記述でき、ユーザーはハードウェアを意識することなくコードを書くことができる。また、ほとんどのコードがLLVMを介してメモリ上でコンパイルされるため、低レベル言語と同等の実行速度を実現している。時間方向に離散的な処理の記述では、<code>@</code>演算子を用いて、関数を実行する時間を指定することができ、継時再帰のデザインパターンと組み合わせることで、繰り返し発生するイベントを抽象化することが可能である。信号処理の記述では、Faustのように状態変数を隠し、<code>self</code>を用いたフィードバック接続と組み込み状態付き関数のみを組み合わせることで、内部に状態を持つ関数を通常の関数定義や適用と同じ構文で表現することができる。</p>
+<p>既存の環境と比較して、mimiumは、<em>汎用プログラミング言語の仕様と実装に、最小限の音楽のための機能とセマンティクスを付加するアーキテクチャ</em>をとることで、プログラミング言語の自己拡張性を損なうことなく、実装をシンプルに保ち、ユーザーが音楽的作業に集中できるようにしている。</p>
+<p>実際、スケジューリング機能や状態付き関数が使われていない場合、mimiumは汎用のスクリプト言語のように使える。また、mimiumのコンパイラの実装は、状態付き関数の変換部分を除けば、一般的な関数型言語のコンパイラと同じである。</p>
+<p>Extemporeは、単一の環境ですべての記述ができるという点で、このアプローチと似ているものの、ユーザはxtlangとSchemeという2つの異なる言語を使用する必要がある。xtlangでは、UGenをクロージャとして定義する際に、手動のメモリ管理やポインタを含む複雑な型シグネチャを理解する必要がある。Extemporeは音楽に限らないフルスタックのライブコーディングを行うことを想定した環境であるため、手動メモリ管理は必ずしもマイナスポイントではないが、SuperColliderの開発者であるマッカートニーが言うように、音楽のために作られた言語であれば、ユーザーが音楽の作業に集中できるように、メモリやスレッドなどのハードウェア管理を不要、もしくはオプショナルにすることは一般的に重要だと言える<span
+class="citation" data-cites="McCartney2002">(McCartney 2002,
+p61)</span>。</p>
+<p>Kronos（とMeta-Sequencer）も同様に自己拡張性を重視した言語である。KronosはSystem
+<code>F\omega</code>をと呼ばれる、ラムダ計算の拡張体系の1つをベースにしたより厳密な関数型言語であり、プロセッサの入出力をリスト構造としてパラメータ化できることで、よりUGenの一般的な表現が可能である。しかし、その内部表現はFaustのようにグラフ構造をベースにしている<span
+class="citation" data-cites="Norilo2016phd">(Norilo 2016b,
+p23)</span>。mimiumの内部表現は、ラムダ計算ベースの木構造やSSA形式の命令型IRであり、より汎用プログラミング言語の中間表現に近いという違いがある。</p>
+</section>
+</section>
+<section id="現状の実装の問題点" data-number="0.5">
+<h2 data-number="6.5"><span class="header-section-number">6.5</span>
+現状の実装の問題点</h2>
+<div id="lst:frp" class="listing rust">
+<p>コード 15:
+mimiumの現在の実装ではコンパイル不可能な、時間方向に離散的に変化する値を関数として抽象化するコードの例。</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> frp_constructor(period)<span class="op">{</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    modifier <span class="op">=</span> <span class="op">|</span>x<span class="op">|{</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>        n <span class="op">=</span> x <span class="co">//capture freevar</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    modifier(n<span class="op">+</span><span class="dv">1</span>)<span class="op">@</span>(now<span class="op">+</span>period)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    modifier(<span class="dv">0</span>)<span class="op">@</span> <span class="dv">0</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    get <span class="op">=</span> <span class="op">||{</span> n <span class="op">}</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> get</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>val <span class="op">=</span> frp_constructor(<span class="dv">1000</span>)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>event_val <span class="op">=</span> val()</span></code></pre></div>
+</div>
+<div id="lst:filterbank" class="listing rust">
+<p>コード 16:
+mimiumの現在の実装ではコンパイル不可能な、内部状態を持つ関数のパラメトリックな複製のコード例。</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> filterbank(N<span class="op">,</span>input<span class="op">,</span>lowestfreq<span class="op">,</span> margin<span class="op">,</span>Q<span class="op">,</span>filter)<span class="op">{</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(N<span class="op">&gt;</span><span class="dv">0</span>)<span class="op">{</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> filter(input<span class="op">,</span>lowestfreq<span class="op">+</span>N<span class="op">*</span>margin<span class="op">,</span>Q)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                <span class="op">+</span>  filterbank(N<span class="op">-</span><span class="dv">1</span><span class="op">,</span>input<span class="op">,</span> lowestfreq<span class="op">,</span>margin<span class="op">,</span>Q<span class="op">,</span>filter)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span><span class="cf">else</span><span class="op">{</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">0</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}}</span></span></code></pre></div>
+</div>
+<p>現状mimiumを実用的に利用する際に3つの問題点が残っている。1つは離散的なイベントの記述は命令型、信号処理は関数型のパラダイムという2つの記法のミスマッチ、2つ目は信号処理に用いる状態付き関数をパラメトリックに複製できないこと、最後がFFTに代表されるサンプルをあるまとまった数ごとに処理をする信号処理が記述できないことだ。</p>
+<section id="離散イベントの処理と信号処理の記述のミスマッチ"
+data-number="0.5.1">
+<h3 data-number="6.5.1"><span class="header-section-number">6.5.1</span>
+離散イベントの処理と信号処理の記述のミスマッチ</h3>
+<p><code>@</code>演算子を用いて関数実行を時間指定するという方式は、当然ながら即時その関数が実行されないために、返り値を持たない<code>void</code>型の関数を用いて副作用（変数の破壊的代入もしくは標準出力への書き込みなどのIO操作）を起こす、命令型プログラミングのスタイルに帰着する。これはmimiumにおける信号処理で行われる、返り値を次の関数の引数として渡していくことで、信号フローの表現を行うようなスタイルとは大きく異なる。</p>
+<p>シンタックス上はコード 15のように、継時再帰とクロージャを組み合わせれば、離散的な値の変化を連続的な信号処理のスタイルと同様に表現することができる。だが、現在の実装ではこのコードは実現不可能である。mimiumの現在の実装では関数内部で定義されたローカル変数は本来のスコープを超えて生存することができないため、変数の参照を返り値として返却するようなこのコードを実行することができないためである。コンパイラが仮にライフタイム解析<span
+class="citation" data-cites="Ruggieri1988">(Ruggieri and Murtagh
+1988)</span>などの静的解析を用いてコンパイル時に変数の寿命を決定（あるいは、プログラム実行中は永続的に解放されないことを静的に判定）できればこの時間方向に離散的なタイミングで変化する数値の抽象化が可能になる。</p>
+</section>
+<section id="状態付き変数のパラメトリックな複製" data-number="0.5.2">
+<h3 data-number="6.5.2"><span class="header-section-number">6.5.2</span>
+状態付き変数のパラメトリックな複製</h3>
+<p>もう1つの問題は、現在の実装では<code>self</code>や<code>delay</code>を用いる状態付きの関数をパラメトリックに複製できないということだ。コード 16のような例を考えてみよう。関数<code>filterbank</code>は引数<code>N</code>の条件を基にして、別の引数として与えられる<code>filter</code>関数を再帰的に足し合わせるようなコードだ。この時、<code>filter</code>関数に用いられる状態変数の数と、そのためのメモリのサイズはコンパイル時に静的に決定されねばならない。しかし<code>filter</code>関数が何回複製されるかは引数である<code>N</code>によって決定されるために、<code>filterbank</code>関数が実行されるタイミングになるまで状態変数の数の決定は不可能である。</p>
+<p>このようなパラメトリックな信号処理プロセッサの複製は、たとえばFaustではパターンマッチを用いたコンパイル時再帰によって記述可能である。これはオリジナルのFaustのセマンティクスの中には存在しなかった機能で、Gräfによる項書き換えシステム（パターンに応じてコードそのものをコンパイル前に書き換えてしまう一種のマクロ）の導入によって解決されたものである<span
+class="citation" data-cites="Graf2010">(Gräf
+2010)</span>。それ故、コンパイル時にコード 16でいう<code>N</code>に相当する、コンパイル時に展開される変数が、整数の定数であることを保証できない場合にはコンパイルエラーになる。加えて、FaustのBlock-diagram
+Algebraの意味論とマクロの体系は別物として存在しているため、コードを書いている人からすると、コンパイル時定数と実行時に変化する変数はどちらも同じ数値であり区別がつけづらい。</p>
+<p>mimiumにおいてこの問題を解決するためには、コンパイラが定数を予め展開してしまうような仕組み、あるいはマクロを最低でも状態変数の解析の前のステップに導入する必要がある。これはコンパイラが暗黙的に行うことでも解決は可能だが、Faust同様、ユーザーからすれば<code>N</code>が定数でなければいけないことは意味論の外側の事情になってしまうので理解が複雑になってしまう。</p>
+<p>この問題は一歩引いて考えると、そもそもこの<code>filterbank</code>関数は、シグナルフローをコンパイル時に決定する処理の記述と、実際にプログラムが実行されるタイミングで発生する信号処理という、<strong>2つの時間における計算を混在させている</strong>ことになる。こうした状況はMetaMLに代表される一種の多段階計算<span
+class="citation" data-cites="Taha1997">(Taha and Sheard
+1997)</span>と類似した状況と考えられる。多段階計算は、計算が起きるステップを明示的に文法の中に記述でき、型システムにもその変数がいつ計算される変数かという情報を入れることができるような計算パラダイムで、再帰の発生する計算などを効率的にプログラムできるといった特徴がある。</p>
+<p>計算がいつ発生するかという視点で考えれば音楽プログラミング言語には、シグナルフローの決定という計算以外にも例えば波形テーブルの生成、リズムパターンの生成といった、プログラムの中では一度きりしか発生しない計算はいくつもあるため、導入することで副次的に得られる利点もある。</p>
+<p>さらに、多段階計算はMacroML<span class="citation"
+data-cites="Ganz2001">(Ganz, Sabry, and Taha
+2001)</span>のように高機能なマクロとしての活用方法もある。つまり多段階計算を導入することによって、UGenのパラメトリックな複製だけでなく、言語の自己反映性を高め、言語内DSLをライブラリとして構築できる仕組みへと応用することも期待できる。</p>
+</section>
+<section id="複数サンプルレートが混在した信号処理" data-number="0.5.3">
+<h3 data-number="6.5.3"><span class="header-section-number">6.5.3</span>
+複数サンプルレートが混在した信号処理</h3>
+<p>mimiumの信号処理は1サンプルごとの処理の記述によって表現されているため、高速フーリエ変換（FFT）に代表されるような、256、512などまとまった数のサンプルを処理し、同じまとまりのサンプルを一挙に出力する、いわゆる複数サンプルレートの混在した信号処理（Multi-rate
+Processing）の記述が不可能である。FFTは音声信号を時間領域から周波数領域へと一度変換し、なんらかの処理を経て再度時間領域へと逆変換を行う、スペクトラルプロセッシングと呼ばれる種類の今日多用されている信号処理に必須の処理である<span
+class="citation" data-cites="Roads2001">(Roads 2001,
+13章)</span>。この問題はサンプルごとの処理を基本とする言語であるFaustにも共通した問題であり、実現のための文法拡張は同様に試みられている<span
+class="citation" data-cites="Jouvelot2011">(Jouvelot and Orlarey
+2011)</span>ものの実用には至っていない。Kronosはサンプルレート自体を変更するコンパイラ組み込みの関数を導入することでこれを解決している<span
+class="citation" data-cites="Norilo2015">(Norilo 2015,
+p40〜41)</span>。これも多段階計算同様に<strong>いつ計算するか</strong>に関わる、一般的なプログラミング言語では考慮されない要素であるため、どのみち意味論に何かしらの拡張を加えなければ根本的な解決はできないものと考えられる。</p>
+</section>
+</section>
+<section id="より形式的な定義のための関連研究" data-number="0.6">
+<h2 data-number="6.6"><span class="header-section-number">6.6</span>
+より形式的な定義のための関連研究</h2>
+<p>現在のところ、mimiumの統語論の定義に関しては付録で示すように形式的な定義を行えてはいるが、<code>self</code>のような状態付き関数の意味論は実装によって示されているのみである。</p>
+<p>この参考となる研究がmimiumを発表したACM SIGPLAN FARM(Functional Art,
+Research,
+Modeling)というワークショップで同じセッションで発表された<em>W</em>計算（<em>W</em>-calculus、ラムダ計算と同じような名付け）である<span
+class="citation" data-cites="Arias2021">(Arias et al.
+2021)</span>。<em>W</em>計算はFaustに強く影響を受けたサンプルベースの信号処理に特化した体系ではあるが、FaustやKronosのように入出力を持ったブロックのグラフを組み合わせる構造とは大きく異なる。<em>W</em>計算はmimium同様にラムダ計算をベースにした計算体系であり、通常のラムダ計算に現れる項に加えて、<span
+class="math inline"><em>f</em><em>e</em><em>e</em><em>d</em> <em>x</em>.<em>e</em></span>といった独自の項が追加されている。</p>
+<p>この<code>feed</code>はその項における1時刻前のサンプルでの計算結果が<span
+class="math inline"><em>x</em></span>として項の中で再帰的に利用できるといった意味合いをもち、これはmimiumにおける<code>self</code>の概念に直接的に対応する。例えば1サンプルずつ引数<code>incl</code>に応じて増加するカウンターの関数コード 17は<em>W</em>計算の中では式 1のように表せる<a
+href="#fn2" class="footnote-ref" id="fnref2"
+role="doc-noteref"><sup>2</sup></a>。</p>
+<div id="lst:wcalc" class="listing rust">
+<p>コード 17:
+mimiumでの引数<code>incl</code>サンプルずつ増加するカウンター</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> counter(incl<span class="op">:</span>float)<span class="op">{</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">self</span><span class="op">+</span>incl</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+<p><span id="eq:label"><span
+class="math display"><em>λ</em> <em>i</em><em>n</em><em>c</em><em>l</em>.<em>f</em><em>e</em><em>e</em><em>d</em> <em>s</em><em>e</em><em>l</em><em>f</em>.(<em>i</em><em>n</em><em>c</em><em>l</em>+<em>s</em><em>e</em><em>l</em><em>f</em>)   (1)</span></span></p>
+<!-- \begin{equation}
+\lambda \ incl.feed \ self.(incl+self)
+\label{eq:label}
+\end{equation} -->
+<p>W計算では<em>feed</em>の項の他に、式の過去のサンプルの参照、つまりディレイに相当する処理も基本操作として備えている。こうした過去のサンプルへの参照は、実用的には過去のサンプル全てを保存しなければならず、ほぼ無限のメモリを必要としてしまう問題がある。この問題は、Chronicが簡潔なデータ表現を可能にはなってはいるものの、リアルタイム実行が難しくなっていた理由の1つでもある。</p>
+<p><em>W</em>計算も、最も簡単な意味論では同じ問題を共有しているものの、リアルタイム実行のために都度意味論を拡張させることで対応できている。また、OCamlで書かれた<em>W</em>計算で記述された信号処理のプログラムを、一度MetaOCamlというOCamlのプログラム自体を加工できるメタ言語上で評価することで、入力プログラムに特化したインタプリタプログラムを生成し、コンパイラの最適化などをさらに組み合わせることでリアルタイム計算を実現できている。またMulti-rate信号処理への拡張も既に方針が示されているなど、かなり実用を意識した上での理論構築がなされている。</p>
+<p>mimiumも根本的な意味論の定義を<em>W</em>計算の形式を借りることによって可能になるだろうと考えられる。もっとも、<em>W</em>計算においても時間方向に離散的な処理の意味論は含まれておらず、現状のランタイムとの通信という実装に依存する定義方法に対する解は今後別に検討する必要がある。</p>
+</section>
+<section id="sec:chap6end" data-number="0.7">
+<h2 data-number="6.7"><span class="header-section-number">6.7</span>
+小括</h2>
+<p>本章ではmimiumの具体的な設計と実装を示した。mimiumは汎用関数型言語の設計に最小限の時間操作の機能を追加する方針で作られていた。その最小限の機能とは、<code>@</code>演算子によるスケジューリングと、内部状態付き関数によるUGen相当の信号処理の表現を2つであった。</p>
+<p>ここまでmimiumの実装を通じての視点で、一度本研究の提出する貢献のひとつ、PLfMとは一体何かという問いに答えることで本章のまとめに替える。</p>
+<p>音楽プログラミング言語とは本質的にはマッカートニーの言ったように、<strong>音楽のための最低限の抽象化機構を備えた人工言語</strong>である。今日（音楽に限らない）プログラミング言語とは、ハードウェアの違いに依存しない抽象的な計算モデルを、（必ずしもテキストに限らない）人間が知覚、認識、記述可能な形で記述/操作できるようにしたものと言える。ただし、ハードウェアを意識する必要のない高級汎用プログラミング言語の多くは、ガベージコレクションのような実行タイミングに不確定性を生じさせる機能を利用している。そのため汎用言語のライブラリとして、信号処理を含むリアルタイムな動作が可能なDSLを構築することは難しい状況が続いている。</p>
+<p>そのため多くのPLfMの設計はその統語論や意味論の設計自体を行う必要が出てくるが、問題となるのは<strong>最低限の抽象化</strong>をどこに設定するかである。言語実装者にとっての最低限の抽象化の線引きによってその言語の実行環境は、大きければUnit
+Generatorのインタプリタモデルのようになるし、小さければFaustのような厳格な形式的意味論を備える言語体系になる。</p>
+<p>最低限のラインを大きくすると、それは基本的に、十二音の音階や、モジュラーシンセサイザーのメタファーなど、ある音楽様式が言語自体に埋め込まれてしまい、プログラマーの思考をその様式に固定してしまうだけでなく、基本的にプログラミング言語としての抽象化能力は高くないものが多いので、基本から外れた試みを行うためにその言語上で高度なライブラリを作ることも難しいといった問題が生じてしまう。</p>
+<p>一方で、最低限のラインを下げれば下げるほど、その言語自体の設計や実装に必要な知識は音楽ではなくコンピューターに関する知識そのものになっていく。</p>
+<p>さらに、比較的現代的なものを含めて汎用プログラミング言語の下敷きになっている理論は基本的に、可能な限り速く計算できることが是とされる、時間を考慮しない計算モデルを基にしており、<strong>いつ計算するか</strong>を明示的に意味論に組み込む言語は少ない。現状、時間の概念が関係してくる抽象計算モデルの議論の種別としては次のような4種類に分類される。1つ目は、例えば線形時相論理、計算木論理などの「時間Aまでに処理が間に合っていればBの処理を、間に合わなければCを」といった、実時間に伴うタイムアウト処理などの用途を想定したリアルタイムコンピューティングの議論。2つ目は、Communicating
+Sequential Processes（CSP）や<span
+class="math inline"><em>π</em></span>計算のような、並行システムをラムダ計算と同じように、形式的に抽象化する方法についての議論。3つ目は、Functional-Reactive
+Programming（FRP）のような、時間に伴って変化するデータ全般を抽象的に表すことを目的とした関数型プログラミングの議論。4つ目は、Faustや<em>W</em>計算のような、音声信号処理で使われることを想定した、実時間ではなく等間隔な時間で発生する計算の順序を保証し、かつ、漸化式的に、時間方向に遡って計算結果を利用する計算モデルである。</p>
+<p>リアルタイムコンピューティングと並行システムの抽象化は音楽以外の分野が議論の中心である。FRPは元々アニメーションなどの表現に使われることを想定としているが、信号処理の理論との接続は未だ積極的に行われてはいない（数少ない例としては<span
+class="citation" data-cites="Reach2013">(Reach 2013)</span>や<span
+class="citation" data-cites="Gaster2018">(Gaster, Renney, and Mitchell
+2018)</span>）。</p>
+<p>これら4種類の時間に関わる計算モデルを統合するような研究は未だ行われていない。その上、仮にもし時間を含めた計算モデルがあったとしても、現代で使われているコンピューターの構造自体、特にOSのスケジューラーなどの実行タイミングの不確定性から逃れることはどの道できない。</p>
+<p>そのため、なるべく可能な表現範囲の広いPLfMを設計するには、まず未だ確たるものが存在しない時間を考慮した抽象計算モデルを考慮に入れた意味論の設計を行う必要がある。その上で、ハードウェアやOSと言った、現状存在しているインフラストラクチャ上で動くランタイムプログラムの工夫などで実行モデルとインフラストラクチャの不一致をつなぎ合わせるという、常に暫定解を探し続ける必要がある。</p>
+<div id="refs" class="references csl-bib-body hanging-indent"
+role="doc-bibliography">
+<div id="ref-Aaron2013" class="csl-entry" role="doc-biblioentry">
+Aaron, Samuel, and Alan F. Blackwell. 2013. <span>“<span
+class="nocase">From Sonic Pi to overtone: Creative musical experiences
+with domain-specific and functional languages</span>.”</span>
+<em>Proceedings of the ACM SIGPLAN International Conference on
+Functional Programming, ICFP</em>, 35–46. <a
+href="https://doi.org/10.1145/2505341.2505346">https://doi.org/10.1145/2505341.2505346</a>.
+</div>
+<div id="ref-Arias2021" class="csl-entry" role="doc-biblioentry">
+Arias, Emilio Jesús Gallego, Pierre Jouvelot, Sylvain Ribstein, and
+Dorian Desblancs. 2021. <span>“The w-Calculus: A Synchronous Framework
+for the Verified Modelling of Digital Signal Processing
+Algorithms.”</span> <em>Proceedings of the 9th <span>ACM</span>
+<span>SIGPLAN</span> International Workshop on Functional Art, Music,
+Modelling, and Design</em> 12 (August): 35–46. <a
+href="https://doi.org/10.1145/3471872.3472970">https://doi.org/10.1145/3471872.3472970</a>.
+</div>
+<div id="ref-Dannenberg2005" class="csl-entry" role="doc-biblioentry">
+Dannenberg, Roger B., and Ross Bencina. 2005. <span>“<span
+class="nocase">Design Patterns for Real-Time Computer Music
+Systems</span>.”</span> In <em>ICMC 2005 Workshop on Real Time Systems
+Concepts for Computer Music</em>. <a
+href="https://www.researchgate.net/publication/242648768_Design_Patterns_for_Real-Time_Computer_Music_Systems">https://www.researchgate.net/publication/242648768_Design_Patterns_for_Real-Time_Computer_Music_Systems</a>.
+</div>
+<div id="ref-Ganz2001" class="csl-entry" role="doc-biblioentry">
+Ganz, Steven E., Amr Sabry, and Walid Taha. 2001. <span>“<span
+class="nocase">Macros as multi-stage computations: Type-safe,
+generative, binding macros in MacroML</span>.”</span> <em>SIGPLAN
+Notices (ACM Special Interest Group on Programming Languages)</em> 36
+(10): 74–85. <a
+href="https://doi.org/10.1145/507669.507646">https://doi.org/10.1145/507669.507646</a>.
+</div>
+<div id="ref-Gaster2018" class="csl-entry" role="doc-biblioentry">
+Gaster, Benedict R, Nathan Renney, and Tom Mitchell. 2018.
+<span>“<span>OUTSIDE</span> <span>THE</span> <span>BLOCK</span>
+<span>SYNDICATE</span>: <span>TRANSLATING</span> <span>FAUST</span>’s
+<span>ALGEBRA</span> <span>OF</span> <span>BLOCKS</span> <span>TO</span>
+<span>THE</span> <span>ARROWS</span> <span>FRAMEWORK</span>.”</span> In
+<em>Proceedings of the 1st International Faust Conference</em>.
+Mainz,Germany.
+</div>
+<div id="ref-Graf2010" class="csl-entry" role="doc-biblioentry">
+Gräf, Albert. 2010. <span>“<span class="nocase">Term Rewriting Extension
+for the Faust Programming Language</span>.”</span> In <em>International
+Linux Audio Conference</em>. <a
+href="https://hal.archives-ouvertes.fr/hal-03162973 https://hal.archives-ouvertes.fr/hal-03162973/document">https://hal.archives-ouvertes.fr/hal-03162973
+https://hal.archives-ouvertes.fr/hal-03162973/document</a>.
+</div>
+<div id="ref-Jouvelot2011" class="csl-entry" role="doc-biblioentry">
+Jouvelot, Pierre, and Yann Orlarey. 2011. <span>“Dependent Vector Types
+for Data Structuring in Multirate Faust.”</span> <em>Computer Languages,
+Systems &amp; Structures</em> 37 (3): 113–31.
+</div>
+<div id="ref-Klabnik2020" class="csl-entry" role="doc-biblioentry">
+Klabnik, Steve and Nichols, Carol. 2020. <span>“<span>The Rust
+Programming Language</span>.”</span> <a
+href="https://doc.rust-lang.org/book/">https://doc.rust-lang.org/book/</a>.
+</div>
+<div id="ref-Lattner2004" class="csl-entry" role="doc-biblioentry">
+Lattner, Chris, and Vikram Adve. 2004. <span>“<span class="nocase">LLVM:
+A Compilation Framework for Lifelong Program Analysis &amp;
+Transformation</span>.”</span> In <em>Proceedings of the International
+Symposium on Code Generation and Optimization: Feedback-Directed and
+Runtime Optimization</em>, 75. CGO ’04. USA: IEEE Computer Society. <a
+href="https://llvm.org/pubs/2004-01-30-CGO-LLVM.html">https://llvm.org/pubs/2004-01-30-CGO-LLVM.html</a>.
+</div>
+<div id="ref-Lopo" class="csl-entry" role="doc-biblioentry">
+Lopo, Erik de Castro. 1990. <span>“Libsndfile.”</span> <a
+href="http://www.mega-nerd.com/libsndfile/">http://www.mega-nerd.com/libsndfile/</a>.
+</div>
+<div id="ref-Matsuura2021" class="csl-entry" role="doc-biblioentry">
+Matsuura, Tomoya, and Kazuhiro Jo. 2021. <span>“Mimium: A
+Self-Extensible Programming Language for Sound and Music.”</span> In
+<em><span>FARM</span> 2021 - Proceedings of the <span>ACM</span>
+<span>SIGPLAN</span> International Workshop on Functional Art, Music,
+Modeling, and Design</em>. <a
+href="https://doi.org/10.1145/3471872.3472969">https://doi.org/10.1145/3471872.3472969</a>.
+</div>
+<div id="ref-McCartney2002" class="csl-entry" role="doc-biblioentry">
+McCartney, James. 2002. <span>“<span class="nocase">Rethinking the
+computer music language: SuperCollider</span>.”</span> <em>Computer
+Music Journal</em> 26 (4): 61–68. <a
+href="https://doi.org/10.1162/014892602320991383">https://doi.org/10.1162/014892602320991383</a>.
+</div>
+<div id="ref-Microsoft2020" class="csl-entry" role="doc-biblioentry">
+Microsoft. 2020. <span>“<span>Functions - F# | Microsoft
+Docs</span>.”</span> <a
+href="https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/functions/#function-composition-and-pipelining">https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/functions/#function-composition-and-pipelining</a>.
+</div>
+<div id="ref-Norilo2015" class="csl-entry" role="doc-biblioentry">
+Norilo, Vesa. 2015. <span>“<span class="nocase">Kronos: A Declarative
+Metaprogramming Language for Digital Signal Processing</span>.”</span>
+<em>Computer Music Journal</em> 39 (4): 30–48. <a
+href="https://doi.org/10.1162/COMJ_a_00330">https://doi.org/10.1162/COMJ_a_00330</a>.
+</div>
+<div id="ref-Norilo2016" class="csl-entry" role="doc-biblioentry">
+———. 2016a. <span>“<span class="nocase">Kronos Meta-Sequencer – From
+Ugens to Orchestra, Score and Beyond</span>.”</span> In <em>Proceedings
+of the International Computer Music Conference</em>, 117–22.
+</div>
+<div id="ref-Norilo2016phd" class="csl-entry" role="doc-biblioentry">
+———. 2016b. <span>“<span class="nocase">Kronos: Reimagining musical
+signal processing</span>.”</span> PhD thesis, University of the Arts
+Helsinki.
+</div>
+<div id="ref-Reach2013" class="csl-entry" role="doc-biblioentry">
+Reach, Caleb. 2013. <span>“<span>INCREMENTAL</span>
+<span>FUNCTIONAL</span> <span>REACTIVE</span> <span>PROGRAMMING</span>
+<span>FOR</span> <span>INTERACTIVE</span> <span>MUSIC</span>
+<span>SIGNAL</span> <span>PROCESSING</span>.”</span> In <em>Proc. Of the
+16th Int. Conference on Digital Audio Effects
+(<span>DAFx</span>-13)</em>.
+</div>
+<div id="ref-Roads2001" class="csl-entry" role="doc-biblioentry">
+Roads, Curtis. 2001. <em>コンピュータ音楽:
+歴史・テクノロジー・アート</em>. Translated by 青柳竜也, 小阪直敏,
+平田圭二, 堀内靖雄, 後藤孝文, 平野砂峰旅, and 松島俊明.
+東京電機大学出版局.
+</div>
+<div id="ref-Ruggieri1988" class="csl-entry" role="doc-biblioentry">
+Ruggieri, Cristina, and Thomas P. Murtagh. 1988. <span>“<span
+class="nocase">Lifetime analysis of dynamically allocated
+objects</span>.”</span> In <em>Conference Record of the Annual ACM
+Symposium on Principles of Programming Languages</em>, Part
+F130193:285–93. Association for Computing Machinery. <a
+href="https://doi.org/10.1145/73560.73585">https://doi.org/10.1145/73560.73585</a>.
+</div>
+<div id="ref-Ruiz2020" class="csl-entry" role="doc-biblioentry">
+Ruiz, Leonardo Laguna. 2020. <span>“<span>Vult Language</span>.”</span>
+<a
+href="http://modlfo.github.io/vult/">http://modlfo.github.io/vult/</a>.
+</div>
+<div id="ref-Scavone2002" class="csl-entry" role="doc-biblioentry">
+Scavone, Gary P. 2002. <span>“<span class="nocase">RtAudio: A
+Cross-Platform C++ Class for Realtime Audio Input/Output</span>.”</span>
+In <em>Proceedings of the 2002 International Computer Music
+Conference</em>. Goteborg, Sweden.
+</div>
+<div id="ref-Sorensen2010" class="csl-entry" role="doc-biblioentry">
+Sorensen, Andrew Carl, and Henry Gardner. 2010. <span>“<span
+class="nocase">Programming With Time Cyber-physical programming with
+Impromptu</span>.”</span> In <em>Proceedings of the ACM International
+Conference on Object Oriented Programming Systems Languages and
+Applications - OOPSLA ’10</em>. New York, New York, USA: ACM Press.
+</div>
+<div id="ref-Sumii2005" class="csl-entry" role="doc-biblioentry">
+Sumii, Eijiro. 2005. <span>“<span class="nocase">MinCaml: A simple and
+efficient compiler for a minimal functional language</span>.”</span> In
+<em>FDPE’05 - Proceedings of the ACM SIGPLAN 2005 Workshop on Functional
+and Declarative Programming in Education</em>, 27–38. New York, New
+York, USA: ACM Press. <a
+href="https://doi.org/10.1145/1085114.1085122">https://doi.org/10.1145/1085114.1085122</a>.
+</div>
+<div id="ref-Taha1997" class="csl-entry" role="doc-biblioentry">
+Taha, Walid, and Tim Sheard. 1997. <span>“<span
+class="nocase">Multi-Stage Programming with Explicit
+Annotations</span>.”</span> <em>SIGPLAN Notices (ACM Special Interest
+Group on Programming Languages)</em> 32 (12): 203–14. <a
+href="https://doi.org/10.1145/258994.259019">https://doi.org/10.1145/258994.259019</a>.
+</div>
+</div>
+</section>
+<section class="footnotes footnotes-end-of-document"
+role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"
+role="doc-endnote"><p>本論文中ではバージョンは0.4.0をもとに解説している。ソースコードは<a
+href="https://github.com/mimium-org/mimium"
+class="uri">https://github.com/mimium-org/mimium</a>で公開されている。<a
+href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"
+role="doc-endnote"><p><em>W</em>計算はフィルタのような線形時不変（Linear
+Time-Invariant:LTI）システムの実質的等価性を形式的に証明することを1つの目的としている。そのため厳密に言えば基本的演算に式同士の加算と、式と定数の乗算（スケーリング）のみが許されており、式同士の乗算などは許されない。しかし基本的な演算の項を追加すれば非線型システムにも対応はできる。<a
+href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+<style>pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #2a211c;
+    color: #bdae9d;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #bdae9d;  padding-left: 4px; }
+div.sourceCode
+  { color: #bdae9d; background-color: #2a211c; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ffff00; } /* Alert */
+code span.an { color: #0066ff; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #44aa43; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #43a8ed; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #049b0a; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #0066ff; font-weight: bold; font-style: italic; } /* Comment */
+code span.do { color: #0066ff; font-style: italic; } /* Documentation */
+code span.dt { text-decoration: underline; } /* DataType */
+code span.dv { color: #44aa43; } /* DecVal */
+code span.er { color: #ffff00; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #44aa43; } /* Float */
+code span.fu { color: #ff9358; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #0066ff; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #43a8ed; font-weight: bold; } /* Keyword */
+code span.op { } /* Operator */
+code span.pp { font-weight: bold; } /* Preprocessor */
+code span.sc { color: #049b0a; } /* SpecialChar */
+code span.ss { color: #049b0a; } /* SpecialString */
+code span.st { color: #049b0a; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #049b0a; } /* VerbatimString */
+code span.wa { color: #ffff00; font-weight: bold; } /* Warning */</style>
