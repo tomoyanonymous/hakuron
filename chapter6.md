@@ -147,7 +147,7 @@ mimiumには組み込み関数として、基本的な算術演算、libcの *ma
 
 クロージャ変換と低レベルコード（LLVM IR：LLVMで利用される、C言語とアセンブリ言語の中間程度の抽象度を持つ形式）の生成器の間には、mimiumの独自仕様である状態を伴う関数（[@sec:statefulfun]）のための状態変数の検出を行う。この変換では、`dsp`関数を信号処理のエントリポイントとして、関数が使用する状態変数を、呼び出された状態付き関数名のノードと関数内で使われる状態変数の型を持つ木構造（図中の*State Tree*）のデータとして出力する。最後に、クロージャ変換されたIRとState TreeをもとにLLVM IRを生成する。
 
-![mimiumのコンパイラとランタイムのアーキテクチャの構成。](img/mimium-arch-v4-affinity.png){width=100% #fig:arch}
+![mimiumのコンパイラとランタイムのアーキテクチャの構成。](../img/mimium-arch-v4-affinity.png){width=100% #fig:arch}
 
 ランタイムは、LLVM IRを受け取り、メモリ上でネイティブバイナリにコンパイルするJIT実行エンジン、オーディオデバイスとの入出力通信を行うオーディオドライバ、時間指定実行された関数とその論理時間の情報を保持するスケジューラの3つの部分で構成される。現在、オーディオドライバーには、オーディオデバイスをOSのAPIで抽象化したC++用のクロスプラットフォームライブラリRtAudio[@Scavone2002]を使用している。実行エンジンは、信号処理のエントリーポイントである`dsp`関数をオーディオドライバーに渡す。オーディオドライバーは、ハードウェアからの要求を基にスケジューラーに論理時間を進めるように命令し、スケジューラは、論理時間に基づいてタスクを実行したり、実行されているプログラムからタスクの登録の要求への応答、内部時間(`now`)をプログラムへ返す役割を担う。
 
@@ -386,14 +386,15 @@ osc(freq) = freq:phasor:scaleTwopi : cos;
 
 : Faustでの直列接続演算子（:）の利用例 {#lst:pipefaust}
 
+![Maxでのデータフロー的表現の例。](../img/max-osc-example.png){#fig:maxexample}
 
-\begin{figure}[h]
+<!-- \begin{figure}[h]
   \centering
   \includegraphics[width=0.7\columnwidth]{img/max-osc-example.png}
   \caption{Maxでのデーターフロー的表現の例。}
   % \Description{Example of dataflow syntax in Max}
   \label{fig:maxexample}
-\end{figure}
+\end{figure} -->
 
 ### 状態付き関数のコンパイル手順
 
