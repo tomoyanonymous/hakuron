@@ -45,7 +45,7 @@ mimiumでは改めて、音楽に特化した言語ではあるが、プログ�
 \end{tabular}
 \end{table*}
 
-表\ref{langcomparison} はmimiumと既存の主要な音楽プログラミング言語の仕様を比較したものである。mimiumは時間方向に離散的な制御の記述と、信号処理と1つのセマンティクスで実現している。信号処理の実行速度はJIT（実行時）コンパイルを用いることでC++などの低レベル言語での記述と同等にしている。またユーザーはメモリーの確保、開放のようなハードウェアの意識をする必要がない。
+[@tbl:langcomparison] はmimiumと既存の主要な音楽プログラミング言語の仕様を比較したものである。mimiumは時間方向に離散的な制御の記述と、信号処理と1つのセマンティクスで実現している。信号処理の実行速度はJIT（実行時）コンパイルを用いることでC++などの低レベル言語での記述と同等にしている。またユーザーはメモリーの確保、開放のようなハードウェアの意識をする必要がない。
 
 また低レベルなUGenの定義が言語上で可能ではあるものの、その内部表現はFaustやKronosの採用するグラフ表現と異なり、ラムダ計算をベースにしたフォーマットである。
 
@@ -59,7 +59,7 @@ mimiumでは改めて、音楽に特化した言語ではあるが、プログ�
 
 mimiumの基本的なシンタックスは、Rust[@Klabnik2020]をベースにした。シンタックスの選択は常に**すでにある程度普及している言語体系**を眺めた上で設計せざるを得ない。Rustの構文は予約語が比較的短いので音楽のように素早くプロトタイピングを行う分野に適していることが主な理由である。また、既存の言語の構文と似せると、既存の言語のためのシンタックスハイライト（ソースコードを色分けして見やすくするためのツール）を再利用しやすいという副次的効果も得られる。
 
-\begin{lstlisting}[float,floatplacement=Htb,language=Rust,style=mystyle,caption=mimiumの基本的なシンタックスの説明。,label=lst:mimiumbasic]
+```rust
 //コメントはダブルスラッシュ
 //新しい名前の変数への代入が変数宣言になる
 mynumber = 1000 
@@ -104,15 +104,20 @@ fn fact(input){
 }
 // if文は式としても使える
 fact = |input|{ if(input>0) 1 else input * fact(input-1) }
-\end{lstlisting}
+```
 
-\begin{lstlisting}[float,floatplacement=Htb,language=Rust,style=mystyle,caption=mimiumでの、1chの入力を2chに複製して返却する\texttt{dsp}関数の例。,label=lst:dsp]
+: mimiumの基本的なシンタックスの説明。 {#lst:mimiumbasic}
+
+
+```rust
 fn dsp(input:(float,float)) ->(float,float){
 	left,right = input
 	out = (left+right)/2
 	return (out,out)
 }
-\end{lstlisting}
+```
+
+: mimiumでの、1chの入力を2chに複製して返却する`dsp`関数の例。 {#lst:dsp}
 
 [@lst:mimiumbasic]に基本的な言語仕様を示す。BNFによる形式的な言語仕様定義は付録\ref{sec:appendA}にて示した。
 変数の宣言は、関数のスコープ内で新しい名前の変数に何らかの値を代入することで自動的に行われる。変数を宣言する際には、コロンの後に型名を記述することで、値の型を明示的に指定できる。型名が省略された場合は、文脈から型を推測可能である。データ型には、`void`（空の値の型）、`float`（整数、浮動小数点型の区別はなく、内部的にはデフォルトで64bit-float）、`string`といったプリミティブな型のほか、任意の型の値を受け取り任意の型の値を返す`function`、任意の型を列挙する型である`tuple`、任意の型の有限長配列`array`といった合成型がある。また、ユーザー定義の型エイリアスを宣言もできる。
@@ -140,7 +145,7 @@ mimiumには組み込み関数として、基本的な算術演算、libcの *ma
 
 ソースコードのテキストデータは、まず抽象構文木（AST）に解析され、シンタックスシュガーを変換した後、ASTはラムダ計算ベースの木構造に変換される。次に、型推論、型検査を行い、すべての変数の型を決定する。ASTは、型情報とともに、すべての変数が一度だけ割り当てられる静的単一代入（SSA）形式の中間表現に変換される。この段階ではまだ関数の入れ子定義が可能になっているので、関数定義から自由変数を取り除くためにクロージャ変換が行われる。
 
-クロージャ変換と低レベルコード（LLVM IR：LLVMで利用される、C言語とアセンブリ言語の中間程度の抽象度を持つ形式）の生成器の間には、mimiumの独自仕様である状態を伴う関数関数（[@sec:statefulfun]）のための状態変数の検出を行う。この変換では、`dsp`関数を信号処理のエントリポイントとして、関数が使用する状態変数を、呼び出された状態付き関数名のノードと関数内で使われる状態変数の型を持つ木構造（図中の*State Tree*）のデータとして出力する。最後に、クロージャ変換されたIRとState TreeをもとにLLVM IRを生成する。
+クロージャ変換と低レベルコード（LLVM IR：LLVMで利用される、C言語とアセンブリ言語の中間程度の抽象度を持つ形式）の生成器の間には、mimiumの独自仕様である状態を伴う関数（[@sec:statefulfun]）のための状態変数の検出を行う。この変換では、`dsp`関数を信号処理のエントリポイントとして、関数が使用する状態変数を、呼び出された状態付き関数名のノードと関数内で使われる状態変数の型を持つ木構造（図中の*State Tree*）のデータとして出力する。最後に、クロージャ変換されたIRとState TreeをもとにLLVM IRを生成する。
 
 ![mimiumのコンパイラとランタイムのアーキテクチャの構成。](img/mimium-arch-v4-affinity.png){width=100% #fig:arch}
 
@@ -152,7 +157,7 @@ LLVM IRまで変換されたコードの中では、タスクの登録と、内�
 
 ## `@`演算子によるスケジューリング
 
-\begin{lstlisting}[float,floatplacement=Htb,language=Rust,style=mystyle,caption=mimiumにおける継時再帰のサンプル,label=lst:tr-mimium]
+```rust
 ntrigger = 1
 fn setN(val:float){
     ntrigger = val
@@ -167,13 +172,15 @@ fn Nloop(period:float)->void{
     Nloop(period)@(now+nextperiod) 
 }
 Nloop(12000)
-\end{lstlisting}
+```
+
+: mimiumにおける継時再帰のサンプル {#lst:tr-mimium}
 
 mimiumで時間方向に離散的に発生するイベントを記述するには、Impromptu（Extemporeの前身）で導入され、Overtone[@Aaron2013]やKronos Meta-Sequener[@Norilo2016]といった言語などでも利用されてきた、継時再帰（**Temporal Recursion**[@Sorensen2010]）と呼ばれるデザインパターンを用いる。継時再帰は、一定時間後に関数を呼び出す機能を用いて、ある関数の中で自分自身を一定の遅延とともに再帰的に呼び出すことで、時間とともに繰り返すイベント処理の記述を可能にするものである。
 
 [@lst:tr-mimium]に具体的な例を挙げる。関数呼び出しに続けて`@`演算子、さらにその後ろに数値型の式を置くと、その関数はすぐには実行されない。代わりに、時間をキーとした優先順位付きタスクキューに登録され、実行コンテキストは次の文に移る。ランタイムは、オーディオドライバのクロックを基にして、各サンプルを処理する前にタスクキューをチェックし、先頭の要素のキーが現在の論理時間に達していれば、それらを先に実行する。時刻は、ランタイム実行を開始を0とした絶対時刻（単位は現在のところサンプル）となっているが、キーワード`now`を用いてランタイムから現在の論理的な時間を取得し相対的な時間を記述できる。
 
-\begin{lstlisting}[float,floatplacement=Htb,language=Scheme,style=mystyle,caption=コード\ref{lst:tr-mimium}と等価なコードをExtemporeで記述したもの,label=lst:tr-extempore]
+```lisp
 (define ntrigger 1)
 (define setN
     (lambda (val)
@@ -187,7 +194,9 @@ mimiumで時間方向に離散的に発生するイベントを記述するに�
         (playN 50)
         (callback (+ (now) (if (random > 0) (/ period 2) period)) 'Nloop period)))
 (Nloop 12000)
-\end{lstlisting}
+```
+
+: [@lst:tr-mimium]と等価なコードをExtemporeで記述したもの {#lst:tr-extempore}
 
 [@lst:tr-mimium]の場合、`ntrigger`という変数は、`Nloop`という関数が呼ばれるたびに書き換えられる。
 `Nloop`は自分自身を乱数によって不定期な間隔で再帰的に実行し続けるようになっている。継時再帰はこのように、言語仕様への最小限の機能追加で、様々なタイミングでのイベント実行を可能にする機能である。
@@ -223,7 +232,7 @@ mimiumは信号処理専用のデータ型を作らなくても、UGenを通常�
 オブジェクトとは、メンバー変数のセットと、変数を変更したり他のオブジェクトにメッセージを送ったりするメンバー関数（メソッド）のセットを含むデータ構造である。オブジェクトの場合、内部状態はメンバ定数として定義されている。これを利用するには、あらかじめインスタンス化した上で、メインの処理メソッドを呼び出す必要がある。[@lst:cppexample]にC++言語でのオブジェクトを用いたphasorの表現の例を示す。
 
 
-\begin{lstlisting}[float,floatplacement=H,language=c++,style=mystyle,label=lst:cppexample,caption=phasorをC++のオブジェクトを用いて表現した例.]
+```rust
 class Phasor{
   double out_tmp=0;
   double process(double freq){
@@ -241,7 +250,10 @@ double something(){
   //use instantiated objects
   return phasor1.process(phasor2.process(10) + 1000);
 }
-\end{lstlisting}
+
+```
+
+: phasorをC++のオブジェクトを用いて表現した例. {#lst:cppexample}
 
 #### クロージャ
 
@@ -251,7 +263,7 @@ double something(){
 
 [@lst:closure]にクロージャを用いたphasorの表現をJavaScriptでの疑似コードで示す。変数`out_tmp`は最終的に返却される関数`process`の中に閉じ込められている。`makePhasor`関数を実行することはC++における`Phasor`クラスの初期化処理（コンストラクタ）の実行に相当している。JavaScriptは内部的にガベージコレクションなどを利用する言語のため実際にこのコードを利用することは難しいが、命令型ベースの読みやすいシンタックスを持ち、かつクロージャを利用可能な言語であるため例示のために用いている。
 
-\begin{lstlisting}[float,floatplacement=H,language=c++,style=mystyle,caption=phasorのクロージャを用いた表現をJavaScriptによる疑似コードで表したもの,label=lst:closure]
+```js
 //pseudo-code in javascript
 function makePhasor(tmpinit){
   let out_tmp = tmpinit;
@@ -270,7 +282,9 @@ let phasor2 = makePhasor(1);
 function something(){
   return phasor1(phasor2(10) + 1000);
 }
-\end{lstlisting}
+```
+
+: phasorのクロージャを用いた表現をJavaScriptによる疑似コードで表したもの {#lst:closure}
 
 
 #### 関数型の表現
@@ -281,19 +295,21 @@ FaustやKronosの信号処理の記述では、一時変数の読み書きなし
 
 これらの言語ではそれぞれ、Faustではそれぞれ0以上の入出力を持つUGen（定数は入力0、出力が1つの関数、`+`演算子は入力が2つで出力が1つの関数、のように）、KronosではUGenの入出力がリストとしてシンボル化されており、通常の言語のように、記号が特定のメモリアドレス上のデータに対応しているわけではない。そのためこれらの言語に汎用言語と同等の自己拡張性を期待することは難しい。
 
-\begin{lstlisting}[float,floatplacement=Htb,style=mystyle,language=Rust,caption=Faustでのphasor関数の定義の例。,label=lst:faust]
+```rust
 phasor(freq) = +(freq/4800) ~ out_tmp
 	with{
         out_tmp = _ <: select2(>(1),_,0);
  };
 // no need to instantiate.
 something = phasor(phasor(10)+1000);
-\end{lstlisting}
+```
+
+: Faustでのphasor関数の定義の例。 {#lst:faust}
 
 
 Vult言語[@Ruiz2020]では、関数定義において、通常の変数宣言である`var`ではなく、キーワード`mem`で変数を宣言すると、破壊的変更された値が時系列で保持され、UGenの内部状態を表現できる。この機能により、Faustと同じくあらかじめインスタンス化しておく必要がなく、通常の関数適用として、内部状態を持つUGenの接続を表現できる。
 
-\begin{lstlisting}[float,floatplacement=Htb,style=mystyle,language=Rust,caption=Vult言語でのphasor関数の定義の例。,label=lst:vult]
+```rust
 fun phasor(freq){
 	mem out_tmp;//"mem" variable holds its value over times
   out_tmp = out_tmp+freq/48000;
@@ -306,7 +322,9 @@ fun something(input){
 // no need to instantiate.
   return phasor(phasor(10)+1000);
 }
-\end{lstlisting}
+```
+
+: Vult言語でのphasor関数の定義の例。 {#lst:vult}
 
 Faust、Vultともに、内部状態を持つ関数は、最初にインスタンスを作成することなく仕様できる。その代わり、内部状態の初期化は関数定義時に決定され、インスタンス作成時にコンストラクタを介して初期値を決定するような操作はできない。
 
@@ -314,17 +332,19 @@ Faust、Vultともに、内部状態を持つ関数は、最初にインスタ�
 
 ### 内部状態つき関数による信号処理 {#sec:statefulfun}
 
-\begin{lstlisting}[float,floatplacement=htb,language=Rust,style=mystyle,caption=mimiumでの1サンプルごとに1増加するカウンター関数の例。,label=lst:counter]
+```rust
 fn counter(){
   return self+1
 }
-\end{lstlisting}
+```
+
+: mimiumでの1サンプルごとに1増加するカウンター関数の例。 {#lst:counter}
 
 こうした様々なUGenの内部表現の例を基に、mimiumでは、内部状態付き関数をUGenのように利用できる文法を導入した。これらの関数は、Vultと同じように、通常の関数適用`f(x)`と同じシンタックスで呼び出せる。その上でFaustのように`delay`などの限られた組み込み状態付き関数を使うことで、ユーザーは内部状態の変数の宣言を行う必要がない。さらに、汎用言語の場合と同様に、変数をメモリ上のデータとしてシンボル化する体系は崩していない。
 
 また、関数定義の中でキーワード`self`を使うことで、1サンプル前の時刻でその関数が返した戻り値を参照することができ、UGenの再帰的な接続を表現することを可能にしている。`self`は、関数定義の中でのみ使用できる予約語で、時刻0では0で初期化され、関数の前回の戻り値を得ることができる。[@lst:counter]に最もシンプルな`self`の使い方として、1サンプルごとに1増加するようなカウンターの関数の例を示した。
 
-\begin{lstlisting}[float,floatplacement=H,language=Rust,style=mystyle,caption=mimiumでのphasor関数の記述例。,label=lst:phasormimium]
+```rust
 fn phasor(freq){
   res = self + freq/48000 // assuming the sample rate is 48000Hz
   return if (res > 1) 0 else res
@@ -332,7 +352,9 @@ fn phasor(freq){
 fn dsp(input){
   return phasor(440)+phasor(660)
 }
-\end{lstlisting}
+```
+
+: mimiumでのphasor関数の記述例。 {#lst:phasormimium}
 
 `self`を用いると、これまでオブジェクトやクロージャといった例で見てきたUGenの`phasor`をmimium上で定義することができる。例を[@lst:phasormimium]に示した。この例では、ユーザーは状態変数の宣言の必要も、関数を利用する際のインスタンス化の必要もないことがわかる。
 FaustでUGenの再帰的接続の表現のための中置演算子`~`が式の中で何度も利用できるのに比べて、mimiumでは再帰接続の単位は自然と関数定義の単位に分割される。
@@ -343,7 +365,7 @@ FaustでUGenの再帰的接続の表現のための中置演算子`~`が式の�
 
 これに相当するものを、Faustでは[@lst:pipefaust]、Cycling'74 Maxでは図[@fig:maxexample]で示す。Faustの直列接続演算子(`:`)の他にも、ChucK言語のChucK演算子(`=>`)など、他の言語でも似たような機能を持つものはあるが、パイプライン演算子は、セマンティクスとしては通常の関数呼び出しと区別されない点が特徴である。
 
-\begin{lstlisting}[float,floatplacement=H,label=lst:pipeline,language=Rust,style=mystyle,caption=mimiumでのパイプライン演算子の利用例。]
+```rust
 fn scaleTwopi(input){
   return input* 2 * 3.141595
 }
@@ -353,12 +375,16 @@ fn osc(freq){ //normal function call
 fn osc(freq){ //pipeline operator version
   return freq |> phasor |> scaleTwopi |> cos
 }
-\end{lstlisting}
+```
 
-\begin{lstlisting}[float,floatplacement=H,label=lst:pipefaust,style=mystyle,caption=Faustでの直列接続演算子（:）の利用例]
+: mimiumでのパイプライン演算子の利用例。 {#lst:pipeline}
+
+```rust
 scaleTwopi(input) = input * 2 * 3.141595;
 osc(freq) = freq:phasor:scaleTwopi : cos;
-\end{lstlisting}
+```
+
+: Faustでの直列接続演算子（:）の利用例 {#lst:pipefaust}
 
 
 \begin{figure}[h]
@@ -378,7 +404,7 @@ osc(freq) = freq:phasor:scaleTwopi : cos;
 
 この時の状態変数を明示的に引数として渡すように変換した後の疑似コードを [@lst:fbdelayafter]に示す。`fbdelay`関数やそれを呼び出す`dsp`関数の引数の先頭にそれぞれ内部状態が渡されている。
 
-\begin{lstlisting}[float,floatplacement=Htb,label=lst:fbdelay,language=Rust,style=mystyle,caption=mimiumでのフィードバックディレイのコード例。]
+```rust
 // delay is a built-in stateful function
 fn fbdelay(input,time,fb){
     return delay(input+self*fb,time) 
@@ -389,9 +415,11 @@ fn dsp(){
     out = fbdelay(src,1000,0.8)+ fbdelay(src,2000,0.5)
     return (out,out)
 }
-\end{lstlisting}
+```
 
-\begin{lstlisting}[float,floatplacement=Htb,label=lst:fbdelayafter,language=Rust,style=mystyle,caption=\ref{lst:fbdelay}の内部状態付き関数の変換処理後の疑似コード]
+: mimiumでのフィードバックディレイのコード例。 {#lst:fbdelay}
+
+```rust
 // pseudo-code after lifting stateful function
 fn fbdelay(state,input,time,fb){
   //unpack state variables
@@ -405,7 +433,9 @@ fn dsp(state){
     out = fbdelay(s_fbdelay0,src,1000,0.8) +fbdelay(s_fbdelay1,src,2000,0.5)
     return (out,out)
 }
-\end{lstlisting}
+```
+
+: [@lst:fbdelay]の内部状態付き関数の変換処理後の疑似コード {#lst:fbdelayafter}
 
 ## 言語仕様の整理、既存の言語との比較
 
@@ -423,7 +453,7 @@ Kronos（とMeta-Sequencer）も同様に自己拡張性を重視した言語で
 
 # 現状の実装の問題点
 
-\begin{lstlisting}[float,floatplacement=H,label=lst:frp,language=Rust,caption=mimiumの現在の実装ではコンパイル不可能な、時間方向に離散的に変化する値を関数として抽象化するコードの例。]
+```rust
 fn frp_constructor(period){
 	n = 0
 	modifier = |x|{
@@ -436,10 +466,12 @@ fn frp_constructor(period){
 }
 val = frp_constructor(1000)
 event_val = val()
-\end{lstlisting}
+```
+
+: mimiumの現在の実装ではコンパイル不可能な、時間方向に離散的に変化する値を関数として抽象化するコードの例。 {#lst:frp}
 
 
-\begin{lstlisting}[float,floatplacement=H,label=lst:filterbank,language=Rust,caption=mimiumの現在の実装ではコンパイル不可能な、内部状態を持つ関数のパラメトリックな複製のコード例。]
+```rust
 fn filterbank(N,input,lowestfreq, margin,Q,filter){
 	if(N>0){
 		return filter(input,lowestfreq+N*margin,Q)
@@ -447,7 +479,9 @@ fn filterbank(N,input,lowestfreq, margin,Q,filter){
 	}else{
 		return 0
 	}}
-\end{lstlisting}
+```
+
+: mimiumの現在の実装ではコンパイル不可能な、内部状態を持つ関数のパラメトリックな複製のコード例。 {#lst:filterbank}
 
 現状mimiumを実用的に利用する際に3つの問題点が残っている。1つは離散的なイベントの記述は命令型、信号処理は関数型のパラダイムという2つの記法のミスマッチ、2つ目は信号処理に用いる状態付き関数をパラメトリックに複製できないこと、最後がFFTに代表されるサンプルをあるまとまった数ごとに処理をする信号処理が記述できないことだ。
 
@@ -486,17 +520,21 @@ mimiumの信号処理は1サンプルごとの処理の記述によって表現�
 
 [^wcalculus]: *W*計算はフィルタのような線形時不変（Linear Time-Invariant:LTI）システムの実質的等価性を形式的に証明することを1つの目的としている。そのため厳密に言えば基本的演算に式同士の加算と、式と定数の乗算（スケーリング）のみが許されており、式同士の乗算などは許されない。しかし基本的な演算の項を追加すれば非線型システムにも対応はできる。
 
-\begin{lstlisting}[label=lst:wcalc,language=Rust,style=mystyle,caption=mimiumでの引数\texttt{incl}サンプルずつ増加するカウンター]
+```rust
 fn counter(incl:float){
     return self+incl
 }
-\end{lstlisting}
+```
 
-<!-- 
+: mimiumでの引数`incl`サンプルずつ増加するカウンター {#lst:wcalc}
+
+
 $$
 \lambda \ incl.feed \ self.(incl+self)
 $$ 
--->
+
+: {#eq:label}
+
 
 \begin{equation}
 \lambda \ incl.feed \ self.(incl+self)

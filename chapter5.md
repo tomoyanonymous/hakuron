@@ -123,7 +123,7 @@ DSLは音楽に限らず、例えばProcessingやGLSLのようなグラフィッ
 
 CoffeeColliderはSuperCollider上におけるUnit Generatorの接続をWeb Audio APIという、Webブラウザに近年標準的に組み込まれるようになった音声合成のためのインターフェースを用いることで実現している。CoffeeColliderは文字列解析を自分では行っておらず、特定のオブジェクトに対する`+`演算子や`*`演算子の挙動をオーバーロードすることで、CoffeeScriptの文法で可能な範囲の表現でシンタックスをSuperColliderへと模している。
 
-\begin{lstlisting}[float=btph,caption=CoffeeColliderのコードサンプル,label=lst:coffeecollider]
+```rust
 (->
   noise = PinkNoise.ar(0.2)
   noise = Mix Array.fill 10, (i)->
@@ -132,9 +132,11 @@ CoffeeColliderはSuperCollider上におけるUnit Generatorの接続をWeb Audio
   noise = RHPF.ar(noise, LFNoise0.kr(0.5).range(220, 880), rq:0.001)
   CombL.ar(noise, delaytime:0.5, decaytime:25).dup() * 0.5
 ).play()
-\end{lstlisting}
+```
 
-\begin{lstlisting}[float=btph,caption=SuperColliderのコードサンプル,label=lst:supercollider]
+: CoffeeColliderのコードサンプル。 {#lst:coffeecollider}
+
+```rust
 {
    var noise = PinkNoise.ar(0.2);
    noise = Mix.new(Array.fill(10, {arg i;
@@ -143,7 +145,9 @@ CoffeeColliderはSuperCollider上におけるUnit Generatorの接続をWeb Audio
    noise = RHPF.ar(noise, LFNoise0.kr(0.5).range(220, 880), rq:0.001);
    CombL.ar(noise, delaytime:0.5, decaytime:25).dup() * 0.5
 }.play;
-\end{lstlisting}
+```
+
+: SuperColliderのコードサンプル {#lst:supercollider}
 
 [@lst:coffeecollider]と[@lst:supercollider]にSuperColliderとCoffeeColliderで、等価な音を出すサンプルコードの比較を示す。2つのコードを見比べると、SuperColliderでの`{}`で囲むことでオブジェクトを生成するシンタックスを、CoffeeScriptにおける無名関数`(-> statements)`を利用して似せていることがわかる。CoffeeColliderの実装は、**演算子のオーバーロード**というホスト言語にある機能を積極的に活用することで、テキストをパースするプログラムを書くことなく、かつ、CoffeeScriptのシンタックスの中で可能な限り記法をSuperColliderに近づけている。
 

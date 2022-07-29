@@ -9,7 +9,7 @@ draft: true
 ここでは演算子の優先順位をつけていないが、実際の優先順位は一般的なプログラミング言語の優先順位に準じた上で、`@`演算子が一番低い優先順位となっている。
 
 
-\begin{lstlisting}[float,floatplacement=h,caption=mimiumのシンタックスのEBNFによる定義。,label=lst:bnfdef]
+```rust
   number ::= ?numbers?
   symbol ::= ?all_alnum_and_underscore?
   string ::= ?double_quote?<symbol>?double_quote?
@@ -46,4 +46,5 @@ draft: true
   typealias ::= "type" <symbol> "=" <type>
 
   program ::= <statements>
-\end{lstlisting}
+```
+: mimiumのシンタックスのEBNFによる定義。 {#lst:bnfdef}

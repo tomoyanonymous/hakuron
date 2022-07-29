@@ -343,7 +343,7 @@ ALGOL（以下、MUSIGOLに関連する話題で単にALGOLと示した時はALG
 
 実際の、論文に示されていたサイン波を生成するインストゥルメントの関数定義を[@lst:musigolsin]に示す。[^musigolsample]。
 
-\begin{lstlisting}[float,floatplacement=Htb,language=Algol,caption=MUSIGOLにおけるサイン波生成関数のサンプル。,label=lst:musigolsin]
+```rust
 real procedure Sinoscil(Time, Frequency, Amplitude);
     value Time, Frequency, Amplitude;
     real Time, Frequency, Amplitude;
@@ -362,7 +362,9 @@ real procedure Sinoscil(Time, Frequency, Amplitude);
             (0.079487663 - 0.004362476 * XX))) * Amplitude;
         end;
     end Sinoscil;
-\end{lstlisting}
+```
+
+: MUSIGOLにおけるサイン波生成関数のサンプル。 {#lst:musigolsin}
 
 MUSICにおけるUnit GeneratorがFORTRANの関数ではなかったのと異なり、この正弦波発振器はもはやALGOLの関数そのものである。論文で示されていたノコギリ波と正弦波の実装はMUSICと異なりすべて純粋に時間`Time`の写像として表せる方式になっている。一方、内部状態を格納する変数が必要なはずのバンドパスフィルタも実装はされていたようだが、それがどのように成されていたのかに関しては情報が残っておらずはっきりしない。ただ、ALGOLには関数の引数を、2行目で示されているような`value`という宣言をしないことで、関数の内側から引数として渡された変数を書き換えることができる、名前渡しと呼ばれる機能が存在している。これを用いれば関数として内部状態付きのUGenを定義することも難しくはなかったことが予想される。
 
@@ -370,7 +372,7 @@ MUSICにおけるUnit GeneratorがFORTRANの関数ではなかったのと異な
 
 スコアも同様にALOGLの関数である。[@lst:musigolscore]に論文から引用した。`Boing`関数の引数は`開始時間、長さ、音量、音程`である。3行目の`Boing`の音程は`E4`となっており、事前にE4と対応する周波数が変数として宣言されていると思われる。次の行では音程が`Slope`関数で時間に応じてC\msharp{}4からC9まで滑らかに変化するよう指定されている。そして、この`Boing`関数自体もユーザーが、`Sinoscil`関数などを呼び出すものとして実装する部分である。
 
-\begin{lstlisting}[float,floatplacement=Htb,language=Algol,caption=MUSIGOLでのスコアに相当する関数。,label=lst:musigolscore]
+```rust
 procedure Score;
     begin 
         Boing(-3, -1.5, 20, E4);
@@ -378,7 +380,9 @@ procedure Score;
         ...
         Speaker(OUTS, 100); 
     end of Score;
-\end{lstlisting}
+```
+
+: MUSIGOLでのスコアに相当する関数。 {#lst:musigolscore}
 
 イニスによる記述を読む限り、MUSICにおけるStore Functionのような、ウェーブテーブルに一度結果を保存する機能は省かれているようで、サイン波のような比較的計算コストが高い関数も毎サンプル計算され直していたものと思われる。
 
@@ -719,7 +723,7 @@ ChucKは「strongly-timed language」をコンセプトに掲げた言語であ�
 
 [@lst:chucksample]に10000サンプルごとのタイミングでサイン波の周波数をランダムに書き換える例を示した。ChucK演算子`=>`と呼ばれる独自の演算子は、値を変数に格納するための代入演算子（一般的な`=`と異なり右側に代入先を記述する、右向き代入）としての役割と、UGen同士の接続の記述を表す機能を兼ねている。また、`now`と呼ばれる値に`Time`型を持つ値を代入すると、その値の分論理時間スケジューラを停止する。このnowへの代入を用いて具体的な実行タイミングを制御するのである。
 
-\begin{lstlisting}[float,floatplacement=htb,caption=ChucKで10000サンプルごとにサイン波の周波数を変更するコードの例。,label=lst:chucksample]
+```rust
 SinOsc s => dac;
 .4 => s.gain;
 while(true)
@@ -727,7 +731,9 @@ while(true)
     Std.mtof( Math.random2(20,60) ) => s.freq;
     10000::samp => now;// advance time
 }
-\end{lstlisting}
+```
+
+: ChucKで10000サンプルごとにサイン波の周波数を変更するコードの例。 {#lst:chucksample}
 
 またChucKのもう1つの特徴は、コードをリアルタイムで書き換え演奏するライブコーディングも想定している部分である。
 
@@ -754,8 +760,7 @@ ChucKも2012年に導入されたChuGenという拡張機能を用いること�
 時間軸上のデータという考え方を中心においたChronicに対して、よりUGenのような、入出力を持つグラフ構造による処理の代数的表現を追求したのが、南フランスの電子音楽研究所GRAMEで、ヤン・オーラリー、ステファン・レッツ、ドミニク・フーバーらによって同じく2002年ごろから開発されているFaustである[@Orlarey2004]。
 
 <!-- =latexがないとpandocのパースが狂う  -->
-```{=latex} 
-\begin{lstlisting}[float,floatplacement=htb,caption=Faustで有限インパルス応答フィルターを表現するコード。,label=lst:faustsample]
+```rust
 import("stdfaust.lib");
 fir(taps,gainlist) =  (_,gainlist):routes(taps):>_
     with{
@@ -768,8 +773,9 @@ fir(taps,gainlist) =  (_,gainlist):routes(taps):>_
 process =fir(3,(0.1,0.2,0.3));
 //process =fir(4,(0.1,0.2,0.3,0.4)); //increasing the order
 //process =fir(5,(0.1,0.2,0.3,0.4,0.5));
-\end{lstlisting}
 ```
+
+: Faustで有限インパルス応答フィルターを表現するコード。 {#lst:faustsample}
 
 Faustの言語の概念の中心となる概念は**ブロックダイアグラム代数（Block Diagram Algebra：BDA）**という体系である。BDAでは、定数、入力同士の四則演算、サイン波、ディレイなどのあらゆる要素が、任意の数の入出力を持つノードとして表される。そして、これらノードを、並列（`a , b`）、直列（`a : b`）、分岐（`a <: (b,c)`）、合流（`(a,b) :> c`）、再帰（`a ~ b`）という5種類の基本演算を組み合わせることによってグラフ構造を形成し、信号処理を表現する[@Orlarey2002]。Faustではのちに、アルバート・グラーフが再帰的にパターンマッチ可能なマクロの体系を導入することによって、例えば任意のオシレーターを100個入れ子状に複製する、といったような高度な抽象化が可能になった[@Graf2010]。[@lst:faustsample]にFaustにおける有限インパルス応答フィルタの記述例を示した[^faustfirsample]。`fir`関数はフィルターの次数と、次数に応じた係数のリストを受け取るとフィルター処理のBDAを生成する。FaustはプログラムだけでなくSVG（ベクター画像）ファイル形式でBDAの構造を視覚化も可能である。それぞれ次数が3、4、5、10の時の視覚化の様子を[@fig:faustmacro]に示す。
 
