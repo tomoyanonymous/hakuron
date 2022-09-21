@@ -336,7 +336,7 @@ FaustでUGenの再帰的接続の表現のための中置演算子`~`が式の�
 
 [@lst:pipeline]に通常の関数呼び出しとパイプライン演算子の両方を使って正弦波発振器を定義した例を示す。
 
-これに相当するものを、Faustでは[@lst:pipefaust]、Cycling'74 Maxでは図[@fig:maxexample]で示す。Faustの直列接続演算子(`:`)の他にも、ChucK言語のChucK演算子(`=>`)など、他の言語でも似たような機能を持つものはあるが、パイプライン演算子は、セマンティクスとしては通常の関数呼び出しと区別されない点が特徴である。
+これに相当するものを、Faustでは[@lst:pipefaust]、Cycling'74 Maxでは[@fig:maxexample]で示す。Faustの直列接続演算子(`:`)の他にも、ChucK言語のChucK演算子(`=>`)など、他の言語でも似たような機能を持つものはあるが、パイプライン演算子は、セマンティクスとしては通常の関数呼び出しと区別されない点が特徴である。
 
 \begin{lstlisting}[float,floatplacement=H,label=lst:pipeline,language=Rust,style=mystyle,caption=mimiumでのパイプライン演算子の利用例。]
 fn scaleTwopi(input){
