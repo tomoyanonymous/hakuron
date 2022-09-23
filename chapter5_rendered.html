@@ -15,8 +15,8 @@ href="#fn1" class="footnote-ref" id="fnref1"
 role="doc-noteref"><sup>1</sup></a>のように、音楽とは関係のない部分で言語処理系の知識に触れる機会があった者に限られてくる。</p>
 <p>加えて、PLfMを設計するという作業は、換言すれば時間に伴って変化するデータを、どのように人間が解釈可能な形で表現するかを考えることである。その意味では、マシューズのGROOVEシステムのような、目的や音楽様式にとらわれないシステムの設計に関する知見は、PLfMに限らず汎用プログラミング言語の理論や、映像などの音楽以外の時間軸を扱うマルチメディア表現のためのシステムなどの分野にも存在しているはずである。</p>
 <p>本章での整理は、デザインパターンを類型化することによってPLfMの開発の参入障壁を下げよう、という意図だと考えてもらって基本的には問題ない。しかし、デザインパターンを用いてデザインの効率化と普遍化を図ることは2章における、デザインサイエンスのムーブメントにおいて批判されたことではないかという疑問については言及しておく必要があるだろう。本章の整理は、普遍的な「良い」PLfMについての設計方針を与えるものではない。むしろ、言語設計と実装に実質的に回避できないトレードオフが存在することを指摘することで、各々が作った言語の立ち位置の選択とその理由をはっきりさせることによって、様々な思想の言語の存在意義を肯定しやすくすることを目的としている。</p>
-<section id="ダネンバーグによるplfmを特徴づける要素" data-number="0.1">
-<h2 data-number="5.1"><span class="header-section-number">5.1</span>
+<h2 data-number="5.1" id="ダネンバーグによるplfmを特徴づける要素"><span
+class="header-section-number">5.1</span>
 ダネンバーグによるPLfMを特徴づける要素</h2>
 <p>本章で検討するような、表現よりも言語の構造や実装方法という観点で言語の特徴づける要素や言語同士を比較した研究としては、第4章でも参照した、Nyquistを開発したロジャー・ダネンバーグの『Languages
 for Computer Music』がある<span class="citation"
@@ -54,9 +54,9 @@ Server Protocol（LSP）<a href="#fn3" class="footnote-ref" id="fnref3"
 role="doc-noteref"><sup>3</sup></a>というプロトコルに応じてハイライトや補完の情報をホストエディタに渡すサーバープログラムを作ることで、専用のエディタを丸ごと作ることなく特定の言語に特化した編集モードを作ることができる。こうした機能はその言語のコンパイラの機能を部分的に借りて作ることで、その言語の意味論に応じた高度な補完などが行えるようになるため、言語開発の中でも重要な作業になりつつある。しかし、こうした汎用エディタはWebブラウザ向けの技術をベースに作られていることが多いので、PLfMの用途においては、例えば編集中の音声信号波形のリアルタイム表示などを行うことが難しいと言った難点もある。そのため例えばSuperColliderやSonic
 Piなど、テキストベースの言語でも専用のIDEが同時に開発されているものも多く存在する。</p>
 <p>また、<strong>コミュニティやドキュメントなどの資料</strong>の充実もプログラミングの体験に当然大きな影響を与える。多くの環境では言語のエディタから直接サンプルプログラムやチュートリアル、リファレンスドキュメントを参照できるようになっていることも多い。</p>
-<section id="言語を設計することとコンパイラを作ることの違い"
-data-number="0.1.1">
-<h3 data-number="5.1.1"><span class="header-section-number">5.1.1</span>
+<h3 data-number="5.1.1"
+id="言語を設計することとコンパイラを作ることの違い"><span
+class="header-section-number">5.1.1</span>
 言語を設計することと、コンパイラを作ることの違い</h3>
 <p>ここから、現代の状況において、そもそもプログラミング言語を作る、という作業が具体的にどのようなものなのかを整理する。</p>
 <p>プログラミング言語を作るという作業には、観念的に大きく分けて2つの作業が存在する。1つ目は言語仕様を定義する設計の作業であり、2つ目は仕様に従って実際にその言語を読み込み、実行できるプログラムを実装する作業である。ところが、現実的には（特定のドメインに特化した言語であればなおのこと）言語の仕様は厳密に定義されているとは限らず、曖昧に定義された言語を実行できるプログラムのみが存在していて、実装やリファレンスドキュメントのみが言語仕様を表すものになっているケースも少なくない。</p>
@@ -76,10 +76,8 @@ Semantics）という、ある項を別の言語の項へと変換する論理�
 href="#fn5" class="footnote-ref" id="fnref5"
 role="doc-noteref"><sup>5</sup></a><span class="citation"
 data-cites="Orlarey2004">(Orlarey, Fober, and Letz 2004)</span>。</p>
-</section>
-</section>
-<section id="ドメイン固有言語のデザインパターン" data-number="0.2">
-<h2 data-number="5.2"><span class="header-section-number">5.2</span>
+<h2 data-number="5.2" id="ドメイン固有言語のデザインパターン"><span
+class="header-section-number">5.2</span>
 ドメイン固有言語のデザインパターン</h2>
 <p>次に、プログラミング言語全般における言語仕様の定義方法の話から、より特定の応用領域（ドメイン）に向けたプログラミング言語、いわゆるドメイン固有言語（Domain-Specific-Language：DSL）の実装方法に関する議論を概観する。</p>
 <p>DSLは音楽に限らず、例えばProcessingやGLSLのようなグラフィック生成のための言語や、ArduinoやHDLのようなハードウェアの操作に特化した言語が存在する。先ほど挙げたbisonのようなシンタックス定義のためのコンパイラ・コンパイラも、バッカス・ナウア記法風に書かれたテキストデータからパースプログラムのソースコードを出力する、いわばプログラミング言語実装のためのDSLである。</p>
@@ -106,9 +104,9 @@ IRなどさまざまな言語に変換することができるようになって
 <p><strong>パイプライン</strong>は、様々なツールを組み合わせてデータ構造を変換していくデザインパターンである。これは、SuperColliderをホストとして動くSonic
 PiやTidalCyclesのことを考えればわかりやすい。起源を辿ればMUSIC
 Nも基本的に、テキストデータをバイナリ表現に変換するPass1、ノートの情報を整理し時間軸に沿って並べ直すPass2、最終的にPCMの波形を実行するPass3の3つの処理のパイプラインで作られていた。</p>
-<section id="言語拡張と自己反映性coffeecolliderを例に"
-data-number="0.2.1">
-<h3 data-number="5.2.1"><span class="header-section-number">5.2.1</span>
+<h3 data-number="5.2.1"
+id="言語拡張と自己反映性coffeecolliderを例に"><span
+class="header-section-number">5.2.1</span>
 言語拡張と自己反映性：CoffeeColliderを例に</h3>
 <p>ライブラリとしてのDSL実装の中でも、ホスト言語の機能が拡張性がある場合はかなり構文の自由度がある言語設計を行うことが可能だ。</p>
 <p>その例を、mohayonaoによるCoffeeColliderというWebブラウザ上で動作するPLfMを例にして見ていこう。CoffeeColliderは、音楽プログラミング言語の中でも代表的な言語であるSuperColliderの構文を模した、CoffeeScriptという言語のライブラリとして実装されているDSLである<span
@@ -159,11 +157,10 @@ role="doc-noteref"><sup>7</sup></a>などがある。また、C言語など多�
 class="citation" data-cites="Racket">(Culpepper et al.
 2019)</span>がある。Racketそのものは本来S式のシンタックスを持つLISP系列の言語だが、<code>#lang slideshow</code>のようなシンタックス指定の命令を記述することによってその行以下で利用する言語をスライドショーを作る機能に特化した言語に切り替えられるように、ライブラリを切り替える感覚で言語の表面的な見た目までを切り替えられてしまう。この設計思想は、解きたい問題のドメインに合わせてまずそのドメインに特化した言語を作る、<em>Language-Oriented
 Programming</em>と呼ばれている。実装面から見れば、マクロにしてもRacketのような高度なコンパイラの挙動変更にしても、ソースコードをコンパイルしながら適宜その内容によってコンパイラ自体も変更されるというフィードバックプロセスが、言語の自由度を高めるほどに複雑化していくため、単に入力されたテキストデータを低レベルのデータまで変換していくパイプ的な構造から遠ざかっていくことになり、実装の難易度も一般的に上がっていく。</p>
-</section>
-<section id="tidalcycles---ハイブリッドなアプローチ"
-data-number="0.2.2">
-<h3 data-number="5.2.2"><span class="header-section-number">5.2.2</span>
-TidalCycles - ハイブリッドなアプローチ</h3>
+<h3 data-number="5.2.2"
+id="tidalcycles---ハイブリッドなアプローチ"><span
+class="header-section-number">5.2.2</span> TidalCycles -
+ハイブリッドなアプローチ</h3>
 <p>さらに、文字列解析、言語拡張、言語特殊化など複数のパターンを組み合わせて実装するハイブリッドなアプローチもありうる。例としてはTidalCycles<span
 class="citation" data-cites="McLean2014">(McLean
 2014)</span>が挙げられる。</p>
@@ -174,9 +171,8 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a 
 Processorという表記法をベースに独自に定義されたものである。また最終的にTidalCyclesはSuperColliderという音声合成エンジンに対してOSC（Open
 Sound
 Control）というネットワークコマンドを送ることで音を出している（<strong>パイプライン</strong>）。</p>
-</section>
-<section id="ライブラリとしてのplfmの限界" data-number="0.2.3">
-<h3 data-number="5.2.3"><span class="header-section-number">5.2.3</span>
+<h3 data-number="5.2.3" id="ライブラリとしてのplfmの限界"><span
+class="header-section-number">5.2.3</span>
 ライブラリとしてのPLfMの限界</h3>
 <p>それでは、TidalCyclesのように、自己反映性の高いホスト言語があれば音楽のために1からテキスト解析をする言語の実装は必要ないのだろうか。</p>
 <p>実際、マッカートニーはSuperColliderの設計についての論文で、究極的には音楽のために言語をゼロから開発する必要はないと述べていた。</p>
@@ -208,11 +204,8 @@ Roberts
 
 またMaxやPure Dataのようなビジュアル言語の場合は、保存されているテキスト/バイナリデータを解釈してビジュアルインターフェースとして表示する評価と、音声処理のためのデータ構造としての評価と2方向の評価が行われていると解釈することができる。この時の保存されているデータ形式は例えばMaxではJSONというJavascriptのための汎用データ表現形式を用いているように、その言語のSemanticsとは関係のない汎用的なデータ構造を利用している場合もある。
  -->
-</section>
-</section>
-<section id="plfmの特徴を表す語彙の整理" data-number="0.3">
-<h2 data-number="5.3"><span class="header-section-number">5.3</span>
-PLfMの特徴を表す語彙の整理</h2>
+<h2 data-number="5.3" id="plfmの特徴を表す語彙の整理"><span
+class="header-section-number">5.3</span> PLfMの特徴を表す語彙の整理</h2>
 <p>ここまで、PLfMを特徴づける要素と実装の方法の違いについて概観してきた。では実際のところ、これらの要素がそれぞれの言語を<strong>どのように特徴づける</strong>のだろうか？</p>
 <p>これまで、PLfMの実装に関する論文では、<strong>汎用的（General）</strong>、<strong>効率的（Efficient）</strong>、<strong>表現力が高い（Expressive）</strong>という3つの語がそのシステムの特徴を形容するために頻繁に使われてきた。</p>
 <p>しかし実際には、これらの語が用いられる意図は文献ごとにかなりのばらつきがある。</p>
@@ -265,10 +258,9 @@ class="citation" data-cites="Muller2020">(Muller and Ringler
 class="citation" data-cites="Mcpherson2020">(McPherson and Tahlroǧlu
 2020)</span>。</p>
 <p>そこで、次の項ではコブレンツらやマクファーソンの分類を参考にしながら、改めて評価のための語彙を整理する。そのためにまずは、音楽プログラミング言語を評価、また設計の指針となるための指標を、ユーザーがソースを編集し、実行し、そのフィードバックが帰ってくるHuman-in-the-Loopシステムとしてモデル化することで、その際に考えられるコストや自由度をユーザー、コンピューターそれぞれの観点で分類するという方針をとる。</p>
-</section>
-<section id="音楽プログラミング行為のモデル化と評価語彙の提示"
-data-number="0.4">
-<h2 data-number="5.4"><span class="header-section-number">5.4</span>
+<h2 data-number="5.4"
+id="音楽プログラミング行為のモデル化と評価語彙の提示"><span
+class="header-section-number">5.4</span>
 音楽プログラミング行為のモデル化と評価語彙の提示</h2>
 <figure>
 <img src="../img/Anderson-model.png" id="fig:andersonmodel"
@@ -324,9 +316,8 @@ Cost）</strong>が存在する。</p>
 <!--
 綺麗な切り分けじゃなかったのでやめた
 ![各特徴を編集時-実行時という観点と、空間的自由度-時間的自由度-効率性という観点で分類した図。](../img/diagram2.png){width=80% #fig:diagram2} -->
-<section id="各特徴間のトレードオフ" data-number="0.4.1">
-<h3 data-number="5.4.1"><span class="header-section-number">5.4.1</span>
-各特徴間のトレードオフ</h3>
+<h3 data-number="5.4.1" id="各特徴間のトレードオフ"><span
+class="header-section-number">5.4.1</span> 各特徴間のトレードオフ</h3>
 <figure>
 <img src="../img/tradeoff.png" id="fig:tradeoff1" style="width:90.0%"
 alt="図 4: 図 3の図における特徴間に存在するトレードオフを表した図。" />
@@ -374,11 +365,8 @@ Dataというソフトウェアそのものを別の言語で作り直してい�
 <p>この各間のトレードオフの難しいところは、実行エンジンのパフォーマンスのような、量的に測定可能な指標と、動的変更のしやすさのような量として表しづらい指標が同時に関係しているという、<strong>量的特徴と質的特徴間のトレードオフ</strong>の存在である。</p>
 <p>単に実行コストのような量的な指標だけを取ってみても、第4章で見たように、音楽プログラミング初期の一度信号処理の結果をテープに書き込んでから再生する方式と、1980年代以降のリアルタイムに信号処理ができる環境とでは作られる音楽の質やプログラミングの体験の質も大きく異なる。一見単純な実行速度という量的な指標もある段階から質を大きく左右するものへと転化するのだ。</p>
 <p>そのため、PLfMを設計する際には、その言語がトレードオフのどのポジションに位置付けられるのかを認識することが重要な点になる。</p>
-</section>
-</section>
-<section id="小括" data-number="0.5">
-<h2 data-number="5.5"><span class="header-section-number">5.5</span>
-小括</h2>
+<h2 data-number="5.5" id="小括"><span
+class="header-section-number">5.5</span> 小括</h2>
 <p>本章では音楽プログラミング言語を主に設計、実装の視点から検討し、音楽プログラミングという行為と計算機内で発生するプロセスをHuman-in-the-Loopモデル化し提示することでを改めて整理した。その上で音楽のための言語の特性や、評価するための語彙について検討した。</p>
 <p>まず音楽プログラミング言語を実行するソフトウェアとは、通常のプログラミング言語と同じようにテキストデータがコンパイラによって様々な中間表現を経てより低次なデータ構造へと変換され、ランタイムへと渡されるという大まかな構造を持っている。</p>
 <p>この時、実装方法としてはテキストデータを直接解析せずとも、あるプログラミング言語の自己反映性（演算子オーバーロードやマクロ）が高ければ、その言語自体の機能を変化させる形でライブラリとして言語を実装もできる。ただし、多くの自己反映性の高い言語は、リアルタイムでの動作をあまり考慮しないメモリ自動解放機能のような、信号処理を行う上では障害となる言語機能を同時に備えおり、楽譜レベルの記述やリズムパターンのような比較的抽象度が高く、発生する時間間隔が大きい表現の記述にその対象が絞られるという問題点がある。</p>
@@ -504,55 +492,50 @@ role="doc-biblioentry">
 笹田耕一 and 笹井崇司. オライリー.
 </div>
 </div>
-</section>
-<section class="footnotes footnotes-end-of-document"
+<section id="footnotes" class="footnotes footnotes-end-of-document"
 role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"
-role="doc-endnote"><p>Vult言語はルイーズが元々コンピューターサイエンスの専攻だったこともあり、コンパイラがPLfMの中では珍しく、汎用言語処理系の入門などでよく使われる関数型言語OCamlで記述されている。<a
+<li
+id="fn1"><p>Vult言語はルイーズが元々コンピューターサイエンスの専攻だったこともあり、コンパイラがPLfMの中では珍しく、汎用言語処理系の入門などでよく使われる関数型言語OCamlで記述されている。<a
 href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"
-role="doc-endnote"><p>この整数と小数点の変数に対して算術演算子を使い分ける仕様は実際にOCamlに代表されるML系言語で用いられている。もっともその目的は静的型付け言語においてユーザーが整数と小数点の計算を混同しないようにすることもあるが、そうすることで単に実装を簡略化できるという理由の方が大きい。<a
+<li
+id="fn2"><p>この整数と小数点の変数に対して算術演算子を使い分ける仕様は実際にOCamlに代表されるML系言語で用いられている。もっともその目的は静的型付け言語においてユーザーが整数と小数点の計算を混同しないようにすることもあるが、そうすることで単に実装を簡略化できるという理由の方が大きい。<a
 href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"
-role="doc-endnote"><p>https://microsoft.github.io/language-server-protocol/
+<li id="fn3"><p>https://microsoft.github.io/language-server-protocol/
 2022年2月16日最終閲覧。<a href="#fnref3" class="footnote-back"
 role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"
-role="doc-endnote"><p>http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf
+<li
+id="fn4"><p>http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf
 2021年1月4日最終閲覧。<a href="#fnref4" class="footnote-back"
 role="doc-backlink">↩︎</a></p></li>
-<li id="fn5" role="doc-endnote"><p>この他に、操作的意味論（Operational
+<li id="fn5"><p>この他に、操作的意味論（Operational
 Semantics）、公理的意味論（Axiomatic
 Semantics）といった種類が存在する。<span class="citation"
 data-cites="UnderstandingComputation">(スチュアート 2014,
 p56)</span>を参照。<a href="#fnref5" class="footnote-back"
 role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"
-role="doc-endnote"><p>https://kotlinlang.org/docs/type-safe-builders.html
+<li id="fn6"><p>https://kotlinlang.org/docs/type-safe-builders.html
 2022年1月28日最終閲覧。<a href="#fnref6" class="footnote-back"
 role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"
-role="doc-endnote"><p>https://docs.microsoft.com/ja-jp/dotnet/fsharp/whats-new/fsharp-50#applicative-computation-expressions
+<li
+id="fn7"><p>https://docs.microsoft.com/ja-jp/dotnet/fsharp/whats-new/fsharp-50#applicative-computation-expressions
 2022年1月28日最終閲覧。<a href="#fnref7" class="footnote-back"
 role="doc-backlink">↩︎</a></p></li>
-<li id="fn8"
-role="doc-endnote"><p>Linuxカーネルの場合にはユーザーはプロセスのスケジューリングポリシーをいくつかの種類から選択できる。
+<li
+id="fn8"><p>Linuxカーネルの場合にはユーザーはプロセスのスケジューリングポリシーをいくつかの種類から選択できる。
 https://linuxjm.osdn.jp/html/LDP_man-pages/man7/sched.7.html
 2022年1月31日最終閲覧。またそもそもLinuxの場合はOSがオープンソースなため、Bela（<a
 href="../chapter1_rendered#intro">第1章</a>参照）で用いられていたXenomaiのように、ユーザーアプリケーションがメインのスケジューラーをバイパスして動作するカーネル拡張を利用する選択肢もある。<a
 href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn9"
-role="doc-endnote"><p>筆者の投稿したFARMなどの国際会議を主催する団体。<a
+<li id="fn9"><p>筆者の投稿したFARMなどの国際会議を主催する団体。<a
 href="../chapter2_rendered#researchfield">第2章</a>を参照。<a
 href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn10" role="doc-endnote"><p>https://github.com/sebpiq/WebPd
+<li id="fn10"><p>https://github.com/sebpiq/WebPd
 2022年1月29日最終閲覧。<a href="#fnref10" class="footnote-back"
 role="doc-backlink">↩︎</a></p></li>
-<li id="fn11" role="doc-endnote"><p>https://mathr.co.uk/empd/
-2022年1月29日最終閲覧。<a href="#fnref11" class="footnote-back"
-role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p>https://mathr.co.uk/empd/ 2022年1月29日最終閲覧。<a
+href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

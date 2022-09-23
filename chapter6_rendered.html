@@ -16,9 +16,8 @@ Art, Music, Modeling and
 Design（FARM）という、関数型プログラミング言語のアートやデザインへの応用を主題としたワークショップで発表した内容<span
 class="citation" data-cites="Matsuura2021">(Matsuura and Jo
 2021)</span>を実装部分を中心として日本語化したものである。そのため、他の章と比べると幾分文体が工学系論文の慣習に従った硬いものになっているが、プログラミング言語を扱う学会に参加することをある種の参与観察と捉え、その文体自体も、ある種特殊なコミュニティの性質のディテールを伝える要素として残すべきだと判断しそのままにしている。</p>
-<section id="mimiumの設計" data-number="0.1">
-<h2 data-number="6.1"><span class="header-section-number">6.1</span>
-mimiumの設計</h2>
+<h2 data-number="6.1" id="mimiumの設計"><span
+class="header-section-number">6.1</span> mimiumの設計</h2>
 <p>本セクションでは、mimiumの言語仕様と実行環境の詳細を記述する。</p>
 <p>第4章では、歴史のなかでPLfMの設計のなかでUGenモデルが所与のものとされて受け入れられる過程を描いた。また、PLfM設計はケイが目指したようなメタメディア的な、自己拡張可能なツールとしての性質よりも、個別の需要に合わせて各レイヤーに特化した言語を作るMulti-Languageパラダイムの方向に進んできた。</p>
 <p>mimiumでは改めて、音楽に特化した言語ではあるが、プログラミングにおけるメタメディアとしての自己拡張性を重視した設計を試みる。具体的には、汎用プログラミング言語の設計に最小限音楽のための使用を追加するという設計方針を取る。ここでは、汎用性を重視しつつもChronicなどと異なりあくまでリアルタイムでの動作を想定する。また、汎用言語の設計をベースにした構造ではあるものの、たとえばExtemporeの中のxtlangでポインターの記法やユーザーによるメモリ確保など、ハードウェア操作に関係する部分の理解が必要なのと異なり、mimiumでこれらの概念は言語仕様として隠蔽するという選択をした。</p>
@@ -111,9 +110,8 @@ href="../chapter5_rendered#tradeoff5">5つ目の図</a>にあたる）。</p>
 <p>本節ではまず、基本的な構文を紹介し、メモリ管理などのハードウェアを意識する必要がないこと、型推論により変数の型アノテーションを省略できることを示す。次に、mimiumの実行環境（コンパイラとランタイム）の一般的なアーキテクチャを紹介し、信号処理であっても、LLVMを介してすぐにネイティブバイナリにコンパイルして実行することができることを示す。</p>
 <p>さらに、連続的な信号処理と離散的な制御処理を統一されたセマンティクスで記述することを可能にする、mimiumの2つの特徴的な機能について説明する。一つ目は、サンプルレベルで決定的なタスクスケジューリングのためのシンタックスと、スケジューラーの実装である。2つ目は、信号処理用のUGenを言語上で定義するために用いられるセマンティクスとそのコンパイルプロセスについて、関数と内部状態変数のペアのデータ構造という点で既存のパラダイムと比較しながら説明する。</p>
 <p>議論のセクションでは、2つの問題を取り上げる。（1）mimiumは離散的な制御と信号処理を統一的なセマンティクスで記述できるが、離散的な処理の記述方法は命令的なものが多く、信号処理に用いられる関数パラダイムは互いに大きく異なること、（2）現在の実装では、FaustやKronosと異なり、信号処理のためのステートフル関数のパラメトリックな複製を表現できないこと。また、前述の問題を解決する方法として、多段階計算の利用可能性についても説明する。</p>
-<section id="基本的な文法" data-number="0.1.1">
-<h3 data-number="6.1.1"><span class="header-section-number">6.1.1</span>
-基本的な文法</h3>
+<h3 data-number="6.1.1" id="基本的な文法"><span
+class="header-section-number">6.1.1</span> 基本的な文法</h3>
 <p>mimiumの基本的なシンタックスは、Rust<span class="citation"
 data-cites="Klabnik2020">(Klabnik, Steve and Nichols
 2020)</span>をベースにした。シンタックスの選択は常に<strong>すでにある程度普及している言語体系</strong>を眺めた上で設計せざるを得ない。Rustの構文は予約語が比較的短いので音楽のように素早くプロトタイピングを行う分野に適していることが主な理由である。また、既存の言語の構文と似せると、既存の言語のためのシンタックスハイライト（ソースコードを色分けして見やすくするためのツール）を再利用しやすいという副次的効果も得られる。</p>
@@ -181,20 +179,15 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="
 囲み、最終行の<code>return</code>式の値を式として返す構文（Block）を持つことで実現している（<code>return</code>を省略することも可能）。同様に、関数定義は、無名関数を変数に代入する構文のシンタックスシュガーとして定義されている。</p>
 <p>mimiumは静的型付け言語で、すべての変数と関数の型がコンパイル時に決定される。型推論（現在は単相）はHindley-Milnerのアルゴリズムに基づく。</p>
 <p>また、DSP処理の高速化のために、メモリの割り当てと解放はコンパイル時に静的に決定され、ランタイムではガベージコレクションが行われない。</p>
-</section>
-</section>
-<section id="mimiumでの信号処理" data-number="0.2">
-<h2 data-number="6.2"><span class="header-section-number">6.2</span>
-mimiumでの信号処理</h2>
+<h2 data-number="6.2" id="mimiumでの信号処理"><span
+class="header-section-number">6.2</span> mimiumでの信号処理</h2>
 <p>mimiumでは、<code>dsp</code>という関数をユーザーが定義すると、オーディオドライバーと音声の入出力に仕様される。例をコード 2に示す。この場合、<code>dsp</code>関数の型は、<em>1つ以上の<code>float</code>型からなる<code>tuple</code>型</em>を取り、かつ、<em>1つ以上の<code>float</code>型からなる<code>tuple</code>型</em>を返す関数型にする必要がある。タプルの各要素が、オーディオドライバの入力チャンネルと出力チャンネルに対応する。例では、オーディオドライバから2つのチャンネルの入力を受け取り、それらをミックスして、左右それぞれのチャンネルに複製して返している。</p>
 <p>mimiumには組み込み関数として、基本的な算術演算、libcの
 <em>math.h</em>で定義されている三角関数や指数関数などの数学関数、<code>delay</code>や<code>mem</code>（1サンプルの遅延）などの組み込みの状態を持つ関数(後述)、libsndfile<span
 class="citation" data-cites="Lopo">(Lopo
 1990)</span>を使ってwavファイルを読み込むための<code>loadwav</code>関数、デバッグのための<code>print</code>関数などがある。フィルターやオシレーターは、これらの関数を組み合わせることで、すべてライブラリとして定義することになる。</p>
-</section>
-<section id="アーキテクチャ" data-number="0.3">
-<h2 data-number="6.3"><span class="header-section-number">6.3</span>
-アーキテクチャ</h2>
+<h2 data-number="6.3" id="アーキテクチャ"><span
+class="header-section-number">6.3</span> アーキテクチャ</h2>
 <p>図図 1にmimiumの実行環境（コンパイラとランタイム）のアーキテクチャを示す。</p>
 <p>コンパイラの構造は、一般的な関数型言語の構造に近く、mincaml<span
 class="citation" data-cites="Sumii2005">(Sumii
@@ -219,12 +212,10 @@ class="citation" data-cites="Scavone2002">(Scavone
 2002)</span>を使用している。実行エンジンは、信号処理のエントリーポイントである<code>dsp</code>関数をオーディオドライバーに渡す。オーディオドライバーは、ハードウェアからの要求を基にスケジューラーに論理時間を進めるように命令し、スケジューラは、論理時間に基づいてタスクを実行したり、実行されているプログラムからタスクの登録の要求への応答、内部時間(<code>now</code>)をプログラムへ返す役割を担う。</p>
 <p>LLVM
 IRまで変換されたコードの中では、タスクの登録と、内部時間の取得という2つの機能だけがランタイムに依存する。それ以外のコードは、メモリ上でコンパイルされて実行されるため、C言語などの低レベル言語で書かれた処理と同等の実行速度を実現できる。</p>
-</section>
-<section id="mimium固有の言語仕様" data-number="0.4">
-<h2 data-number="6.4"><span class="header-section-number">6.4</span>
-mimium固有の言語仕様</h2>
-<section id="演算子によるスケジューリング" data-number="0.4.1">
-<h3 data-number="6.4.1"><span class="header-section-number">6.4.1</span>
+<h2 data-number="6.4" id="mimium固有の言語仕様"><span
+class="header-section-number">6.4</span> mimium固有の言語仕様</h2>
+<h3 data-number="6.4.1" id="演算子によるスケジューリング"><span
+class="header-section-number">6.4.1</span>
 <code>@</code>演算子によるスケジューリング</h3>
 <div id="lst:tr-mimium" class="listing rust">
 <p>コード 3: mimiumにおける継時再帰のサンプル</p>
@@ -276,13 +267,11 @@ class="sourceCode lisp"><code class="sourceCode commonlisp"><span id="cb4-1"><a 
 <p>mimiumはChucKなどと同様に論理時間に基づいた同期的なスケジューリング戦略をとる。これは計算プロセスが変数を書き換えたりするだけで言語の中に閉じたIOを介さない処理の場合、サンプル単位での実行順序が正確に保証される。また実装が単純かつ実行コストが比較的少ない、OSのスケジューラに関与しないため移植性が高いなどの利点がある。一方で、標準入出力、MIDIやネットワークなどの信号を受けたり送ったりするIO処理をスケジューリングして実行した際に、指定した時間が実時間とは必ずしも正確には一致しないというデメリットがある。</p>
 <p>Extemporeはこれと対照的な、非同期的スケジューリングを行う。これはIO処理を含めてスケジュールした関数の実行タイミングを実時間に近づけることができるが、実装に各OSごとのスケジューラへの対応が必要だったり、実行コストが論理時間ベースに比べると比較的高いというトレードオフが存在している。</p>
 <p>mimiumは現状、実装の単純さを重視して論理時間ベースのスケジューラを用いているが、これは言語仕様と紐づいたものではなくあくまでランタイム上の実装次第である。そのため今後の実装によってはスケジューラの戦略をオプションで切り替え可能にもできるだろう。</p>
-</section>
-<section id="状態付き関数を利用した信号処理" data-number="0.4.2">
-<h3 data-number="6.4.2"><span class="header-section-number">6.4.2</span>
+<h3 data-number="6.4.2" id="状態付き関数を利用した信号処理"><span
+class="header-section-number">6.4.2</span>
 状態付き関数を利用した信号処理</h3>
 <p>本セクションでは、まず信号処理のためのUGenを表現するための適切なセマンティクスとデータ構造について検討する。</p>
-<section id="ugenに仕様されるデータ構造の比較" data-number="0.4.2.1">
-<h4 data-number="6.4.2.1"><span
+<h4 data-number="6.4.2.1" id="ugenに仕様されるデータ構造の比較"><span
 class="header-section-number">6.4.2.1</span>
 UGenに仕様されるデータ構造の比較</h4>
 <p>UGenは、入力データ（もしくはその配列）を受け取り、何らかの処理をして出力するものだ。これは一見すると純粋な関数として表現できるように見えるが、実際には関数と状態変数のペアというデータ構造を使う必要がある。</p>
@@ -291,8 +280,7 @@ UGenに仕様されるデータ構造の比較</h4>
 <p>したがって、汎用言語上でUGenを表現するためには、典型的にはオブジェクトやクロージャなどの関数と内部状態を組み合わせたデータ構造を利用する。ただし、オブジェクトやクロージャでは複数のプロセッサを用いる時に、一度インスタンス化してから実際の処理を呼び出す必要がある。</p>
 <p>mimiumは信号処理専用のデータ型を作らなくても、UGenを通常の関数のように使うことができる文法を持たせている。</p>
 <p>以降では例として0から1まで一定の割合で増加し、再び0に戻るノコギリ波のようなUGen：<code>phasor</code>の表現方法を、オブジェクト、クロージャ、さらにFaust、Vultにおける関数型の表現という異なる体系間で比較し、最終的にmimiumでUGenを状態を持つ関数として表現するセマンティクスおよびそのコンパイル手順について解説する。</p>
-<section id="オブジェクト" data-number="0.4.2.1.1">
-<h5 data-number="6.4.2.1.1"><span
+<h5 data-number="6.4.2.1.1" id="オブジェクト"><span
 class="header-section-number">6.4.2.1.1</span> オブジェクト</h5>
 <p>オブジェクトとは、メンバー変数のセットと、変数を変更したり他のオブジェクトにメッセージを送ったりするメンバー関数（メソッド）のセットを含むデータ構造である。オブジェクトの場合、内部状態はメンバ定数として定義されている。これを利用するには、あらかじめインスタンス化した上で、メインの処理メソッドを呼び出す必要がある。コード 5にC++言語でのオブジェクトを用いたphasorの表現の例を示す。</p>
 <div id="lst:cppexample" class="listing rust">
@@ -316,9 +304,7 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> phasor1<span class="op">.</span>process(phasor2<span class="op">.</span>process(<span class="dv">10</span>) <span class="op">+</span> <span class="dv">1000</span>)<span class="op">;</span></span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </div>
-</section>
-<section id="クロージャ" data-number="0.4.2.1.2">
-<h5 data-number="6.4.2.1.2"><span
+<h5 data-number="6.4.2.1.2" id="クロージャ"><span
 class="header-section-number">6.4.2.1.2</span> クロージャ</h5>
 <p>クロージャとは、レキシカルスコープを持つ（≒関数の中で関数を定義可能な）言語で利用できる記法である。例えば、関数<code>A</code>の中で複数のローカル変数<code>a, b, c</code>が定義されており、さらに関数<code>B</code>が関数<code>A</code>のなかでネストして定義されている状況を考える。<code>B</code>の定義の中では、変数<code>a,b,c</code>が参照し、何らかの変更を加える操作を行なっている。このとき<code>a,b,c</code>は関数<code>B</code>にとってはローカル変数ではなく、自由変数と呼ばれる。<code>A</code>の定義が最終的に<code>B</code>を返り値として返却するような高階関数だったとすると、関数<code>A</code>の処理が一通り終わった後も、返却された<code>B</code>が実行されることによって<code>a,b,c</code>の値に何らかの変更が加えられることになる。言い換えると、この時<code>a,b,c</code>に変更を加えられるのは返却された<code>B</code>の処理のみである。このように、ある関数のローカル変数を、ネストされた関数の中に閉じ込めることを閉包、クロージャ（closure）と呼ぶ。このとき<code>A</code>を実行し<code>B</code>を何かの変数に格納する処理は、オブジェクトのインスタンスを生成することに相当する。</p>
 <p>信号処理をクロージャで記述する場合、コンパイル時に変数の寿命を決めることが難しくなるという問題がある。クロージャが使える言語では、ガベージコレクション（GC）を実装して、変数へのメモリの割り当てと解放を動的に行うことが一般的だが、1秒間に48000回もの関数がリアルタイムで実行されるDSPのための言語にGCを導入することは困難である<span
@@ -347,9 +333,7 @@ phasorのクロージャを用いた表現をJavaScriptによる疑似コード�
 <span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fu">phasor1</span>(<span class="fu">phasor2</span>(<span class="dv">10</span>) <span class="op">+</span> <span class="dv">1000</span>)<span class="op">;</span></span>
 <span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
-</section>
-<section id="関数型の表現" data-number="0.4.2.1.3">
-<h5 data-number="6.4.2.1.3"><span
+<h5 data-number="6.4.2.1.3" id="関数型の表現"><span
 class="header-section-number">6.4.2.1.3</span> 関数型の表現</h5>
 <p>FaustやKronosの信号処理の記述では、一時変数の読み書きなしにUGenの代数的な組み合わせ表現を、内部状態を状態変数の代わりに遅延（<code>delay</code>）関数のような最小セットを組み込みの状態付き関数と、信号の1サンプル遅延を伴う再帰的な接続表現を用意することで可能にしている。</p>
 <p>コード 7のFaustの例では、オブジェクトやクロージャのように、最初にインスタンス化する必要はなく、phasor用の状態変数は、コンパイル後に個別の関数呼び出しごとに自動的に確保される。</p>
@@ -384,10 +368,7 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="
 </div>
 <p>Faust、Vultともに、内部状態を持つ関数は、最初にインスタンスを作成することなく仕様できる。その代わり、内部状態の初期化は関数定義時に決定され、インスタンス作成時にコンストラクタを介して初期値を決定するような操作はできない。</p>
 <p>逆に言えば、内部状態の初期値がほとんどの場合0または0の配列であるという信号処理のドメイン固有知識を利用することで、インスタンス化のための文法をコンパイラ側で省略し通常の関数定義、関数適用と同じように扱える、とも言えるだろう。</p>
-</section>
-</section>
-<section id="sec:statefulfun" data-number="0.4.2.2">
-<h4 data-number="6.4.2.2"><span
+<h4 data-number="6.4.2.2" id="sec:statefulfun"><span
 class="header-section-number">6.4.2.2</span>
 内部状態つき関数による信号処理</h4>
 <div id="lst:counter" class="listing rust">
@@ -450,9 +431,7 @@ Maxでのデータフロー的表現の例。</figcaption>
   % \Description{Example of dataflow syntax in Max}
   \label{fig:maxexample}
 \end{figure} -->
-</section>
-<section id="状態付き関数のコンパイル手順" data-number="0.4.2.3">
-<h4 data-number="6.4.2.3"><span
+<h4 data-number="6.4.2.3" id="状態付き関数のコンパイル手順"><span
 class="header-section-number">6.4.2.3</span>
 状態付き関数のコンパイル手順</h4>
 <p>状態付き関数は、図図 1にあるように、コンパイラにおけるクロージャ変換と低レベルコード生成の間で、状態変数を隠れ引数として渡す純粋な関数へと変換される。</p>
@@ -490,10 +469,8 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb14-1"><a href=
 <span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (out<span class="op">,</span>out)</span>
 <span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </div>
-</section>
-</section>
-<section id="言語仕様の整理既存の言語との比較" data-number="0.4.3">
-<h3 data-number="6.4.3"><span class="header-section-number">6.4.3</span>
+<h3 data-number="6.4.3" id="言語仕様の整理既存の言語との比較"><span
+class="header-section-number">6.4.3</span>
 言語仕様の整理、既存の言語との比較</h3>
 <p>まとめると、mimiumは、UGenを状態付きな関数として表現でき、時間離散的な制御や信号処理を統一的なセマンティクスで記述でき、ユーザーはハードウェアを意識することなくコードを書くことができる。また、ほとんどのコードがLLVMを介してメモリ上でコンパイルされるため、低レベル言語と同等の実行速度を実現している。時間方向に離散的な処理の記述では、<code>@</code>演算子を用いて、関数を実行する時間を指定することができ、継時再帰のデザインパターンと組み合わせることで、繰り返し発生するイベントを抽象化することが可能である。信号処理の記述では、Faustのように状態変数を隠し、<code>self</code>を用いたフィードバック接続と組み込み状態付き関数のみを組み合わせることで、内部に状態を持つ関数を通常の関数定義や適用と同じ構文で表現することができる。</p>
 <p>既存の環境と比較して、mimiumは、<em>汎用プログラミング言語の仕様と実装に、最小限の音楽のための機能とセマンティクスを付加するアーキテクチャ</em>をとることで、プログラミング言語の自己拡張性を損なうことなく、実装をシンプルに保ち、ユーザーが音楽的作業に集中できるようにしている。</p>
@@ -502,14 +479,12 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb14-1"><a href=
 class="citation" data-cites="McCartney2002">(McCartney 2002,
 p61)</span>。</p>
 <p>Kronos（とMeta-Sequencer）も同様に自己拡張性を重視した言語である。KronosはSystem
-<code>F\omega</code>をと呼ばれる、ラムダ計算の拡張体系の1つをベースにしたより厳密な関数型言語であり、プロセッサの入出力をリスト構造としてパラメータ化できることで、よりUGenの一般的な表現が可能である。しかし、その内部表現はFaustのようにグラフ構造をベースにしている<span
+<span class="math inline"><em>F</em><em>ω</em></span>
+と呼ばれる、ラムダ計算の拡張体系の1つをベースにしたより厳密な関数型言語であり、プロセッサの入出力をリスト構造としてパラメータ化できることで、よりUGenの一般的な表現が可能である。しかし、その内部表現はFaustのようにグラフ構造をベースにしている<span
 class="citation" data-cites="Norilo2016phd">(Norilo 2016b,
 p23)</span>。mimiumの内部表現は、ラムダ計算ベースの木構造やSSA形式の命令型IRであり、より汎用プログラミング言語の中間表現に近いという違いがある。</p>
-</section>
-</section>
-<section id="現状の実装の問題点" data-number="0.5">
-<h2 data-number="6.5"><span class="header-section-number">6.5</span>
-現状の実装の問題点</h2>
+<h2 data-number="6.5" id="現状の実装の問題点"><span
+class="header-section-number">6.5</span> 現状の実装の問題点</h2>
 <div id="lst:frp" class="listing rust">
 <p>コード 15:
 mimiumの現在の実装ではコンパイル不可能な、時間方向に離散的に変化する値を関数として抽象化するコードの例。</p>
@@ -540,17 +515,16 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb16-1"><a href=
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}}</span></span></code></pre></div>
 </div>
 <p>現状mimiumを実用的に利用する際に3つの問題点が残っている。1つは離散的なイベントの記述は命令型、信号処理は関数型のパラダイムという2つの記法のミスマッチ、2つ目は信号処理に用いる状態付き関数をパラメトリックに複製できないこと、最後がFFTに代表されるサンプルをあるまとまった数ごとに処理をする信号処理が記述できないことだ。</p>
-<section id="離散イベントの処理と信号処理の記述のミスマッチ"
-data-number="0.5.1">
-<h3 data-number="6.5.1"><span class="header-section-number">6.5.1</span>
+<h3 data-number="6.5.1"
+id="離散イベントの処理と信号処理の記述のミスマッチ"><span
+class="header-section-number">6.5.1</span>
 離散イベントの処理と信号処理の記述のミスマッチ</h3>
 <p><code>@</code>演算子を用いて関数実行を時間指定するという方式は、当然ながら即時その関数が実行されないために、返り値を持たない<code>void</code>型の関数を用いて副作用（変数の破壊的代入もしくは標準出力への書き込みなどのIO操作）を起こす、命令型プログラミングのスタイルに帰着する。これはmimiumにおける信号処理で行われる、返り値を次の関数の引数として渡していくことで、信号フローの表現を行うようなスタイルとは大きく異なる。</p>
 <p>シンタックス上はコード 15のように、継時再帰とクロージャを組み合わせれば、離散的な値の変化を連続的な信号処理のスタイルと同様に表現することができる。だが、現在の実装ではこのコードは実現不可能である。mimiumの現在の実装では関数内部で定義されたローカル変数は本来のスコープを超えて生存することができないため、変数の参照を返り値として返却するようなこのコードを実行することができないためである。コンパイラが仮にライフタイム解析<span
 class="citation" data-cites="Ruggieri1988">(Ruggieri and Murtagh
 1988)</span>などの静的解析を用いてコンパイル時に変数の寿命を決定（あるいは、プログラム実行中は永続的に解放されないことを静的に判定）できればこの時間方向に離散的なタイミングで変化する数値の抽象化が可能になる。</p>
-</section>
-<section id="状態付き変数のパラメトリックな複製" data-number="0.5.2">
-<h3 data-number="6.5.2"><span class="header-section-number">6.5.2</span>
+<h3 data-number="6.5.2" id="状態付き変数のパラメトリックな複製"><span
+class="header-section-number">6.5.2</span>
 状態付き変数のパラメトリックな複製</h3>
 <p>もう1つの問題は、現在の実装では<code>self</code>や<code>delay</code>を用いる状態付きの関数をパラメトリックに複製できないということだ。コード 16のような例を考えてみよう。関数<code>filterbank</code>は引数<code>N</code>の条件を基にして、別の引数として与えられる<code>filter</code>関数を再帰的に足し合わせるようなコードだ。この時、<code>filter</code>関数に用いられる状態変数の数と、そのためのメモリのサイズはコンパイル時に静的に決定されねばならない。しかし<code>filter</code>関数が何回複製されるかは引数である<code>N</code>によって決定されるために、<code>filterbank</code>関数が実行されるタイミングになるまで状態変数の数の決定は不可能である。</p>
 <p>このようなパラメトリックな信号処理プロセッサの複製は、たとえばFaustではパターンマッチを用いたコンパイル時再帰によって記述可能である。これはオリジナルのFaustのセマンティクスの中には存在しなかった機能で、Gräfによる項書き換えシステム（パターンに応じてコードそのものをコンパイル前に書き換えてしまう一種のマクロ）の導入によって解決されたものである<span
@@ -565,9 +539,8 @@ class="citation" data-cites="Taha1997">(Taha and Sheard
 <p>さらに、多段階計算はMacroML<span class="citation"
 data-cites="Ganz2001">(Ganz, Sabry, and Taha
 2001)</span>のように高機能なマクロとしての活用方法もある。つまり多段階計算を導入することによって、UGenのパラメトリックな複製だけでなく、言語の自己反映性を高め、言語内DSLをライブラリとして構築できる仕組みへと応用することも期待できる。</p>
-</section>
-<section id="複数サンプルレートが混在した信号処理" data-number="0.5.3">
-<h3 data-number="6.5.3"><span class="header-section-number">6.5.3</span>
+<h3 data-number="6.5.3" id="複数サンプルレートが混在した信号処理"><span
+class="header-section-number">6.5.3</span>
 複数サンプルレートが混在した信号処理</h3>
 <p>mimiumの信号処理は1サンプルごとの処理の記述によって表現されているため、高速フーリエ変換（FFT）に代表されるような、256、512などまとまった数のサンプルを処理し、同じまとまりのサンプルを一挙に出力する、いわゆる複数サンプルレートの混在した信号処理（Multi-rate
 Processing）の記述が不可能である。FFTは音声信号を時間領域から周波数領域へと一度変換し、なんらかの処理を経て再度時間領域へと逆変換を行う、スペクトラルプロセッシングと呼ばれる種類の今日多用されている信号処理に必須の処理である<span
@@ -577,10 +550,8 @@ class="citation" data-cites="Jouvelot2011">(Jouvelot and Orlarey
 2011)</span>ものの実用には至っていない。Kronosはサンプルレート自体を変更するコンパイラ組み込みの関数を導入することでこれを解決している<span
 class="citation" data-cites="Norilo2015">(Norilo 2015,
 p40〜41)</span>。これも多段階計算同様に<strong>いつ計算するか</strong>に関わる、一般的なプログラミング言語では考慮されない要素であるため、どのみち意味論に何かしらの拡張を加えなければ根本的な解決はできないものと考えられる。</p>
-</section>
-</section>
-<section id="より形式的な定義のための関連研究" data-number="0.6">
-<h2 data-number="6.6"><span class="header-section-number">6.6</span>
+<h2 data-number="6.6" id="より形式的な定義のための関連研究"><span
+class="header-section-number">6.6</span>
 より形式的な定義のための関連研究</h2>
 <p>現在のところ、mimiumの統語論の定義に関しては付録で示すように形式的な定義を行えてはいるが、<code>self</code>のような状態付き関数の意味論は実装によって示されているのみである。</p>
 <p>この参考となる研究がmimiumを発表したACM SIGPLAN FARM(Functional Art,
@@ -610,10 +581,8 @@ class="math display"><em>λ</em> <em>i</em><em>n</em><em>c</em><em>l</em>.<em>f
 <p>W計算では<em>feed</em>の項の他に、式の過去のサンプルの参照、つまりディレイに相当する処理も基本操作として備えている。こうした過去のサンプルへの参照は、実用的には過去のサンプル全てを保存しなければならず、ほぼ無限のメモリを必要としてしまう問題がある。この問題は、Chronicが簡潔なデータ表現を可能にはなってはいるものの、リアルタイム実行が難しくなっていた理由の1つでもある。</p>
 <p><em>W</em>計算も、最も簡単な意味論では同じ問題を共有しているものの、リアルタイム実行のために都度意味論を拡張させることで対応できている。また、OCamlで書かれた<em>W</em>計算で記述された信号処理のプログラムを、一度MetaOCamlというOCamlのプログラム自体を加工できるメタ言語上で評価することで、入力プログラムに特化したインタプリタプログラムを生成し、コンパイラの最適化などをさらに組み合わせることでリアルタイム計算を実現できている。またMulti-rate信号処理への拡張も既に方針が示されているなど、かなり実用を意識した上での理論構築がなされている。</p>
 <p>mimiumも根本的な意味論の定義を<em>W</em>計算の形式を借りることによって可能になるだろうと考えられる。もっとも、<em>W</em>計算においても時間方向に離散的な処理の意味論は含まれておらず、現状のランタイムとの通信という実装に依存する定義方法に対する解は今後別に検討する必要がある。</p>
-</section>
-<section id="sec:chap6end" data-number="0.7">
-<h2 data-number="6.7"><span class="header-section-number">6.7</span>
-小括</h2>
+<h2 data-number="6.7" id="sec:chap6end"><span
+class="header-section-number">6.7</span> 小括</h2>
 <p>本章ではmimiumの具体的な設計と実装を示した。mimiumは汎用関数型言語の設計に最小限の時間操作の機能を追加する方針で作られていた。その最小限の機能とは、<code>@</code>演算子によるスケジューリングと、内部状態付き関数によるUGen相当の信号処理の表現を2つであった。</p>
 <p>ここまでmimiumの実装を通じての視点で、一度本研究の提出する貢献のひとつ、PLfMとは一体何かという問いに答えることで本章のまとめに替える。</p>
 <p>音楽プログラミング言語とは本質的にはマッカートニーの言ったように、<strong>音楽のための最低限の抽象化機構を備えた人工言語</strong>である。今日（音楽に限らない）プログラミング言語とは、ハードウェアの違いに依存しない抽象的な計算モデルを、（必ずしもテキストに限らない）人間が知覚、認識、記述可能な形で記述/操作できるようにしたものと言える。ただし、ハードウェアを意識する必要のない高級汎用プログラミング言語の多くは、ガベージコレクションのような実行タイミングに不確定性を生じさせる機能を利用している。そのため汎用言語のライブラリとして、信号処理を含むリアルタイムな動作が可能なDSLを構築することは難しい状況が続いている。</p>
@@ -794,18 +763,16 @@ Group on Programming Languages)</em> 32 (12): 203–14. <a
 href="https://doi.org/10.1145/258994.259019">https://doi.org/10.1145/258994.259019</a>.
 </div>
 </div>
-</section>
-<section class="footnotes footnotes-end-of-document"
+<section id="footnotes" class="footnotes footnotes-end-of-document"
 role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"
-role="doc-endnote"><p>本論文中ではバージョンは0.4.0をもとに解説している。ソースコードは<a
+<li
+id="fn1"><p>本論文中ではバージョンは0.4.0をもとに解説している。ソースコードは<a
 href="https://github.com/mimium-org/mimium"
 class="uri">https://github.com/mimium-org/mimium</a>で公開されている。<a
 href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"
-role="doc-endnote"><p><em>W</em>計算はフィルタのような線形時不変（Linear
+<li id="fn2"><p><em>W</em>計算はフィルタのような線形時不変（Linear
 Time-Invariant:LTI）システムの実質的等価性を形式的に証明することを1つの目的としている。そのため厳密に言えば基本的演算に式同士の加算と、式と定数の乗算（スケーリング）のみが許されており、式同士の乗算などは許されない。しかし基本的な演算の項を追加すれば非線型システムにも対応はできる。<a
 href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>

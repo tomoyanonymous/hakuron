@@ -5,9 +5,8 @@ highlight: true
 ---
 <h1>第1章 - 序論</h1>
 
-<section id="序文の前に" data-number="0.1">
-<h2 data-number="1.1"><span class="header-section-number">1.1</span>
-序文の前に</h2>
+<h2 data-number="1.1" id="序文の前に"><span
+class="header-section-number">1.1</span> 序文の前に</h2>
 <p>2021年9月。北九州市の植物園でこのイントロダクションを書いている。</p>
 <p>植物園、というか自然公園みたいなこの場所にはフリーランスの仕事で来ている。公園を大きく使ったナイトウォークのようなイルミネーションのようなイベントで、そのための音楽やSEを流すためのシステムを作る仕事である。仕事の半分くらいはスピーカーをどこに配置するかとか、どの機材を使うかとかそういう話なのだが、もう半分はその沢山あるスピーカーにどう音を割り振ったり、パソコンを起動したら自動的に音が鳴り始めるようにするためのプログラムを作る作業になる。</p>
 <p>制御のためのソフトウェアはCycling’74社のMaxという音声処理が得意なマルチメディアプログラミング環境で構築している。長い歴史を持ち、現在音楽のためのプログラミング環境としては（知る限り）最も多く使われており、個人的には2015年から使い始めたこのMaxというソフトウェアを使うと、たとえば展示空間にスピーカーを10個とか（それも、いわゆるサラウンドとかとは全然違うレイアウトで）配置してそれぞれに違う音を同期して流したりできる。あるいは、映像を生成するコンピュータからネットワーク経由で特定の信号を受け取ったら特定の効果音を流すようにしたり。</p>
@@ -67,10 +66,8 @@ role="doc-noteref"><sup>7</sup></a>……のように、多様な活動を見せ
 [^mitou]: 未踏IT人材発掘・育成事業：2019年度採択プロジェクト概要（松浦PJ）(https://www.ipa.go.jp/jinzai/mitou/2019/gaiyou_tk-1.html)を参照。また同時期に情報処理学会音声情報処理研究会にて同様の案についてのポスター発表を行っている[@Matsuura2019MUS]。
 
 しかし結果として、2019年6月から2020年2月までの同事業でのディスカッションを中心に実装を進める中で、筆者の興味関心は徐々にその根幹であるプログラミング言語の設計そのものに移ることになった。ひとつの理由は、音声信号は、（考えてみれば当たり前だが）グラフィックにおけるコードと直接操作の相互利用ツールと異なり、**直接操作**など不可能である、ということに気づいたことにある。我々が音楽制作ソフトウェアで波形をマウスで切り貼りしているのは言うなれば音声データのありうる表象のかたちのうちのひとつでしかなくて、空気の振動それ自体ではない。音楽プログラミング言語で表現しようとしているデータ形式そのものも音そのものではない。 -->
-</section>
-<section id="sec:intro" data-number="0.2">
-<h2 data-number="1.2"><span class="header-section-number">1.2</span>
-序文</h2>
+<h2 data-number="1.2" id="sec:intro"><span
+class="header-section-number">1.2</span> 序文</h2>
 <p>本研究は音楽土木工学という、未だ存在しない学問領域を、音楽のためのプログラミング言語mimiumの設計と開発を通じて描き出す試みだ。この論文の中で筆者が提起しようとしている音楽土木工学とは、その名前の通り土木工学——つまり街における道路のようなインフラストラクチャ設計や、未来の街の姿自体を検討する都市計画、そのための構造力学や材料工学といった分野を音楽という領域に当てはめて考えてみるというアナロジーに基づくものだ。</p>
 <p>では、音楽における<strong>土と木</strong>、インフラストラクチャとはいったいなにか？</p>
 <p>例えばわかりやすいのは音楽を流通させるストリーミングサービスだ。まだ音楽の流通がCDや、（違法なものを含め）ファイル単位でのデータ配信が主流だった2005年に、クセックとレオナルドはコンピューターやインターネット技術の発展の先に音楽の姿は「水のような音楽」になると予測した<span
@@ -114,10 +111,8 @@ class="citation" data-cites="McPherson2017">(McPherson
 2017)</span>。Belaは、BeagleBone
 Blackという、Linux（オープンソースのOS）を搭載する既存のオープンソースミニコンピューターのための、音声入出力インターフェースを備えた拡張ボードだ。その特徴は単にハードウェアだけがプロダクトに含まれているのではなく、USBケーブルで自分のラップトップなどと接続すると、Arduinoと似たような形で、そのラップトップのWebブラウザ上から簡単にプログラムを書き換えられるような開発環境がセットになっている点である。さらに、音声信号処理において特有の問題である入力データが出力に反映されるまでの遅延を極力取り除くために、OSの機関部分（カーネル）にXenomaiと呼ばれる拡張が加えられていることも特徴のひとつだ。このハードウェアとカスタムOSの合わせ技を利用することでBelaは、より高速なCPUを積んだラップトップやデスクトップコンピューターでも実現できないような低遅延のシステムを構築できる。</p>
 <p>このように、これまで利用目的を問わず万能に対応できるよう構築されていたハードウェアとOSのような基幹的な技術要素を、（音楽のような）特定の目的のために作り直してみたり、開発環境ソフトウェアのような高レイヤー技術も含む複合的な組み合わせを検討することで、特定の課題が解決される可能性は大いに増えている。電子回路やハードウェア設計、実装自体の個人レベルでの取り組みのハードルが下がってきたこともこれらの傾向を後押ししている。</p>
-</section>
-<section id="研究領域のデザイン" data-number="0.3">
-<h2 data-number="1.3"><span class="header-section-number">1.3</span>
-研究領域のデザイン</h2>
+<h2 data-number="1.3" id="研究領域のデザイン"><span
+class="header-section-number">1.3</span> 研究領域のデザイン</h2>
 <!-- 2章の内容 -->
 <p>このように本研究で提起しようとしている音楽土木工学は、音楽に関わる工学の異なる関わり方の追求ではある。一方で筆者はその理論的な基盤を工学や科学よりもデザイン学においている。</p>
 <p>デザインというとグラフィックデザインやインテリアデザインのような視覚的表象の操作や、あるいはインターフェースデザインやWeb/アプリケーションのデザインのようなユーザーの認知的特性に基づく使いやすい道具の操作方法の設計、といった分野を想起させるかもしれない。しかしデザインは歴史の中でその意味を、単に良い製品の創出といった側面だけではなく、社会システムのような抽象的なものを含めた、人工物の創出全般に関する学問へと広げてきた。</p>
@@ -205,9 +200,8 @@ role="doc-noteref"><sup>14</sup></a>。</p>
 <p>本研究のアプローチは、一般的には音楽や芸術表現と無関係なものと思われている事柄の設計と実装——例えばプログラミング言語やコンピューター自体——に自ら取り組み、その技術を理解することによって初めて得られる視点をデザイナー/アーティストの批評的視点と接続するものだ。そうすることによって、技術者に埋め込まれこれまで共有されてこなかった知を一度取り出し、さらに異なる方向性を見出す、いわば<strong>Research
 through Design through
 Science（Technology）</strong>とでも呼ぶべき態度である。</p>
-</section>
-<section id="なぜプログラミング言語なのか" data-number="0.4">
-<h2 data-number="1.4"><span class="header-section-number">1.4</span>
+<h2 data-number="1.4" id="なぜプログラミング言語なのか"><span
+class="header-section-number">1.4</span>
 なぜプログラミング言語なのか</h2>
 <!-- 3章のメタメディアの内容に対応する -->
 <p>では、音楽におけるコンピューターの利用のされ方を再デザインするための試みとして、なぜ<strong>音楽のためのプログラミング言語：Programming
@@ -229,20 +223,16 @@ href="#fn16" class="footnote-ref" id="fnref16"
 role="doc-noteref"><sup>16</sup></a>。そうした非メタメディア的思想に基づいてインフラストラクチャが形成されることで、想像できないものは作れないという限界だけでなく、想像できる機能さえも容易に実現できないという状況を生んでしまう。</p>
 <p>つまりプログラミング言語についての理解を深めるということは、特に音楽という分野においては、個々の人間が音楽の認識を形作る仕組みを理解することでもある。そして、同時に音楽を作るための道具が、社会の中で人間の創作や受容にもたらす自由と制約をどう形成するのかを理解することでもある。</p>
 <!-- （もうちょっと補足してもいいかも） -->
-</section>
-<section id="本論文の貢献" data-number="0.5">
-<h2 data-number="1.5"><span class="header-section-number">1.5</span>
-本論文の貢献</h2>
+<h2 data-number="1.5" id="本論文の貢献"><span
+class="header-section-number">1.5</span> 本論文の貢献</h2>
 <!-- （順番を整理したほうがいいかもしれない） -->
 <p>本論文を通じて学術的に貢献する内容は、大きく分けて3つである。</p>
 <p>1つは、「音楽のためのプログラミング言語とは何か？」という、PLfMの存在論の提示だ。PLfMは歴史的にコンピューターを用いて音楽を生成するための技術としてスタートしつつも汎用プログラミング言語の理論を取り込んで発展してきたことにより、一重に音楽のためのプログラミング言語/環境といってもその応用範囲や想定される使用方法、さらに内部の実装方法までが多岐に及び、単純な比較をすることが難しい。また、評価のための語彙も「表現力が高い」「効率的」「汎用的」などの言葉が共通認識の無いまま慣例的に使われており、実際に何を意味するかもはっきりしないことがある。本稿ではまず音楽プログラミング言語の歴史的変遷を改めて整理した上で、「PLfMにはどんな種類があるのか」、「PLfMの特性はどう記述できるか」といった概念を整理して提示する。</p>
 <p>2つ目は、「音楽のためのプログラミング言語を音楽を設計するという行為とは何か？」という問いである。録音技術（音響再生産技術）に端を欲した音楽のフォーマットは現在空間音響技術のためのフォーマットの普及などよって、原音再現という従来の明確な1つの目標を失いつつあるだけでなく、新しさを謳いながらも一方でインフラストラクチャの性質による音楽の形式を画一化する傾向を持っている。その環境でコンピュータ上の表現の自由度を最大限担保するためには、プログラミング言語そのものを音楽のためのフォーマットとして再考する必要がある。こうした背景から、本研究ではPLfMの設計行為を2020年代以降におけるテクノロジーを主体的に使う音楽実践の1つのあり方に位置付けることを試みる。さらにこれは、デザイン学におけるデザイン実践を通した研究の領域の広がる中で、社会構造自体を長い時間をかけて変化させていくことを試みる動きとも呼応する。これまでデザインリサーチ的手法は
 HCIの研究法の1つとして狭い意味ではPLfM研究にも適用されてきたが、本研究ではプログラミング言語設計という行為をさらに一般化し、音楽土木工学という、誰もがアクセス可能な音楽のためのテクノロジーの変革のための政治的行動という広い領域へ接続する。</p>
 <p>3つ目は、筆者が設計/実装した自己拡張性の高い音楽プログラミング言語『mimium』についての設計思想とその具体的な実装を提示した上で、以上2つの観点からの位置付けを試みることだ。mimiumは先述した音楽のためのプログラミング言語の歴史を見直し、汎用プログラミング言語の設計の上に最低限の音楽のために特化した言語機能を備える構造を取ることで音楽のための言語におけるブラックボックスを減らしながらもその実装の単純さと自己拡張性の高さを同時に実現できるように設計されている。</p>
-</section>
-<section id="構成" data-number="0.6">
-<h2 data-number="1.6"><span class="header-section-number">1.6</span>
-構成</h2>
+<h2 data-number="1.6" id="構成"><span
+class="header-section-number">1.6</span> 構成</h2>
 <figure>
 <img src="../img/thesis_structure.png" id="fig:structure"
 style="width:100.0%" alt="図 2: 本論文全体の構成。" />
@@ -361,7 +351,7 @@ Reese, Ivan. 2020. <span>“47 • Miller Puckette • Max/<span>MSP</span>
 href="https://futureofcoding.org/episodes/047.html">https://futureofcoding.org/episodes/047.html</a>.
 </div>
 <div id="ref-Sterne2012" class="csl-entry" role="doc-biblioentry">
-Sterne, Jonathan. 2012. <em>Mp3: The Meaning of a Format</em>. Duke
+Sterne, Jonathan. 2012. <em>MP3: The Meaning of a Format</em>. Duke
 University Press Books.
 </div>
 <div id="ref-Weiser1996" class="csl-entry" role="doc-biblioentry">
@@ -408,68 +398,62 @@ Chiptune: ゲーム機から生まれた新しい音楽</span></em>. 単行本.
 馬定延. 2014. <em>日本メディアアート史</em>. アルテスパブリッシング.
 </div>
 </div>
-</section>
-<section class="footnotes footnotes-end-of-document"
+<section id="footnotes" class="footnotes footnotes-end-of-document"
 role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"
-role="doc-endnote"><p>C++言語を用いた映像やマルチメディア表現のためのフレームワーク。SFPCを立ち上げたザッカリー・リーバーマンを含むコミュニティによって開発、メンテナンスされている。
+<li
+id="fn1"><p>C++言語を用いた映像やマルチメディア表現のためのフレームワーク。SFPCを立ち上げたザッカリー・リーバーマンを含むコミュニティによって開発、メンテナンスされている。
 https://openframeworks.cc/ 2022年1月24日最終閲覧。<a href="#fnref1"
 class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"
-role="doc-endnote"><p>http://taeyoonchoi.com/2012/05/notes-on-critical-pedagogy/
+<li
+id="fn2"><p>http://taeyoonchoi.com/2012/05/notes-on-critical-pedagogy/
 2022年1月24日最終閲覧。<a href="#fnref2" class="footnote-back"
 role="doc-backlink">↩︎</a></p></li>
-<li id="fn3" role="doc-endnote"><p>たとえば、<span class="citation"
-data-cites="Ma2014">(馬 2014,
+<li id="fn3"><p>たとえば、<span class="citation" data-cites="Ma2014">(馬
+2014,
 58p)</span>の坂根厳夫の引用では、70年代はじめのオイルショックや環境問題を単に発した科学技術自体への批判との共鳴が指摘されている。E.A.Tが演出した大阪万博ペプシ館でのスポンサーによる会期中のプログラム中断と、その後のE.A.Tの活動の衰退もそれを示す例として挙げられるだろう。<a
 href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4" role="doc-endnote"><p>http://zach.li/
-2022年1月24日最終閲覧。<a href="#fnref4" class="footnote-back"
-role="doc-backlink">↩︎</a></p></li>
-<li id="fn5" role="doc-endnote"><p>https://taeyoonchoi.com/
-2022年1月24日最終閲覧。<a href="#fnref5" class="footnote-back"
-role="doc-backlink">↩︎</a></p></li>
-<li id="fn6" role="doc-endnote"><p>https://americanartist.us/
-2022年1月24日最終閲覧。<a href="#fnref6" class="footnote-back"
-role="doc-backlink">↩︎</a></p></li>
-<li id="fn7" role="doc-endnote"><p>https://cwandt.com/
-2022年1月24日最終閲覧。<a href="#fnref7" class="footnote-back"
-role="doc-backlink">↩︎</a></p></li>
-<li id="fn8"
-role="doc-endnote"><p>実際、デナード則という、集積率を上げて処理性能が向上しても電力消費は一定のままであるという法則は2006年ごろから崩れているという見解がなされている<span
+<li id="fn4"><p>http://zach.li/ 2022年1月24日最終閲覧。<a href="#fnref4"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>https://taeyoonchoi.com/ 2022年1月24日最終閲覧。<a
+href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>https://americanartist.us/ 2022年1月24日最終閲覧。<a
+href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>https://cwandt.com/ 2022年1月24日最終閲覧。<a
+href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li
+id="fn8"><p>実際、デナード則という、集積率を上げて処理性能が向上しても電力消費は一定のままであるという法則は2006年ごろから崩れているという見解がなされている<span
 class="citation" data-cites="Hennesy2019">(ヘネシー and パターソン
 2019)</span>。<a href="#fnref8" class="footnote-back"
 role="doc-backlink">↩︎</a></p></li>
-<li id="fn9"
-role="doc-endnote"><p>AVRやPICに代表される、OSなどを用いない小規模の計算機の総称。マイコンと略される。<a
+<li
+id="fn9"><p>AVRやPICに代表される、OSなどを用いない小規模の計算機の総称。マイコンと略される。<a
 href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn10"
-role="doc-endnote"><p>インフラストラクチャの研究は1990年代以降主にSTSの分野でスーザン・レイ・スターやジェフリー・ボウカーのような研究者を中心に議論されてきた。たとえば<span
+<li
+id="fn10"><p>インフラストラクチャの研究は1990年代以降主にSTSの分野でスーザン・レイ・スターやジェフリー・ボウカーのような研究者を中心に議論されてきた。たとえば<span
 class="citation" data-cites="Bowker2000">(Bowker and Star
 2000)</span>を参照。近年ではメディア論とインフラストラクチャ研究を直接的に結びつけた内容の論集が出版されるなど、両分野の接近が進んでいる<span
 class="citation" data-cites="Parks2015 Jancovic2020">(Parks and
 Starosielski 2015; Jancovic and Schneider 2020)</span>。<a
 href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn11"
-role="doc-endnote"><p>パラダイムという言葉を普及させたトーマス・クーンの『科学革命の構造』では、ある安定したパラダイム（特定の科学的領域をささえる認識の共有された構造<span
+<li
+id="fn11"><p>パラダイムという言葉を普及させたトーマス・クーンの『科学革命の構造』では、ある安定したパラダイム（特定の科学的領域をささえる認識の共有された構造<span
 class="citation" data-cites="Fukushima2021">(福島 2021,
 p8)</span>）の中での科学的研究（通常科学）はパズルを解くような物と表現される<span
 class="citation" data-cites="Kuhn1971">(クーン 1971, p30)</span>。<a
 href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn12" role="doc-endnote"><p>Civil
+<li id="fn12"><p>Civil
 Engineerという語は一般的に、1750年ごろにイギリスの工学者ジョン・スミートンが自らの専門を、相容れない軍事的な研究と区別するために名乗り始めたことが起源とされている<span
 class="citation" data-cites="Florman1988">(Florman 1989)</span>。<a
 href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn13" role="doc-endnote"><p><span class="citation"
-data-cites="Dunne2015">(ダン and レイビー 2015,
-p208)</span>。この他に「Design for
+<li id="fn13"><p><span class="citation" data-cites="Dunne2015">(ダン and
+レイビー 2015, p208)</span>。この他に「Design for
 Science（科学研究を伝えたり、わかりやすく説明したりするためにデザインを用いる）」、「Design
 with
 Science（デザイナーと科学の真のコラボレーション）」という2つの関わり方が挙げられている。<a
 href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn14" role="doc-endnote"><p>Research through
+<li id="fn14"><p>Research through
 Designという言葉が作られるきっかけとなった、クリストファー・フレイリングの『Research
 in Art and
 Design』では、アートやデザインの領域における研究行為をinto（歴史研究など、一般に「研究」と認識されているもの）、through（アクションリサーチや材料研究）、for（アーティストやデザイナーが自らの制作のために行う個人的な探求）という3つの接続詞で分類した。このうちforは「伝達可能な知（Communicable
@@ -477,11 +461,11 @@ Knowledge）」を生み出すことを一義的な目的としておらず、�
 class="citation" data-cites="Frayling1993">(Frayling
 1993)</span>。詳しくは第2章を参照。<a href="#fnref14"
 class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn15"
-role="doc-endnote"><p>このPLfMはあまり一般的な呼称ではないが、ひとまず字義通りの意味合い以上のものはない。この用語を導入する詳しい意図は第4章の冒頭を参照。<a
+<li
+id="fn15"><p>このPLfMはあまり一般的な呼称ではないが、ひとまず字義通りの意味合い以上のものはない。この用語を導入する詳しい意図は第4章の冒頭を参照。<a
 href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn16"
-role="doc-endnote"><p>数少ない例としては、Ableton社のLiveにおける、音楽プログラミング環境Maxを内部拡張として用いることができるMax
+<li
+id="fn16"><p>数少ない例としては、Ableton社のLiveにおける、音楽プログラミング環境Maxを内部拡張として用いることができるMax
 for
 Live、独自のスクリプト言語であるReascriptを使用できるReaperなどがある。<a
 href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
