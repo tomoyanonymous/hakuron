@@ -57,7 +57,7 @@ format matters
 
 ## anti-"musicking"
 
-コンピューターが偏在していることを前提とした上で、新しい音楽フォーマットのあるべき形を検討する
+コンピューターが遍在していることを前提とした上で、新しい音楽フォーマットのあるべき形を検討する
 
 # Background C: Programming language for Sound Music(PLfSaM)
 ##  What is PLfMaS?
