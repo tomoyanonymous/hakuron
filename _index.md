@@ -18,6 +18,8 @@ Web版公開日： 2022年7月23日
 
 Web版最終更新日： 2022年10月27日
 
+[公聴会プレゼンテーションでのスライド(SpeakerDeck)](https://speakerdeck.com/tomoyanonymous/yin-le-tu-mu-gong-xue-woshe-ji-suru-yin-le-puroguraminguyan-yu-mimiumnokai-fa-wotong-zite)
+
 ## Web版を読むにあたっての諸注意
 
 - 内容に関わる違いはありませんが、正式に学位論文として提出したものとは別もの扱いと考えてください。特に以下の点に留意してください。
