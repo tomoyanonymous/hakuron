@@ -48,7 +48,7 @@ Web版最終更新日： 2022年10月27日
 
 ### [第7章 - 結論：音楽土木工学とは何なのか、どこへ向かうのか](./chapter7_rendered)
 
-**[付録(mimiumのシンタックス定義)](./appendix_rendered)**
+**[付録(mimiumのシンタックス定義)](./appendixA_rendered)**
 
 
 ---
