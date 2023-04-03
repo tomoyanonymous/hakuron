@@ -16,7 +16,7 @@ enableInlineShortcodes: true
 
 Web版公開日： 2022年7月23日
 
-Web版最終更新日： 2022年10月27日
+Web版最終更新日： 2023年4月3日
 
 [公聴会プレゼンテーションでのスライド(SpeakerDeck)](https://speakerdeck.com/tomoyanonymous/yin-le-tu-mu-gong-xue-woshe-ji-suru-yin-le-puroguraminguyan-yu-mimiumnokai-fa-wotong-zite)
 
