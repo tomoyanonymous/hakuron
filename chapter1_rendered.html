@@ -176,9 +176,8 @@ Dumpling』ワークショップなどを行ってきた。ともするとこれ
 <p>都市は、コンピュータと似て、美学的熟考のための中立的対象ではない。そうではなく、競合し合う政治性と、危うくて不安定〔precarious〕な生活とが置かれた場なのだ。<span
 class="citation" data-cites="Taeyoon2016">(Choi 2016,筆者訳)</span></p>
 </blockquote>
-<figure>
-<img src="../img/taeyoon_handmade.jpg" id="fig:taeyoon"
-style="width:70.0%"
+<figure id="fig:taeyoon">
+<img src="../img/taeyoon_handmade.jpg" style="width:70.0%"
 alt="図 1: チェ・テユンによるHandmade Computerプロジェクトのひとつ、4 BIT FSM（Finite State Machine）(Choi 2015)。" />
 <figcaption aria-hidden="true">図 1: チェ・テユンによるHandmade
 Computerプロジェクトのひとつ、4 BIT FSM（Finite State Machine）<span
@@ -233,9 +232,9 @@ HCIの研究法の1つとして狭い意味ではPLfM研究にも適用されて
 <p>3つ目は、筆者が設計/実装した自己拡張性の高い音楽プログラミング言語『mimium』についての設計思想とその具体的な実装を提示した上で、以上2つの観点からの位置付けを試みることだ。mimiumは先述した音楽のためのプログラミング言語の歴史を見直し、汎用プログラミング言語の設計の上に最低限の音楽のために特化した言語機能を備える構造を取ることで音楽のための言語におけるブラックボックスを減らしながらもその実装の単純さと自己拡張性の高さを同時に実現できるように設計されている。</p>
 <h2 data-number="1.6" id="構成"><span
 class="header-section-number">1.6</span> 構成</h2>
-<figure>
-<img src="../img/thesis_structure.png" id="fig:structure"
-style="width:100.0%" alt="図 2: 本論文全体の構成。" />
+<figure id="fig:structure">
+<img src="../img/thesis_structure.png" style="width:100.0%"
+alt="図 2: 本論文全体の構成。" />
 <figcaption aria-hidden="true">図 2: 本論文全体の構成。</figcaption>
 </figure>
 <p>第2章以降は以下のような構成で論じる。本論文全体の構造を図 2に示した。全体としては、2〜4章で1960年代から2020年までの歴史をデザインリサーチ、メディアとしてのコンピューター、音楽のためのプログラミング言語というそれぞれの視点から振り返る。これらの歴史は例えばデザインリサーチとデザインであれば1970年代以降のコンピューターを用いた機器のインタラクションデザインという点で重なりはするものの、概ね独立して読めるような構成になっている。第5章は通時的な視点でのPLfMの整理、第6章は実際の言語設計と実装についての解説、第7章はその実装の問題点を起点にした省察である。なお、第2章から4章にかけての歴史的文脈の整理は、必ずしもmimiumという言語制作の背景として事前に定まっていたわけではないことに注意する必要がある。第2章で詳しく説明するように、本研究の特徴的な点は実践を通じたこれまでとは異なる視点での歴史記述にあるからだ。本研究全体は歴史の批判的考察と、mimiumの設計と実装を相互に繰り返しながら互いにその結果をフィードバックし合うことで成立している。その意味で、第2章から第5章は研究背景であると同時にリサーチのアウトプットでもある。</p>
@@ -256,73 +255,73 @@ class="citation" data-cites="Matsuura2021">(Matsuura and Jo
 2021)</span>の詳細を記述する。mimiumは型推論を伴う静的型付け言語であり、汎用の関数型プログラミング言語の設計や実装に、音楽のための言語仕様を2つ、最小限追加する形で実装されていることが大きな特徴である。1つは関数の実行のスケジューリングを行う<code>@</code>演算子、もう1つは内部状態を伴う信号処理を通常の関数と同じように記述可能な、状態付き関数の記法である。mimiumはこの2種類の記法を持つことで、これまではブラックボックスとして与えられていた基本的処理の単位をライブラリとして（実行性能を損なわないまま）実装可能であることを、既存の言語との比較を交えて示す。</p>
 <p>第7章では、mimiumの実装過程を踏まえて全体の議論を総括し、音楽土木工学という学問の必要性を改めて提示する。これまで作曲、楽器制作のような各表現のレイヤーごとに個別に言語が作られてきた状況（Multi-Languageパラダイム）は、mimiumを含むモダンな言語によってよりメタメディア的状況へと近づきつつはある。しかし、依然としてそうした言語自体の設計や実装には、音楽とは異なる知識やスキルセットを必要とし、異なる形の分業を生み出している。音楽家が自らの道具を自らの手で作れるような環境づくりには、理想的なツールや言語が存在するだけで十分とは言えず、道具やインフラストラクチャを作る事自体の価値判断の変容を促すメタ的な行動が求められる。技術者や音楽家といった役割分担を知らず知らずのうちに前提としてしまっている私たちの文化から一度離れて別の場所へ向かうための暫定的な運動として、音楽土木工学というこれまでとは異なる考え方の学問領域が提唱されるのである。</p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-role="doc-bibliography">
-<div id="ref-Auger2010" class="csl-entry" role="doc-biblioentry">
+data-entry-spacing="0" role="list">
+<div id="ref-Auger2010" class="csl-entry" role="listitem">
 Auger, James. 2010. <span>“Alternative Presents and Speculative Futures:
 Designing Fictions Through the Extrapolation and Evasion of Product
 Lineages.”</span> <em>Negotiating Futures ? Design Fiction.</em> 6
 (October): 42–57. <a
 href="https://researchonline.rca.ac.uk/1093/">https://researchonline.rca.ac.uk/1093/</a>.
 </div>
-<div id="ref-Born1995" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Born1995" class="csl-entry" role="listitem">
 Born, Georgina. 1995. <em><span>Rationalizing Culture</span></em>. 1.
 University of California Press.
 </div>
-<div id="ref-Bowker2000" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Bowker2000" class="csl-entry" role="listitem">
 Bowker, Geoffrey C., and Susan Leigh Star. 2000. <em>Sorting Things Out:
 Classification and Its Consequences (Inside Technology)</em>. The MIT
 Press.
 </div>
-<div id="ref-Taeyoon2015" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Taeyoon2015" class="csl-entry" role="listitem">
 Choi, Taeyoon. 2015. <span>“4 <span>BIT</span> <span>FSM</span> –
 Taeyoon Choi.”</span> 2015. <a
 href="http://taeyoonchoi.com/2015/02/4-bit-fsm/">http://taeyoonchoi.com/2015/02/4-bit-fsm/</a>.
 </div>
-<div id="ref-Taeyoon2016" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Taeyoon2016" class="csl-entry" role="listitem">
 ———. 2016. <span>“Open Circuit, Open City – Taeyoon Choi.”</span> 2016.
 <a
 href="http://taeyoonchoi.com/2016/12/open-circuit-open-city/">http://taeyoonchoi.com/2016/12/open-circuit-open-city/</a>.
 </div>
-<div id="ref-Emerson2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Emerson2014" class="csl-entry" role="listitem">
 Emerson, Lori. 2014. <em>Reading Writing Interfaces: From the Digital to
 the Bookbound</em>. Univ of Minnesota Pr.
 </div>
-<div id="ref-Florman1988" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Florman1988" class="csl-entry" role="listitem">
 Florman, Samuel C. 1989. <em>The Civilized Engineer</em>. <span>St.
 Martin’s Griffin</span>.
 </div>
-<div id="ref-Frayling1993" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Frayling1993" class="csl-entry" role="listitem">
 Frayling, Christopher. 1993. <span>“Research in Art and Design.”</span>
 <em>Royal College of Art Research Papers</em> 1 (1).
 </div>
-<div id="ref-Jancovic2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Jancovic2020" class="csl-entry" role="listitem">
 Jancovic, Axel, Marek andVolmar, and Alexandra Schneider. 2020.
 <em>Format Matters: Standards, Practices, and Politics in Media
 Cultures</em>. Saint Philip Street Press.
 </div>
-<div id="ref-Jouppi2017" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Jouppi2017" class="csl-entry" role="listitem">
 Jouppi, Norman P., Cliff Young, Nishant Patil, David Patterson, Gaurav
 Agrawal, Raminder Bajwa, Sarah Bates, et al. 2017. <span>“In-Datacenter
 Performance Analysis of a Tensor Processing Unit.”</span>
 <em><span>arXiv</span>:1704.04760 [Cs]</em>, April. <a
 href="http://arxiv.org/abs/1704.04760">http://arxiv.org/abs/1704.04760</a>.
 </div>
-<div id="ref-Kay1977" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Kay1977" class="csl-entry" role="listitem">
 Kay, Alan C., and Adele Goldberg. 1977. <span>“<span>Personal Dynamic
 Media</span>.”</span> <em>Computer</em> 10 (3): 31–41. <a
 href="https://doi.org/10.1109/C-M.1977.217672">https://doi.org/10.1109/C-M.1977.217672</a>.
 </div>
-<div id="ref-Kusek2005" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Kusek2005" class="csl-entry" role="listitem">
 Kusek, David, and Gerd Leonhard. 2005. <em>デジタル音楽の行方</em>.
 Translated by yomoyomo and 津田大介. 翔泳社.
 </div>
-<div id="ref-Magnusson2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Magnusson2009" class="csl-entry" role="listitem">
 Magnusson, Thor. 2009. <span>“<span class="nocase">Of epistemic tools:
 Musical instruments as cognitive extensions</span>.”</span>
 <em>Organised Sound</em> 14 (2): 168–76. <a
 href="https://doi.org/10.1017/S1355771809000272">https://doi.org/10.1017/S1355771809000272</a>.
 </div>
-<div id="ref-Matsuura2021" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Matsuura2021" class="csl-entry" role="listitem">
 Matsuura, Tomoya, and Kazuhiro Jo. 2021. <span>“Mimium: A
 Self-Extensible Programming Language for Sound and Music.”</span> In
 <em><span>FARM</span> 2021 - Proceedings of the <span>ACM</span>
@@ -330,71 +329,71 @@ Self-Extensible Programming Language for Sound and Music.”</span> In
 Modeling, and Design</em>. <a
 href="https://doi.org/10.1145/3471872.3472969">https://doi.org/10.1145/3471872.3472969</a>.
 </div>
-<div id="ref-McPherson2017" class="csl-entry" role="doc-biblioentry">
+<div id="ref-McPherson2017" class="csl-entry" role="listitem">
 McPherson, Andrew. 2017. <span>“Bela: An Embedded Platform for
 Low-Latency Feedback Control of Sound.”</span> <em>The Journal of the
 Acoustical Society of America</em> 141 (5): 3618–18. <a
 href="https://doi.org/10.1121/1.4987761">https://doi.org/10.1121/1.4987761</a>.
 </div>
-<div id="ref-Parikka2012" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Parikka2012" class="csl-entry" role="listitem">
 Parikka, Jussi. 2013. <em>What Is Media Archaeology?</em> Polity.
 </div>
-<div id="ref-Parks2015" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Parks2015" class="csl-entry" role="listitem">
 Parks, Lisa, and Nicole Starosielski, eds. 2015. <em><span
 class="nocase">Signal Traffic: Critical Studies of Media
 Infrastructures</span></em>. <span>Board of Trustees of the Univerity of
 Illinois</span>.
 </div>
-<div id="ref-Puckette2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Puckette2020" class="csl-entry" role="listitem">
 Reese, Ivan. 2020. <span>“47 • Miller Puckette • Max/<span>MSP</span>
 &amp; Pure Data. Future of Coding.”</span> <a
 href="https://futureofcoding.org/episodes/047.html">https://futureofcoding.org/episodes/047.html</a>.
 </div>
-<div id="ref-Sterne2012" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Sterne2012" class="csl-entry" role="listitem">
 Sterne, Jonathan. 2012. <em>MP3: The Meaning of a Format</em>. Duke
 University Press Books.
 </div>
-<div id="ref-Weiser1996" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Weiser1996" class="csl-entry" role="listitem">
 Weiser, Mark. 1996. <span>“Ubiquitous Computing.”</span> March 17, 1996.
 <a
 href="https://web.archive.org/web/20180604013008/http://www.ubiq.com/hypertext/weiser/UbiHome.html">https://web.archive.org/web/20180604013008/http://www.ubiq.com/hypertext/weiser/UbiHome.html</a>.
 </div>
-<div id="ref-Kuhn1971" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Kuhn1971" class="csl-entry" role="listitem">
 クーントーマス. 1971. <em>科学革命の構造</em>. Translated by 中山茂.
 みすず書房.
 </div>
-<div id="ref-Dunne2015" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Dunne2015" class="csl-entry" role="listitem">
 ダンアンソニー, and レイビーフィオナ. 2015.
 <em>スペキュラティヴ・デザイン</em>. Translated by 千葉敏生 and
 久保田晃弘. <span>ビー・エヌ・エヌ新社</span>.
 </div>
-<div id="ref-Huhtamo2015" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Huhtamo2015" class="csl-entry" role="listitem">
 フータモエルキ, and 太田純貴. 2015. <em>メディア考古学 :
 過去・現在・未来の対話のために</em>. <span>NTT出版</span>.
 </div>
-<div id="ref-Hennesy2019" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Hennesy2019" class="csl-entry" role="listitem">
 ヘネシージョン・L, and パターソンデイビッド・A. 2019.
 <em><span>コンピュータアーキテクチャ[第6版]定量的アプローチ</span></em>.
 Translated by 中條拓伯, 天野英晴, and 鈴木貢.
 発行:エスアイビー・アクセス, 発売:星雲社.
 </div>
-<div id="ref-Jo2016" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Jo2016" class="csl-entry" role="listitem">
 城一裕. 2016.
 <span>“パーソナル・ファブリケーションとメディア考古学の交点：
 車輪の再発明プロジェクトのまとめとして.”</span> In
 <em>先端芸術音楽創作学会 会報</em>, 8:22–27. 4th series.
 </div>
-<div id="ref-Tanaka2017" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Tanaka2017" class="csl-entry" role="listitem">
 田中治久(hally). 2017. <em><span>チップチューンのすべて All About
 Chiptune: ゲーム機から生まれた新しい音楽</span></em>. 単行本.
 誠文堂新光社.
 </div>
-<div id="ref-Fukushima2021" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Fukushima2021" class="csl-entry" role="listitem">
 福島真人. 2021. <span>“ポスト・カント主義.”</span> In
 <em>科学技術社会学(STS)ーテクノサイエンス時代を航行するために
 (ワードマップ)</em>, edited by 日比野愛子, 鈴木舞, and 福島真人. 新曜社.
 </div>
-<div id="ref-Ma2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Ma2014" class="csl-entry" role="listitem">
 馬定延. 2014. <em>日本メディアアート史</em>. アルテスパブリッシング.
 </div>
 </div>

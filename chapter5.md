@@ -254,7 +254,7 @@ d1 $ sound "bd*4" # gain (every 3 (rev) $ "1 0.8 0.5 0.7")
 
 音楽プログラミングのプロセスをその表現の様式によらずモデル化したものとして、アンダーソンとキビラによるコンピューターを用いる音楽パフォーマンスのためのシステムを、彼らが開発したFORMULA（FORTH言語上に構築されたPLfM）を中心に分析した研究がある[@Anderson1990]。アンダーソンらは論文内で[@fig:andersonmodel]のように、コンピューターを用いた音楽生成を人間とコンピューターが作り出すフィードバックループ、いわゆるHuman In the Loopモデルとして捉えた。
 
-![Human In the Loopとしての音楽プログラミング言語の利用モデルを、言語を特徴付ける各要素、実際に現れる特徴で表した図。](../img/humanintheloop_model.pdf){width=100% #fig:humanintheloop}
+![Human In the Loopとしての音楽プログラミング言語の利用モデルを、言語を特徴付ける各要素、実際に現れる特徴で表した図。](../img/humanintheloop_model.png){width=100% #fig:humanintheloop}
 
 このアンダーソンらのモデルにおいて、Computer Systemに相当する部分がコンパイラ、Synthesizerに相当する部分がランタイムシステムだと捉えれば、ライブコーディングのような近年の対話的プログラミングの実行モデルとしてもよく当てはまるように思える。
 

@@ -212,9 +212,8 @@ class="header-section-number">5.3</span> PLfMの特徴を表す語彙の整理</
 <p>例えば、ブランドがChronicを開発するにあたってのモチベーションは音楽のための言語に存在する表現力の高さ（Expressiveness）と汎用性（Generality）のトレードオフの解消だった<span
 class="citation" data-cites="Brandt2002">(Brandt
 2002)</span>。それを説明したのが図 1である。</p>
-<figure>
-<img src="../img/chronic-tradeoff.png" id="fig:chronic-tradeoff"
-style="width:70.0%"
+<figure id="fig:chronic-tradeoff">
+<img src="../img/chronic-tradeoff.png" style="width:70.0%"
 alt="図 1: ブランドがChronicを開発するにあたって説明した、ExpressivenessとGeneralityのトレードオフ。(Brandt 2002)より引用。" />
 <figcaption aria-hidden="true">図 1:
 ブランドがChronicを開発するにあたって説明した、ExpressivenessとGeneralityのトレードオフ。<span
@@ -262,9 +261,8 @@ class="citation" data-cites="Mcpherson2020">(McPherson and Tahlroǧlu
 id="音楽プログラミング行為のモデル化と評価語彙の提示"><span
 class="header-section-number">5.4</span>
 音楽プログラミング行為のモデル化と評価語彙の提示</h2>
-<figure>
-<img src="../img/Anderson-model.png" id="fig:andersonmodel"
-style="width:75.0%"
+<figure id="fig:andersonmodel">
+<img src="../img/Anderson-model.png" style="width:75.0%"
 alt="図 2: アンダーソンとキビラによる音楽プログラミングのモデル。" />
 <figcaption aria-hidden="true">図 2:
 アンダーソンとキビラによる音楽プログラミングのモデル。</figcaption>
@@ -273,9 +271,9 @@ alt="図 2: アンダーソンとキビラによる音楽プログラミング�
 class="citation" data-cites="Anderson1990">(Anderson and Kuivila
 1990)</span>。アンダーソンらは論文内で図 2のように、コンピューターを用いた音楽生成を人間とコンピューターが作り出すフィードバックループ、いわゆるHuman
 In the Loopモデルとして捉えた。</p>
-<figure>
-<embed src="../img/humanintheloop_model.pdf" id="fig:humanintheloop"
-style="width:100.0%" />
+<figure id="fig:humanintheloop">
+<img src="../img/humanintheloop_model.png" style="width:100.0%"
+alt="図 3: Human In the Loopとしての音楽プログラミング言語の利用モデルを、言語を特徴付ける各要素、実際に現れる特徴で表した図。" />
 <figcaption aria-hidden="true">図 3: Human In the
 Loopとしての音楽プログラミング言語の利用モデルを、言語を特徴付ける各要素、実際に現れる特徴で表した図。</figcaption>
 </figure>
@@ -318,22 +316,22 @@ Cost）</strong>が存在する。</p>
 ![各特徴を編集時-実行時という観点と、空間的自由度-時間的自由度-効率性という観点で分類した図。](../img/diagram2.png){width=80% #fig:diagram2} -->
 <h3 data-number="5.4.1" id="各特徴間のトレードオフ"><span
 class="header-section-number">5.4.1</span> 各特徴間のトレードオフ</h3>
-<figure>
-<img src="../img/tradeoff.png" id="fig:tradeoff1" style="width:90.0%"
+<figure id="fig:tradeoff1">
+<img src="../img/tradeoff.png" style="width:90.0%"
 alt="図 4: 図 3の図における特徴間に存在するトレードオフを表した図。" />
 <figcaption aria-hidden="true">図 4:
 図 3の図における特徴間に存在するトレードオフを表した図。</figcaption>
 </figure>
 <p>これら8つの特徴全てを同時に改善することは根本的に難しい。少なくとも、全ての要素を改善しようと思えばそれだけ開発のコストは増大してしまうことは直感的に納得できるだろう。それ以外に存在するトレードオフには、コンパイラからランタイムに渡される中間表現の抽象度が大きく影響してくる。</p>
 <p>図 4でそれを説明する。この中で、学習のしやすさとコーディングコストについてはシンタックスとセマンティクスのデザイン、ドキュメンテーションやコミュニティの充実度合いに大きく影響を受け中間表現の粒度からは独立したものであるため除外して考えている。また、コンパイル時や実行時、開発時のコストに関する矢印の向きに関しては、一般的に少なくできる方が良いためLowの側に矢印を向けていることに注意されたい。</p>
-<figure>
-<img src="../img/tradeoff2.png" id="fig:tradeoff2" style="width:90.0%"
+<figure id="fig:tradeoff2">
+<img src="../img/tradeoff2.png" style="width:90.0%"
 alt="図 5: UGenインタプリタのような、粒度の大きい中間表現を用いる言語の特性を表した図。" />
 <figcaption aria-hidden="true">図 5:
 UGenインタプリタのような、粒度の大きい中間表現を用いる言語の特性を表した図。</figcaption>
 </figure>
-<figure>
-<img src="../img/tradeoff3.png" id="fig:tradeoff3" style="width:90.0%"
+<figure id="fig:tradeoff3">
+<img src="../img/tradeoff3.png" style="width:90.0%"
 alt="図 6: 粒度の大きい中間表現のプラットフォーム非依存性を上げようとすると開発コストが増大することを示した図。" />
 <figcaption aria-hidden="true">図 6:
 粒度の大きい中間表現のプラットフォーム非依存性を上げようとすると開発コストが増大することを示した図。</figcaption>
@@ -341,14 +339,14 @@ alt="図 6: 粒度の大きい中間表現のプラットフォーム非依存�
 <p>まず、コンパイル時のコストと実行時コストは一般的には相補的な関係にある。なぜなら、実行時のコストの低下は一般的に、実行するプログラムの形式を機械語に近い形式へと変換する作業によってなされるためである。そのため、中間表現の粒度が大きいほどコンパイルコストは下がり、代わりに実行時のコストが嵩む。中間表現の粒度が上がるほど、コンパイル-実行という区別が付きづらいインタプリタ型の言語に近付いていくという表現もできる。</p>
 <p>また、中間表現の粒度が小さくなるほどプラットフォーム非依存性は一般的に上がっていく。例えばFaustはブロックダイアグラム代数のデータをC言語やRust、LLVM
 IR、WebAssemblyと言った様々な形式に変換できるため、同じコードを幅広いプラットフォームで動作させることができる。</p>
-<figure>
-<img src="../img/tradeoff4.png" id="fig:tradeoff4" style="width:90.0%"
+<figure id="fig:tradeoff4">
+<img src="../img/tradeoff4.png" style="width:90.0%"
 alt="図 7: Faustのような、粒度の細かい中間表現を用いる言語の特性を表した図。" />
 <figcaption aria-hidden="true">図 7:
 Faustのような、粒度の細かい中間表現を用いる言語の特性を表した図。</figcaption>
 </figure>
-<figure>
-<img src="../img/tradeoff5.png" id="fig:tradeoff5" style="width:90.0%"
+<figure id="fig:tradeoff5">
+<img src="../img/tradeoff5.png" style="width:90.0%"
 alt="図 8: 粒度の小さな中間表現の言語で動的変更をしやすくしようとすると開発コストが増大することを示した図。" />
 <figcaption aria-hidden="true">図 8:
 粒度の小さな中間表現の言語で動的変更をしやすくしようとすると開発コストが増大することを示した図。</figcaption>
@@ -376,31 +374,31 @@ Algebra、LLVM
 IRというようにより機械語へ近いレベルへ下げていくと、一般的に表現可能な範囲が広まり、実行性能が良くなるといった利点があるが、コンパイルの過程がより汎用プログラミング言語のそれに近づき複雑化する、コードのプラットフォームをまだいだ可搬性が下がる、コードを動的に部分変更することが難しくなるといった根本的トレードオフが存在する。</p>
 <p>このトレードオフを両立することは不可能ではないが、必然的に言語の構造そのものが複雑化することに繋がる他、その言語の実装過程そのものに音楽的要素が無くなることから、開発者にとってはドメイン固有言語を実装モチベーションを下げることにも繋がるという問題があった。</p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-role="doc-bibliography">
-<div id="ref-Anderson1990" class="csl-entry" role="doc-biblioentry">
+data-entry-spacing="0" role="list">
+<div id="ref-Anderson1990" class="csl-entry" role="listitem">
 Anderson, David P., and Ron Kuivila. 1990. <span>“<span class="nocase">A
 System for Computer Music Performance</span>.”</span> <em>ACM
 Transactions on Computer Systems (TOCS)</em> 8 (1): 56–82. <a
 href="https://doi.org/10.1145/77648.77652">https://doi.org/10.1145/77648.77652</a>.
 </div>
-<div id="ref-Bencina2011" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Bencina2011" class="csl-entry" role="listitem">
 Bencina, Ross. 2011. <span>“Programming 101: Time Waits for
 Nothing.”</span> 2011. <a
 href="http://www.rossbencina.com/code/real-time-audio-programming-101-time-waits-for-nothing">http://www.rossbencina.com/code/real-time-audio-programming-101-time-waits-for-nothing</a>.
 </div>
-<div id="ref-Brandt2002" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Brandt2002" class="csl-entry" role="listitem">
 Brandt, Eli. 2002. <span>“<span class="nocase">Temporal type
 constructors for computer music programming</span>.”</span> PhD Thesis,
 School of Computer Science, Carnegie Mellon University.
 </div>
-<div id="ref-Coblenz2018" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Coblenz2018" class="csl-entry" role="listitem">
 Coblenz, Michael, Jonathan Aldrich, Brad A Myers, Joshua Sunshine, and
 Joshua Sun. 2018. <span>“<span>Interdisciplinary Programming Language
 Design</span>.”</span> In <em>Proceedings of the 2018 ACM SIGPLAN
 International Symposium on New Ideas, New Paradigms, and Reflections on
 Programming and Software</em>, 14. New York, NY, USA: ACM.
 </div>
-<div id="ref-Racket" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Racket" class="csl-entry" role="listitem">
 Culpepper, Ryan, Matthias Felleisen, Matthew Flatt, and Shriram
 Krishnamurthi. 2019. <span>“<span class="nocase">From macros to DSLs:
 The evolution of racket</span>.”</span> In <em>Leibniz International
@@ -408,32 +406,32 @@ Proceedings in Informatics, LIPIcs</em>. Vol. 136. Schloss Dagstuhl-
 Leibniz-Zentrum fur Informatik GmbH, Dagstuhl Publishing. <a
 href="https://doi.org/10.4230/LIPIcs.SNAPL.2019.5">https://doi.org/10.4230/LIPIcs.SNAPL.2019.5</a>.
 </div>
-<div id="ref-Dannenberg2018" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Dannenberg2018" class="csl-entry" role="listitem">
 Dannenberg, Roger B. 2018. <span>“<span class="nocase">Languages for
 Computer Music</span>.”</span> <em>Frontiers in Digital Humanities</em>
 5 (November). <a
 href="https://doi.org/10.3389/fdigh.2018.00026">https://doi.org/10.3389/fdigh.2018.00026</a>.
 </div>
-<div id="ref-Lazzarini2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Lazzarini2013" class="csl-entry" role="listitem">
 Lazzarini, Victor. 2013. <span>“<span class="nocase">The Development of
 Computer Music Programming Systems</span>.”</span> <em>Journal of New
 Music Research</em> 42 (1): 97–110. <a
 href="https://doi.org/10.1080/09298215.2013.778890">https://doi.org/10.1080/09298215.2013.778890</a>.
 </div>
-<div id="ref-Markstrum2010" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Markstrum2010" class="csl-entry" role="listitem">
 Markstrum, Shane. 2010. <span>“<span class="nocase">Staking claims: A
 history of programming language design claims and evidence: A positional
 work in progress</span>.”</span> <em>Evaluation and Usability of
 Programming Languages and Tools, PLATEAU’10</em>. <a
 href="https://doi.org/10.1145/1937117.1937124">https://doi.org/10.1145/1937117.1937124</a>.
 </div>
-<div id="ref-McCartney2002" class="csl-entry" role="doc-biblioentry">
+<div id="ref-McCartney2002" class="csl-entry" role="listitem">
 McCartney, James. 2002. <span>“<span class="nocase">Rethinking the
 computer music language: SuperCollider</span>.”</span> <em>Computer
 Music Journal</em> 26 (4): 61–68. <a
 href="https://doi.org/10.1162/014892602320991383">https://doi.org/10.1162/014892602320991383</a>.
 </div>
-<div id="ref-McLean2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-McLean2014" class="csl-entry" role="listitem">
 McLean, Alex. 2014. <span>“<span class="nocase">Making programming
 languages to dance to: Live coding with tidal</span>.”</span> In
 <em>FARM 2014 - Proceedings of the 2014 ACM SIGPLAN International
@@ -441,18 +439,18 @@ Workshop on Functional Art, Music, Modelling and Design</em>, 63–70. New
 York, New York, USA: Association for Computing Machinery. <a
 href="https://doi.org/10.1145/2633638.2633647">https://doi.org/10.1145/2633638.2633647</a>.
 </div>
-<div id="ref-Mcpherson2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Mcpherson2020" class="csl-entry" role="listitem">
 McPherson, Andrew, and Koray Tahlroǧlu. 2020. <span>“<span
 class="nocase">Idiomatic Patterns and Aesthetic Influence in Computer
 Music Languages</span>.”</span> <em>Organised Sound</em> 25 (1): 53–63.
 <a
 href="https://doi.org/10.1017/S1355771819000463">https://doi.org/10.1017/S1355771819000463</a>.
 </div>
-<div id="ref-mohayonao" class="csl-entry" role="doc-biblioentry">
+<div id="ref-mohayonao" class="csl-entry" role="listitem">
 mohayonao. 2015. <span>“<span>CoffeeCollider</span>.”</span> <a
 href="http://mohayonao.github.io/CoffeeCollider/">http://mohayonao.github.io/CoffeeCollider/</a>.
 </div>
-<div id="ref-Muller2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Muller2020" class="csl-entry" role="listitem">
 Muller, Stefan K., and Hannah Ringler. 2020. <span>“<span
 class="nocase">A Rhetorical Framework for Programming Language
 evaluation</span>.”</span> In <em>Onward! 2020 - Proceedings of the 2020
@@ -462,30 +460,30 @@ Reflections on Programming and Software, Co-Located with SPLASH
 Machinery, Inc. <a
 href="https://doi.org/10.1145/3426428.3426927">https://doi.org/10.1145/3426428.3426927</a>.
 </div>
-<div id="ref-Orlarey2004" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Orlarey2004" class="csl-entry" role="listitem">
 Orlarey, Yann, Dominique Fober, and Stéphane Letz. 2004. <span>“<span
 class="nocase">Syntactical and semantical aspects of
 Faust</span>.”</span> <em>Soft Computing</em> 8 (9): 623–32. <a
 href="https://doi.org/10.1007/s00500-004-0388-1">https://doi.org/10.1007/s00500-004-0388-1</a>.
 </div>
-<div id="ref-Spinellis2001" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Spinellis2001" class="csl-entry" role="listitem">
 Spinellis, Diomidis. 2001. <span>“<span class="nocase">Notable design
 patterns for domain-specific languages</span>.”</span> <em>Journal of
 Systems and Software</em> 56 (1): 91–99. <a
 href="https://doi.org/10.1016/S0164-1212(00)00089-3">https://doi.org/10.1016/S0164-1212(00)00089-3</a>.
 </div>
-<div id="ref-tonejs" class="csl-entry" role="doc-biblioentry">
+<div id="ref-tonejs" class="csl-entry" role="listitem">
 <span>“<span class="nocase">Tone.js</span>.”</span> 2021. <a
 href="https://tonejs.github.io/">https://tonejs.github.io/</a>.
 </div>
-<div id="ref-Wakefield2010" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Wakefield2010" class="csl-entry" role="listitem">
 Wakefield, Graham, Wesley Smith, and Charles Roberts. 2010.
 <span>“<span>LuaAV</span>: Extensibility and Heterogeneity for
 Audiovisual Computing.”</span> In <em>Proceeding of Linux Audio
 Conference</em>.
 </div>
 <div id="ref-UnderstandingComputation" class="csl-entry"
-role="doc-biblioentry">
+role="listitem">
 スチュアートトム. 2014.
 <em><span>アンダースタンディングコンピュテーション
 ―単純な機械から不可能なプログラムまで</span></em>. Translated by
@@ -540,7 +538,7 @@ href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </section>
 
 <style>pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -551,7 +549,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }

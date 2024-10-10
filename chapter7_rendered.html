@@ -31,8 +31,8 @@ Technologies</em>）を用いるものは常に、その技術が発展した先
 <p>だが、本研究ではここからさらに、テクノロジーを用いる芸術実践において<strong>単に批評的目線を持つことや意図的な誤用だけでは未だ不十分である</strong>という付け足しを行う必要がある。なぜなら、テクノロジーを誤用するということは、暗に現時点における「正当な」テクノロジーの存在を追認することにつながるからだ。</p>
 <p>人工知能やメタバース、NFTといったテクノロジーを批判的に用いることで、芸術家は社会や芸術にとってそうした技術に関する問いを提示し、議論を巻き起こしてくれるかもしれない。しかしそこで行われる議論は常に、どこかの大企業や研究所、あるいはサトシ・ナカモトのような、テクノロジーを生み出す知らない誰かによって外部からもたらされている状況でもある。その状況では既に、与えられたものに対して必要か否か、オルタナティブは何か、といった受動的な反応しかできない。その時「人工知能」や「メタバース」と言った鉤括弧付きの言葉に当てはまる、根本的なテクノロジーを自らの手で生み出すことができるという想像力は奪い取られてしまっているのだ。言い換えるならば、アーティストは社会の中で外部からやってきたものに対して抗体として違和感＝アレルギー反応を引き起こす。だが裏を返せば、<strong>常に何かが外部からやってきた後にしか反応できない</strong>。わたしたちはテクノロジーを積極的に活用したつもりになっていて、その実誰かが生み出したより根本的なテクノロジーに脊髄反射を引き起こしているだけではないのだろうか？</p>
 <p>テクノロジーの誤用によってその可能性をより広げるというアプローチや、ダンとレイビーがスペキュラティブ・デザインで掲げたような（そして元々はサイモンが「システムの科学」で提言したような）、「世界をより好ましい方向へ近づける」という未来への指向は、どちらも近傍探索にしかなりえないという意味で共通している。だが、もっとも好ましい未来が必ずしも近傍に存在しているとは限らない。こうした近傍探索的アプローチと、本研究の考え方の違いを表したのが図 1である。</p>
-<figure>
-<img src="../img/wildpath.png" id="fig:wildpath" style="width:100.0%"
+<figure id="fig:wildpath">
+<img src="../img/wildpath.png" style="width:100.0%"
 alt="図 1: 分岐するテクノロジーに対して、テクノロジーの意図的誤用という方法論と、あり得たかもしれない現在へのけもの道を作るという本研究の立ち位置の違いを概念化した図。(Auger 2010)、(Buechley 2011)、(ダン and レイビー 2015)をもとに作図。" />
 <figcaption aria-hidden="true">図 1:
 分岐するテクノロジーに対して、テクノロジーの意図的誤用という方法論と、あり得たかもしれない現在へのけもの道を作るという本研究の立ち位置の違いを概念化した図。<span
@@ -69,15 +69,15 @@ role="doc-noteref"><sup>1</sup></a>という、初心者にとっては直感的
 <p>この状況を説明した図が図 2と図 3である。まず<strong>いびつな階段モデル</strong>（図 2）が各ドメインごとに使う言語を分ける、現状のMulti-Languageパラダイムに基づく言語の使用と開発においてそれぞれの経験の差が発生していることを概念的に表したものだ。（なおScore-Orchestra-InstrumentはMUSIC
 NやCsoundで用いられた用語だが、MaterialやAtomはあくまでメタファーとして独自に用いている）。言うなればInstrumentというUGenをC言語などでプログラミングする作業がMaterialレベルのプログラム、さらにC言語のコンパイラそのものを作るような作業がAtomレベルのプログラムとでも表現できる。一方、<strong>突然急になる坂モデル</strong>（図 3）がmimiumやKronosのようなブラックボックスを減らし、ライブラリとしての実装の役割を広げた言語に対応する。天井と床、つまり高レベルの抽象化と低レイヤーへのアクセス可能性は広がっているし、各言語間に存在した差異もなだらかになっている一方、言語を作ることそのものの難易度は、音声信号処理に関わる知識も求められるために、C言語など汎用言語よりも多くの理論的背景を必要とし難易度が高くなってしまう。</p>
 <p>つまり、音楽のためのプログラミング言語を作るという作業は、ひとつの言語の表現力を高めていこうとすると最終的に「音楽のためのライブラリを作りやすい汎用言語を作る」と「その言語上でライブラリを作る」という2つの行為へと分裂してしまう。そして、両者で求められるスキルや関心も大きく異なるものとなってしまい、ある意味ではMulti-Languageパラダイムよりも一層分業化を進めてしまうのである。</p>
-<figure>
-<img src="../img/ladder1.png" id="fig:ladder1" style="width:80.0%"
+<figure id="fig:ladder1">
+<img src="../img/ladder1.png" style="width:80.0%"
 alt="図 2: 従来のMulti-Languageパラダイムに基づく言語におけるプログラミングの学習経験の差を「いびつな階段」 として概念的に表した図。" />
 <figcaption aria-hidden="true">図 2:
 従来のMulti-Languageパラダイムに基づく言語におけるプログラミングの学習経験の差を「いびつな階段」
 として概念的に表した図。</figcaption>
 </figure>
-<figure>
-<img src="../img/ladder2.png" id="fig:ladder2" style="width:80.0%"
+<figure id="fig:ladder2">
+<img src="../img/ladder2.png" style="width:80.0%"
 alt="図 3: mimiumのようなブラックボックスを減らし、ライブラリとしての実装の役割を広げた言語における学習経験の差を「突然急になる坂」 として概念的に表した図。" />
 <figcaption aria-hidden="true">図 3:
 mimiumのようなブラックボックスを減らし、ライブラリとしての実装の役割を広げた言語における学習経験の差を「突然急になる坂」
@@ -222,62 +222,62 @@ Engineeringの語の批判的検証がなされるだろう。その先にはあ
 MusicやYY of
 ZZのような、その時代における何かしらノイジーな学問であるはずだ。</p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-role="doc-bibliography">
-<div id="ref-Ruratae2014" class="csl-entry" role="doc-biblioentry">
+data-entry-spacing="0" role="list">
+<div id="ref-Ruratae2014" class="csl-entry" role="listitem">
 Allen, Andrew Stewert. 2014. <span>“Ruratae: A Physics-Based Audio
 Engine Permalink.”</span> PhD thesis, University of California, San
 Diego. <a
 href="https://escholarship.org/uc/item/2cq7z9kv">https://escholarship.org/uc/item/2cq7z9kv</a>.
 </div>
-<div id="ref-Atherton2018" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Atherton2018" class="csl-entry" role="listitem">
 Atherton, Jack, and Ge Wang. 2018. <span>“Chunity : Integrated
 Audiovisual Programming in Unity.”</span> In <em>Proceedings of New
 Interfaces for Musical Expression</em>, 102–7. Blacksburg, Virginia,
 <span>US</span>.
 </div>
-<div id="ref-Auger2010" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Auger2010" class="csl-entry" role="listitem">
 Auger, James. 2010. <span>“Alternative Presents and Speculative Futures:
 Designing Fictions Through the Extrapolation and Evasion of Product
 Lineages.”</span> <em>Negotiating Futures ? Design Fiction.</em> 6
 (October): 42–57. <a
 href="https://researchonline.rca.ac.uk/1093/">https://researchonline.rca.ac.uk/1093/</a>.
 </div>
-<div id="ref-Buechley2011" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Buechley2011" class="csl-entry" role="listitem">
 Buechley, Leah. 2011. <span>“Improvement? And Sideway Inventions:
 Alternatiec Technology Narratives.”</span> Philadelphia,
 <span>PA</span>. <a
 href="https://web.archive.org/web/20130905172323/http://www.sketching11.com/presentations/leahB_sketching_11.pdf">https://web.archive.org/web/20130905172323/http://www.sketching11.com/presentations/leahB_sketching_11.pdf</a>.
 </div>
-<div id="ref-Lowgren2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Lowgren2013" class="csl-entry" role="listitem">
 Löwgren, Jonas. 2013. <span>“Annotated Portfolios and Other Forms of
 Intermediate-Level Knowledge.”</span> <em>Interactions</em> 20 (1):
 30–34. <a
 href="https://doi.org/10.1145/2405716.2405725">https://doi.org/10.1145/2405716.2405725</a>.
 </div>
-<div id="ref-Manovich2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Manovich2013" class="csl-entry" role="listitem">
 Manovich, Lev. 2013. <em>Software Takes Command: Extending the Language
 of New Media (International Texts in Critical Media Aesthetics)</em>.
 Bloomsbury USA Academic.
 </div>
-<div id="ref-Moody2018" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Moody2018" class="csl-entry" role="listitem">
 Moody, Niall. 2018. <span>“LibPd Unity Integration: A Libpd Wrapper for
 Unity.”</span> <a
 href="https://rke.abertay.ac.uk/en/publications/libpd-unity-integration-a-libpd-wrapper-for-unity">https://rke.abertay.ac.uk/en/publications/libpd-unity-integration-a-libpd-wrapper-for-unity</a>.
 </div>
-<div id="ref-Puckette2015" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Puckette2015" class="csl-entry" role="listitem">
 Puckette, Miller S. 2015. <span>“<span class="nocase">The Sampling
 Theorem and Its Discontents</span>.”</span> <em>International Computer
 Music Conference</em>, 1–14. <a
 href="http://msp.ucsd.edu/Publications/icmc15.pdf">http://msp.ucsd.edu/Publications/icmc15.pdf</a>.
 </div>
-<div id="ref-Resnick2009" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Resnick2009" class="csl-entry" role="listitem">
 Resnick, Mitchel, John Maloney, Andrés Monroy-Hernández, Natalie Rusk,
 Evelyn Eastmond, Karen Brennan, Amon Millner, et al. 2009.
 <span>“Scratch: Programming for All.”</span> <em>Communications of the
 <span>ACM</span></em> 52 (11): 60–67. <a
 href="https://doi.org/10.1145/1592761.1592779">https://doi.org/10.1145/1592761.1592779</a>.
 </div>
-<div id="ref-Sumii2005" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Sumii2005" class="csl-entry" role="listitem">
 Sumii, Eijiro. 2005. <span>“<span class="nocase">MinCaml: A simple and
 efficient compiler for a minimal functional language</span>.”</span> In
 <em>FDPE’05 - Proceedings of the ACM SIGPLAN 2005 Workshop on Functional
@@ -285,42 +285,42 @@ and Declarative Programming in Education</em>, 27–38. New York, New
 York, USA: ACM Press. <a
 href="https://doi.org/10.1145/1085114.1085122">https://doi.org/10.1145/1085114.1085122</a>.
 </div>
-<div id="ref-Sweet2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Sweet2014" class="csl-entry" role="listitem">
 Sweet, Michael. 2014. <em>Writing Interactive Music for Video Games: A
 Composer’s Guide</em>. Addison-Wesley Professional.
 </div>
-<div id="ref-Ueyama2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Ueyama2020" class="csl-entry" role="listitem">
 Ueyama, Rui. 2020.
 <span>“低レイヤを知りたい人のためのCコンパイラ作成入門.”</span> March
 16, 2020. <a
 href="https://www.sigbus.info/compilerbook#">https://www.sigbus.info/compilerbook#</a>.
 </div>
-<div id="ref-Attali1983" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Attali1983" class="csl-entry" role="listitem">
 アタリジャック. 1983. <em>情報とエネルギーの人間科学ー言葉と道具</em>.
 Translated by 平田清明 and 斉藤日出治.
 </div>
-<div id="ref-Small2011" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Small2011" class="csl-entry" role="listitem">
 スモールクリストファー. 2011.
 <em>ミュージッキングー音楽は<span>“行為”</span>である</em>. Translated
 by 野澤豊一 and 西島千尋. 水声社.
 </div>
-<div id="ref-Dunne2015" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Dunne2015" class="csl-entry" role="listitem">
 ダンアンソニー, and レイビーフィオナ. 2015.
 <em>スペキュラティヴ・デザイン</em>. Translated by 千葉敏生 and
 久保田晃弘. <span>ビー・エヌ・エヌ新社</span>.
 </div>
-<div id="ref-Matsumoto2014" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Matsumoto2014" class="csl-entry" role="listitem">
 まつもとゆきひろ. 2016. <em><span>まつもとゆきひろ
 言語のしくみ</span></em>. 日経BP.
 </div>
-<div id="ref-Kubota2021b" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Kubota2021b" class="csl-entry" role="listitem">
 久保田晃弘. 2021. <span>“Make: Japan <span></span>
 ものをつくらないものづくり #11 —
 スペキュラティヴ・デザイン（を超えるため）の原則. Make: Japan.”</span>
 August 16, 2021. <a
 href="https://makezine.jp/blog/2021/08/make_without_making_11.html">https://makezine.jp/blog/2021/08/make_without_making_11.html</a>.
 </div>
-<div id="ref-Shirayanagi2017" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Shirayanagi2017" class="csl-entry" role="listitem">
 白柳亨. 2017. <span>“知っておきたいキーワード 第118回
 オブジェクトオーディオ.”</span> <em>映像情報メディア学会誌</em> 71 (6):
 846–48. <a

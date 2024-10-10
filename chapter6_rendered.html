@@ -39,7 +39,7 @@ href="../chapter5_rendered#tradeoff5">5つ目の図</a>にあたる）。</p>
 <col style="width: 12%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;"></th>
 <th style="text-align: center;">Pd/SC</th>
 <th style="text-align: center;">ChucK</th>
@@ -51,7 +51,7 @@ href="../chapter5_rendered#tradeoff5">5つ目の図</a>にあたる）。</p>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">スケジューラ</td>
 <td style="text-align: center;">◯</td>
 <td style="text-align: center;">○</td>
@@ -61,7 +61,7 @@ href="../chapter5_rendered#tradeoff5">5つ目の図</a>にあたる）。</p>
 <td style="text-align: center;">○</td>
 <td style="text-align: center;">○</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">サンプル精度スケジューリング</td>
 <td style="text-align: center;">-</td>
 <td style="text-align: center;">○</td>
@@ -71,7 +71,7 @@ href="../chapter5_rendered#tradeoff5">5つ目の図</a>にあたる）。</p>
 <td style="text-align: center;">○</td>
 <td style="text-align: center;">○</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">低レベルなUGenの定義</td>
 <td style="text-align: center;">-</td>
 <td style="text-align: center;">○</td>
@@ -81,7 +81,7 @@ href="../chapter5_rendered#tradeoff5">5つ目の図</a>にあたる）。</p>
 <td style="text-align: center;">○</td>
 <td style="text-align: center;">○</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">DSPコードのJITコンパイル</td>
 <td style="text-align: center;">-</td>
 <td style="text-align: center;">-</td>
@@ -91,7 +91,7 @@ href="../chapter5_rendered#tradeoff5">5つ目の図</a>にあたる）。</p>
 <td style="text-align: center;">○</td>
 <td style="text-align: center;">○</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">UGen内部状態の関数型表現</td>
 <td style="text-align: center;">-</td>
 <td style="text-align: center;">-</td>
@@ -196,12 +196,11 @@ class="citation" data-cites="Lattner2004">(Lattner and Adve
 2004)</span>を利用する。</p>
 <p>ソースコードのテキストデータは、まず抽象構文木（AST）に解析され、シンタックスシュガーを変換した後、ASTはラムダ計算ベースの木構造に変換される。次に、型推論、型検査を行い、すべての変数の型を決定する。ASTは、型情報とともに、すべての変数が一度だけ割り当てられる静的単一代入（SSA）形式の中間表現に変換される。この段階ではまだ関数の入れ子定義が可能になっているので、関数定義から自由変数を取り除くためにクロージャ変換が行われる。</p>
 <p>クロージャ変換と低レベルコード（LLVM
-IR：LLVMで利用される、C言語とアセンブリ言語の中間程度の抽象度を持つ形式）の生成器の間には、mimiumの独自仕様である状態を伴う関数（章 0.4.2.2）のための状態変数の検出を行う。この変換では、<code>dsp</code>関数を信号処理のエントリポイントとして、関数が使用する状態変数を、呼び出された状態付き関数名のノードと関数内で使われる状態変数の型を持つ木構造（図中の<em>State
+IR：LLVMで利用される、C言語とアセンブリ言語の中間程度の抽象度を持つ形式）の生成器の間には、mimiumの独自仕様である状態を伴う関数（章 4.2.2）のための状態変数の検出を行う。この変換では、<code>dsp</code>関数を信号処理のエントリポイントとして、関数が使用する状態変数を、呼び出された状態付き関数名のノードと関数内で使われる状態変数の型を持つ木構造（図中の<em>State
 Tree</em>）のデータとして出力する。最後に、クロージャ変換されたIRとState
 TreeをもとにLLVM IRを生成する。</p>
-<figure>
-<img src="../img/mimium-arch-v4-affinity.png" id="fig:arch"
-style="width:100.0%"
+<figure id="fig:arch">
+<img src="../img/mimium-arch-v4-affinity.png" style="width:100.0%"
 alt="図 1: mimiumのコンパイラとランタイムのアーキテクチャの構成。" />
 <figcaption aria-hidden="true">図 1:
 mimiumのコンパイラとランタイムのアーキテクチャの構成。</figcaption>
@@ -254,11 +253,11 @@ class="sourceCode lisp"><code class="sourceCode commonlisp"><span id="cb4-1"><a 
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>(define playN</span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    (<span class="kw">lambda</span> (duration)</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>            (setN <span class="dv">1</span>)</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>            (callback (<span class="op">+</span> now duration) &#39;setN <span class="dv">0</span>)))</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>            (callback (<span class="op">+</span> now duration) <span class="dt">&#39;setN</span> <span class="dv">0</span>)))</span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>(define Nloop</span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  (<span class="kw">lambda</span> (period)</span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        (playN <span class="dv">50</span>)</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        (callback (<span class="op">+</span> (now) (<span class="kw">if</span> (<span class="kw">random</span> <span class="op">&gt;</span> <span class="dv">0</span>) (<span class="op">/</span> period <span class="dv">2</span>) period)) &#39;Nloop period)))</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        (callback (<span class="op">+</span> (now) (<span class="kw">if</span> (<span class="kw">random</span> <span class="op">&gt;</span> <span class="dv">0</span>) (<span class="op">/</span> period <span class="dv">2</span>) period)) <span class="dt">&#39;Nloop</span> period)))</span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>(Nloop <span class="dv">12000</span>)</span></code></pre></div>
 </div>
 <p>コード 3の場合、<code>ntrigger</code>という変数は、<code>Nloop</code>という関数が呼ばれるたびに書き換えられる。
@@ -418,8 +417,8 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb11-1"><a href=
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>scaleTwopi(input) <span class="op">=</span> input <span class="op">*</span> <span class="dv">2</span> <span class="op">*</span> <span class="dv">3.141595</span><span class="op">;</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>osc(freq) <span class="op">=</span> freq<span class="op">:</span>phasor<span class="op">:</span>scaleTwopi <span class="op">:</span> cos<span class="op">;</span></span></code></pre></div>
 </div>
-<figure>
-<img src="../img/max-osc-example.png" id="fig:maxexample"
+<figure id="fig:maxexample">
+<img src="../img/max-osc-example.png"
 alt="図 2: Maxでのデータフロー的表現の例。" />
 <figcaption aria-hidden="true">図 2:
 Maxでのデータフロー的表現の例。</figcaption>
@@ -573,7 +572,7 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb17-1"><a href=
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </div>
 <p><span id="eq:label"><span
-class="math display"><em>λ</em> <em>i</em><em>n</em><em>c</em><em>l</em>.<em>f</em><em>e</em><em>e</em><em>d</em> <em>s</em><em>e</em><em>l</em><em>f</em>.(<em>i</em><em>n</em><em>c</em><em>l</em>+<em>s</em><em>e</em><em>l</em><em>f</em>)   (1)</span></span></p>
+class="math display"><em>λ</em> <em>i</em><em>n</em><em>c</em><em>l</em>.<em>f</em><em>e</em><em>e</em><em>d</em> <em>s</em><em>e</em><em>l</em><em>f</em>.(<em>i</em><em>n</em><em>c</em><em>l</em> + <em>s</em><em>e</em><em>l</em><em>f</em>)   (1)</span></span></p>
 <!-- \begin{equation}
 \lambda \ incl.feed \ self.(incl+self)
 \label{eq:label}
@@ -601,8 +600,8 @@ class="citation" data-cites="Gaster2018">(Gaster, Renney, and Mitchell
 <p>これら4種類の時間に関わる計算モデルを統合するような研究は未だ行われていない。その上、仮にもし時間を含めた計算モデルがあったとしても、現代で使われているコンピューターの構造自体、特にOSのスケジューラーなどの実行タイミングの不確定性から逃れることはどの道できない。</p>
 <p>そのため、なるべく可能な表現範囲の広いPLfMを設計するには、まず未だ確たるものが存在しない時間を考慮した抽象計算モデルを考慮に入れた意味論の設計を行う必要がある。その上で、ハードウェアやOSと言った、現状存在しているインフラストラクチャ上で動くランタイムプログラムの工夫などで実行モデルとインフラストラクチャの不一致をつなぎ合わせるという、常に暫定解を探し続ける必要がある。</p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-role="doc-bibliography">
-<div id="ref-Aaron2013" class="csl-entry" role="doc-biblioentry">
+data-entry-spacing="0" role="list">
+<div id="ref-Aaron2013" class="csl-entry" role="listitem">
 Aaron, Samuel, and Alan F. Blackwell. 2013. <span>“<span
 class="nocase">From Sonic Pi to overtone: Creative musical experiences
 with domain-specific and functional languages</span>.”</span>
@@ -610,7 +609,7 @@ with domain-specific and functional languages</span>.”</span>
 Functional Programming, ICFP</em>, 35–46. <a
 href="https://doi.org/10.1145/2505341.2505346">https://doi.org/10.1145/2505341.2505346</a>.
 </div>
-<div id="ref-Arias2021" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Arias2021" class="csl-entry" role="listitem">
 Arias, Emilio Jesús Gallego, Pierre Jouvelot, Sylvain Ribstein, and
 Dorian Desblancs. 2021. <span>“The w-Calculus: A Synchronous Framework
 for the Verified Modelling of Digital Signal Processing
@@ -619,14 +618,14 @@ Algorithms.”</span> <em>Proceedings of the 9th <span>ACM</span>
 Modelling, and Design</em> 12 (August): 35–46. <a
 href="https://doi.org/10.1145/3471872.3472970">https://doi.org/10.1145/3471872.3472970</a>.
 </div>
-<div id="ref-Dannenberg2005" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Dannenberg2005" class="csl-entry" role="listitem">
 Dannenberg, Roger B., and Ross Bencina. 2005. <span>“<span
 class="nocase">Design Patterns for Real-Time Computer Music
 Systems</span>.”</span> In <em>ICMC 2005 Workshop on Real Time Systems
 Concepts for Computer Music</em>. <a
 href="https://www.researchgate.net/publication/242648768_Design_Patterns_for_Real-Time_Computer_Music_Systems">https://www.researchgate.net/publication/242648768_Design_Patterns_for_Real-Time_Computer_Music_Systems</a>.
 </div>
-<div id="ref-Ganz2001" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Ganz2001" class="csl-entry" role="listitem">
 Ganz, Steven E., Amr Sabry, and Walid Taha. 2001. <span>“<span
 class="nocase">Macros as multi-stage computations: Type-safe,
 generative, binding macros in MacroML</span>.”</span> <em>SIGPLAN
@@ -634,7 +633,7 @@ Notices (ACM Special Interest Group on Programming Languages)</em> 36
 (10): 74–85. <a
 href="https://doi.org/10.1145/507669.507646">https://doi.org/10.1145/507669.507646</a>.
 </div>
-<div id="ref-Gaster2018" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Gaster2018" class="csl-entry" role="listitem">
 Gaster, Benedict R, Nathan Renney, and Tom Mitchell. 2018.
 <span>“<span>OUTSIDE</span> <span>THE</span> <span>BLOCK</span>
 <span>SYNDICATE</span>: <span>TRANSLATING</span> <span>FAUST</span>’s
@@ -643,24 +642,24 @@ Gaster, Benedict R, Nathan Renney, and Tom Mitchell. 2018.
 <em>Proceedings of the 1st International Faust Conference</em>.
 Mainz,Germany.
 </div>
-<div id="ref-Graf2010" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Graf2010" class="csl-entry" role="listitem">
 Gräf, Albert. 2010. <span>“<span class="nocase">Term Rewriting Extension
 for the Faust Programming Language</span>.”</span> In <em>International
 Linux Audio Conference</em>. <a
 href="https://hal.archives-ouvertes.fr/hal-03162973 https://hal.archives-ouvertes.fr/hal-03162973/document">https://hal.archives-ouvertes.fr/hal-03162973
 https://hal.archives-ouvertes.fr/hal-03162973/document</a>.
 </div>
-<div id="ref-Jouvelot2011" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Jouvelot2011" class="csl-entry" role="listitem">
 Jouvelot, Pierre, and Yann Orlarey. 2011. <span>“Dependent Vector Types
 for Data Structuring in Multirate Faust.”</span> <em>Computer Languages,
 Systems &amp; Structures</em> 37 (3): 113–31.
 </div>
-<div id="ref-Klabnik2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Klabnik2020" class="csl-entry" role="listitem">
 Klabnik, Steve and Nichols, Carol. 2020. <span>“<span>The Rust
 Programming Language</span>.”</span> <a
 href="https://doc.rust-lang.org/book/">https://doc.rust-lang.org/book/</a>.
 </div>
-<div id="ref-Lattner2004" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Lattner2004" class="csl-entry" role="listitem">
 Lattner, Chris, and Vikram Adve. 2004. <span>“<span class="nocase">LLVM:
 A Compilation Framework for Lifelong Program Analysis &amp;
 Transformation</span>.”</span> In <em>Proceedings of the International
@@ -668,11 +667,11 @@ Symposium on Code Generation and Optimization: Feedback-Directed and
 Runtime Optimization</em>, 75. CGO ’04. USA: IEEE Computer Society. <a
 href="https://llvm.org/pubs/2004-01-30-CGO-LLVM.html">https://llvm.org/pubs/2004-01-30-CGO-LLVM.html</a>.
 </div>
-<div id="ref-Lopo" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Lopo" class="csl-entry" role="listitem">
 Lopo, Erik de Castro. 1990. <span>“Libsndfile.”</span> <a
 href="http://www.mega-nerd.com/libsndfile/">http://www.mega-nerd.com/libsndfile/</a>.
 </div>
-<div id="ref-Matsuura2021" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Matsuura2021" class="csl-entry" role="listitem">
 Matsuura, Tomoya, and Kazuhiro Jo. 2021. <span>“Mimium: A
 Self-Extensible Programming Language for Sound and Music.”</span> In
 <em><span>FARM</span> 2021 - Proceedings of the <span>ACM</span>
@@ -680,34 +679,34 @@ Self-Extensible Programming Language for Sound and Music.”</span> In
 Modeling, and Design</em>. <a
 href="https://doi.org/10.1145/3471872.3472969">https://doi.org/10.1145/3471872.3472969</a>.
 </div>
-<div id="ref-McCartney2002" class="csl-entry" role="doc-biblioentry">
+<div id="ref-McCartney2002" class="csl-entry" role="listitem">
 McCartney, James. 2002. <span>“<span class="nocase">Rethinking the
 computer music language: SuperCollider</span>.”</span> <em>Computer
 Music Journal</em> 26 (4): 61–68. <a
 href="https://doi.org/10.1162/014892602320991383">https://doi.org/10.1162/014892602320991383</a>.
 </div>
-<div id="ref-Microsoft2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Microsoft2020" class="csl-entry" role="listitem">
 Microsoft. 2020. <span>“<span>Functions - F# | Microsoft
 Docs</span>.”</span> <a
 href="https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/functions/#function-composition-and-pipelining">https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/functions/#function-composition-and-pipelining</a>.
 </div>
-<div id="ref-Norilo2015" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Norilo2015" class="csl-entry" role="listitem">
 Norilo, Vesa. 2015. <span>“<span class="nocase">Kronos: A Declarative
 Metaprogramming Language for Digital Signal Processing</span>.”</span>
 <em>Computer Music Journal</em> 39 (4): 30–48. <a
 href="https://doi.org/10.1162/COMJ_a_00330">https://doi.org/10.1162/COMJ_a_00330</a>.
 </div>
-<div id="ref-Norilo2016" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Norilo2016" class="csl-entry" role="listitem">
 ———. 2016a. <span>“<span class="nocase">Kronos Meta-Sequencer – From
 Ugens to Orchestra, Score and Beyond</span>.”</span> In <em>Proceedings
 of the International Computer Music Conference</em>, 117–22.
 </div>
-<div id="ref-Norilo2016phd" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Norilo2016phd" class="csl-entry" role="listitem">
 ———. 2016b. <span>“<span class="nocase">Kronos: Reimagining musical
 signal processing</span>.”</span> PhD thesis, University of the Arts
 Helsinki.
 </div>
-<div id="ref-Reach2013" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Reach2013" class="csl-entry" role="listitem">
 Reach, Caleb. 2013. <span>“<span>INCREMENTAL</span>
 <span>FUNCTIONAL</span> <span>REACTIVE</span> <span>PROGRAMMING</span>
 <span>FOR</span> <span>INTERACTIVE</span> <span>MUSIC</span>
@@ -715,13 +714,13 @@ Reach, Caleb. 2013. <span>“<span>INCREMENTAL</span>
 16th Int. Conference on Digital Audio Effects
 (<span>DAFx</span>-13)</em>.
 </div>
-<div id="ref-Roads2001" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Roads2001" class="csl-entry" role="listitem">
 Roads, Curtis. 2001. <em>コンピュータ音楽:
 歴史・テクノロジー・アート</em>. Translated by 青柳竜也, 小阪直敏,
 平田圭二, 堀内靖雄, 後藤孝文, 平野砂峰旅, and 松島俊明.
 東京電機大学出版局.
 </div>
-<div id="ref-Ruggieri1988" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Ruggieri1988" class="csl-entry" role="listitem">
 Ruggieri, Cristina, and Thomas P. Murtagh. 1988. <span>“<span
 class="nocase">Lifetime analysis of dynamically allocated
 objects</span>.”</span> In <em>Conference Record of the Annual ACM
@@ -729,25 +728,25 @@ Symposium on Principles of Programming Languages</em>, Part
 F130193:285–93. Association for Computing Machinery. <a
 href="https://doi.org/10.1145/73560.73585">https://doi.org/10.1145/73560.73585</a>.
 </div>
-<div id="ref-Ruiz2020" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Ruiz2020" class="csl-entry" role="listitem">
 Ruiz, Leonardo Laguna. 2020. <span>“<span>Vult Language</span>.”</span>
 <a
 href="http://modlfo.github.io/vult/">http://modlfo.github.io/vult/</a>.
 </div>
-<div id="ref-Scavone2002" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Scavone2002" class="csl-entry" role="listitem">
 Scavone, Gary P. 2002. <span>“<span class="nocase">RtAudio: A
 Cross-Platform C++ Class for Realtime Audio Input/Output</span>.”</span>
 In <em>Proceedings of the 2002 International Computer Music
 Conference</em>. Goteborg, Sweden.
 </div>
-<div id="ref-Sorensen2010" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Sorensen2010" class="csl-entry" role="listitem">
 Sorensen, Andrew Carl, and Henry Gardner. 2010. <span>“<span
 class="nocase">Programming With Time Cyber-physical programming with
 Impromptu</span>.”</span> In <em>Proceedings of the ACM International
 Conference on Object Oriented Programming Systems Languages and
 Applications - OOPSLA ’10</em>. New York, New York, USA: ACM Press.
 </div>
-<div id="ref-Sumii2005" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Sumii2005" class="csl-entry" role="listitem">
 Sumii, Eijiro. 2005. <span>“<span class="nocase">MinCaml: A simple and
 efficient compiler for a minimal functional language</span>.”</span> In
 <em>FDPE’05 - Proceedings of the ACM SIGPLAN 2005 Workshop on Functional
@@ -755,7 +754,7 @@ and Declarative Programming in Education</em>, 27–38. New York, New
 York, USA: ACM Press. <a
 href="https://doi.org/10.1145/1085114.1085122">https://doi.org/10.1145/1085114.1085122</a>.
 </div>
-<div id="ref-Taha1997" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Taha1997" class="csl-entry" role="listitem">
 Taha, Walid, and Tim Sheard. 1997. <span>“<span
 class="nocase">Multi-Stage Programming with Explicit
 Annotations</span>.”</span> <em>SIGPLAN Notices (ACM Special Interest
@@ -779,7 +778,7 @@ href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </section>
 
 <style>pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -790,7 +789,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
