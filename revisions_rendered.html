@@ -66,24 +66,39 @@ class="sourceCode diff"><code class="sourceCode diff"><span id="cb3-1"><a href="
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a> </span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a> ## 認識論的道具としてのコンピューター楽器</span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a> </span></code></pre></div>
-<h2 id="chapter6">chapter6</h2>
+<h2 id="chapter5">chapter5</h2>
 <div class="sourceCode" id="cb4"><pre
-class="sourceCode diff"><code class="sourceCode diff"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/chapter6.md b/chapter6.md</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>index 4fe842a..ebad1dc 100644</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/chapter6.md</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/chapter6.md</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -440,7 +440,7 @@ fn dsp(state){</span></span>
+class="sourceCode diff"><code class="sourceCode diff"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/chapter5.md b/chapter5.md</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>index f2e2055..d9479f7 100644</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/chapter5.md</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/chapter5.md</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -254,7 +254,7 @@ d1 $ sound &quot;bd*4&quot; # gain (every 3 (rev) $ &quot;1 0.8 0.5 0.7&quot;)</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a> Extemporeは、単一の環境ですべての記述ができるという点で、このアプローチと似ているものの、ユーザはxtlangとSchemeという2つの異なる言語を使用する必要がある。xtlangでは、UGenをクロージャとして定義する際に、手動のメモリ管理やポインタを含む複雑な型シグネチャを理解する必要がある。Extemporeは音楽に限らないフルスタックのライブコーディングを行うことを想定した環境であるため、手動メモリ管理は必ずしもマイナスポイントではないが、SuperColliderの開発者であるマッカートニーが言うように、音楽のために作られた言語であれば、ユーザーが音楽の作業に集中できるように、メモリやスレッドなどのハードウェア管理を不要、もしくはオプショナルにすることは一般的に重要だと言える[@McCartney2002,p61]。</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a> 音楽プログラミングのプロセスをその表現の様式によらずモデル化したものとして、アンダーソンとキビラによるコンピューターを用いる音楽パフォーマンスのためのシステムを、彼らが開発したFORMULA（FORTH言語上に構築されたPLfM）を中心に分析した研究がある[@Anderson1990]。アンダーソンらは論文内で[@fig:andersonmodel]のように、コンピューターを用いた音楽生成を人間とコンピューターが作り出すフィードバックループ、いわゆるHuman In the Loopモデルとして捉えた。</span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="st">-Kronos（とMeta-Sequencer）も同様に自己拡張性を重視した言語である。KronosはSystem $\mathit{F\omega}$ と呼ばれる、ラムダ計算の拡張体系の1つをベースにしたより厳密な関数型言語であり、プロセッサの入出力をリスト構造としてパラメータ化できることで、よりUGenの一般的な表現が可能である。しかし、その内部表現はFaustのようにグラフ構造をベースにしている[@Norilo2016phd,p23]。mimiumの内部表現は、ラムダ計算ベースの木構造やSSA形式の命令型IRであり、より汎用プログラミング言語の中間表現に近いという違いがある。</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="va">+Kronos（とMeta-Sequencer）も同様に自己拡張性を重視した言語である。KronosはSystem `F\omega`をと呼ばれる、ラムダ計算の拡張体系の1つをベースにしたより厳密な関数型言語であり、プロセッサの入出力をリスト構造としてパラメータ化できることで、よりUGenの一般的な表現が可能である。しかし、その内部表現はFaustのようにグラフ構造をベースにしている[@Norilo2016phd,p23]。mimiumの内部表現は、ラムダ計算ベースの木構造やSSA形式の命令型IRであり、より汎用プログラミング言語の中間表現に近いという違いがある。</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="st">-![Human In the Loopとしての音楽プログラミング言語の利用モデルを、言語を特徴付ける各要素、実際に現れる特徴で表した図。](../img/humanintheloop_model.png){width=100% #fig:humanintheloop}</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="va">+![Human In the Loopとしての音楽プログラミング言語の利用モデルを、言語を特徴付ける各要素、実際に現れる特徴で表した図。](../img/humanintheloop_model.pdf){width=100% #fig:humanintheloop}</span></span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a> # 現状の実装の問題点</span></code></pre></div>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a> このアンダーソンらのモデルにおいて、Computer Systemに相当する部分がコンパイラ、Synthesizerに相当する部分がランタイムシステムだと捉えれば、ライブコーディングのような近年の対話的プログラミングの実行モデルとしてもよく当てはまるように思える。</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a> </span></code></pre></div>
+<h2 id="chapter6">chapter6</h2>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode diff"><code class="sourceCode diff"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/chapter6.md b/chapter6.md</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>index 4fe842a..ebad1dc 100644</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/chapter6.md</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/chapter6.md</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -440,7 +440,7 @@ fn dsp(state){</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a> Extemporeは、単一の環境ですべての記述ができるという点で、このアプローチと似ているものの、ユーザはxtlangとSchemeという2つの異なる言語を使用する必要がある。xtlangでは、UGenをクロージャとして定義する際に、手動のメモリ管理やポインタを含む複雑な型シグネチャを理解する必要がある。Extemporeは音楽に限らないフルスタックのライブコーディングを行うことを想定した環境であるため、手動メモリ管理は必ずしもマイナスポイントではないが、SuperColliderの開発者であるマッカートニーが言うように、音楽のために作られた言語であれば、ユーザーが音楽の作業に集中できるように、メモリやスレッドなどのハードウェア管理を不要、もしくはオプショナルにすることは一般的に重要だと言える[@McCartney2002,p61]。</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="st">-Kronos（とMeta-Sequencer）も同様に自己拡張性を重視した言語である。KronosはSystem $\mathit{F\omega}$ と呼ばれる、ラムダ計算の拡張体系の1つをベースにしたより厳密な関数型言語であり、プロセッサの入出力をリスト構造としてパラメータ化できることで、よりUGenの一般的な表現が可能である。しかし、その内部表現はFaustのようにグラフ構造をベースにしている[@Norilo2016phd,p23]。mimiumの内部表現は、ラムダ計算ベースの木構造やSSA形式の命令型IRであり、より汎用プログラミング言語の中間表現に近いという違いがある。</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="va">+Kronos（とMeta-Sequencer）も同様に自己拡張性を重視した言語である。KronosはSystem `F\omega`をと呼ばれる、ラムダ計算の拡張体系の1つをベースにしたより厳密な関数型言語であり、プロセッサの入出力をリスト構造としてパラメータ化できることで、よりUGenの一般的な表現が可能である。しかし、その内部表現はFaustのようにグラフ構造をベースにしている[@Norilo2016phd,p23]。mimiumの内部表現は、ラムダ計算ベースの木構造やSSA形式の命令型IRであり、より汎用プログラミング言語の中間表現に近いという違いがある。</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a> # 現状の実装の問題点</span></code></pre></div>
 
 <style>pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -94,7 +109,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
