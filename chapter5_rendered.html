@@ -75,7 +75,7 @@ role="doc-noteref"><sup>4</sup></a>、そもそもプログラマが正しい仕
 Semantics）という、ある項を別の言語の項へと変換する論理的規則を定義する意味論を採用している<a
 href="#fn5" class="footnote-ref" id="fnref5"
 role="doc-noteref"><sup>5</sup></a><span class="citation"
-data-cites="Orlarey2004">(Orlarey, Fober, and Letz 2004)</span>。</p>
+data-cites="Orlarey2004">(Orlarey et al. 2004)</span>。</p>
 <h2 data-number="5.2" id="ドメイン固有言語のデザインパターン"><span
 class="header-section-number">5.2</span>
 ドメイン固有言語のデザインパターン</h2>
@@ -110,7 +110,8 @@ class="header-section-number">5.2.1</span>
 言語拡張と自己反映性：CoffeeColliderを例に</h3>
 <p>ライブラリとしてのDSL実装の中でも、ホスト言語の機能が拡張性がある場合はかなり構文の自由度がある言語設計を行うことが可能だ。</p>
 <p>その例を、mohayonaoによるCoffeeColliderというWebブラウザ上で動作するPLfMを例にして見ていこう。CoffeeColliderは、音楽プログラミング言語の中でも代表的な言語であるSuperColliderの構文を模した、CoffeeScriptという言語のライブラリとして実装されているDSLである<span
-class="citation" data-cites="mohayonao">(mohayonao
+class="citation" data-cites="mohayonao">(<span
+class="nocase">mohayonao</span>
 2015)</span>。なお、CoffeeScript自体はブラウザ上で動作する唯一の言語であるJavaScriptへと変換されることで動作する、AltJSと呼ばれる言語の1つである。</p>
 <p>本来SuperColliderは構文解析から行う言語であり、ネイティブアプリケーションとして動作するがWebブラウザでは動作しない。</p>
 <p>CoffeeColliderはSuperCollider上におけるUnit Generatorの接続をWeb
@@ -144,8 +145,8 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="
 <p>演算子のオーバーロードとは、たとえば<code>+</code>や<code>*</code>などの二項演算を数値の加算乗算やテキストの結合などの言語組み込みの型だけではなく、ユーザーの定義したカスタム型に対して新しく振る舞いを定義できる機能のことだ。たとえば、Number型2つで構成されるの2次元ベクトルの型を定義した時に、<code>+</code>演算子を使ったら要素同士をそれぞれ加算できたり、<code>*</code>演算子を使ったら直積、内積や外積を計算できるようにしたらコードの記述が短くできたり、一般的に数学で使われるような記法と近づけられることでソースコードを直感的に読めるようにできる。</p>
 <p>演算子のオーバーロードができるようになっている汎用的な言語としては、たとえばC++、Scala、Haskellなどがある。特にHaskellでは、あらゆる関数を中置演算子のように使える上に<code>!  #  $  %  &amp;  *  +  .  /  &lt;  =  &gt;  ?  @  \  ^  |  -  ~</code>などの文字から任意の文字を組み合わせて演算子を作ることもでき、<code>~~&lt;=&gt;||</code>演算子のような、存在しない独自の演算子を作ることもできてしまう。</p>
 <p>JavaScriptの言語仕様には演算子オーバーロードの機能がない。そのため例えばTone.js<span
-class="citation" data-cites="tonejs">(<span>“<span
-class="nocase">Tone.js</span>”</span>
+class="citation" data-cites="tonejs">(<em><span
+class="nocase">Tone.js</span></em>
 2021)</span>といったJavaScript上で構築される音声信号処理ライブラリでは、信号処理プロセッサのようなユーザー（Tone.js自体の開発者という、JavaScriptのユーザー）によって定義されたデータ型同士を組み合わせるためには関数呼び出し<code>f(arg)</code>やオブジェクトのメソッド呼び出し<code>A.callmethod()</code>のような記法を用いて表現するしかなくなる。一方、CoffeeScriptには演算子オーバーロードがついているので、SuperColliderという全く関連性のない言語体系の言語であっても、ある程度表面上のシンタックスを近づけることができる。</p>
 <p>演算子オーバーロード以外に、こうした言語自体の記法を自己拡張できるような機能は他にも、KotlinのType-Safe
 Builder<a href="#fn6" class="footnote-ref" id="fnref6"
@@ -194,8 +195,7 @@ class="citation" data-cites="Bencina2011">(Bencina
 href="#fn8" class="footnote-ref" id="fnref8"
 role="doc-noteref"><sup>8</sup></a>。</p>
 <p>ライブラリとしてのPLfMを実現している数少ない例外としては、Lua言語上で、コードをメモリ上でネイティブバイナリへとコンパイルし即時利用するJIT（Just-In-Time）コンパイルするLuaJITの機能を活用した音声、映像のライブコーディング環境LuaAVがある<span
-class="citation" data-cites="Wakefield2010">(Wakefield, Smith, and
-Roberts
+class="citation" data-cites="Wakefield2010">(Wakefield et al.
 2010)</span>。LuaAVはライブラリでありながら論理時間ベースのサンプル単位の制御を保証したスケジューラーを搭載している。LuaAVというライブラリとしてのPLfMの実現にはLuaという言語自体が様々な言語やアプリケーションに埋め込んで用いることを想定した作りになっていることが反映されている（例えば、音楽制作ソフトウェアではオープンソースのDAWであるArdourが機能拡張のためにLuaを採用している）。</p>
 <!-- 
 ## ビジュアル言語のシンタックスと保存フォーマット
@@ -374,7 +374,7 @@ Algebra、LLVM
 IRというようにより機械語へ近いレベルへ下げていくと、一般的に表現可能な範囲が広まり、実行性能が良くなるといった利点があるが、コンパイルの過程がより汎用プログラミング言語のそれに近づき複雑化する、コードのプラットフォームをまだいだ可搬性が下がる、コードを動的に部分変更することが難しくなるといった根本的トレードオフが存在する。</p>
 <p>このトレードオフを両立することは不可能ではないが、必然的に言語の構造そのものが複雑化することに繋がる他、その言語の実装過程そのものに音楽的要素が無くなることから、開発者にとってはドメイン固有言語を実装モチベーションを下げることにも繋がるという問題があった。</p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-data-entry-spacing="0" role="list">
+role="list">
 <div id="ref-Anderson1990" class="csl-entry" role="listitem">
 Anderson, David P., and Ron Kuivila. 1990. <span>“<span class="nocase">A
 System for Computer Music Performance</span>.”</span> <em>ACM
@@ -383,7 +383,7 @@ href="https://doi.org/10.1145/77648.77652">https://doi.org/10.1145/77648.77652</
 </div>
 <div id="ref-Bencina2011" class="csl-entry" role="listitem">
 Bencina, Ross. 2011. <span>“Programming 101: Time Waits for
-Nothing.”</span> 2011. <a
+Nothing.”</span> <a
 href="http://www.rossbencina.com/code/real-time-audio-programming-101-time-waits-for-nothing">http://www.rossbencina.com/code/real-time-audio-programming-101-time-waits-for-nothing</a>.
 </div>
 <div id="ref-Brandt2002" class="csl-entry" role="listitem">
@@ -394,16 +394,15 @@ School of Computer Science, Carnegie Mellon University.
 <div id="ref-Coblenz2018" class="csl-entry" role="listitem">
 Coblenz, Michael, Jonathan Aldrich, Brad A Myers, Joshua Sunshine, and
 Joshua Sun. 2018. <span>“<span>Interdisciplinary Programming Language
-Design</span>.”</span> In <em>Proceedings of the 2018 ACM SIGPLAN
+Design</span>.”</span> <em>Proceedings of the 2018 ACM SIGPLAN
 International Symposium on New Ideas, New Paradigms, and Reflections on
-Programming and Software</em>, 14. New York, NY, USA: ACM.
+Programming and Software</em> (New York, NY, USA), 14.
 </div>
 <div id="ref-Racket" class="csl-entry" role="listitem">
 Culpepper, Ryan, Matthias Felleisen, Matthew Flatt, and Shriram
 Krishnamurthi. 2019. <span>“<span class="nocase">From macros to DSLs:
-The evolution of racket</span>.”</span> In <em>Leibniz International
-Proceedings in Informatics, LIPIcs</em>. Vol. 136. Schloss Dagstuhl-
-Leibniz-Zentrum fur Informatik GmbH, Dagstuhl Publishing. <a
+The evolution of racket</span>.”</span> <em>Leibniz International
+Proceedings in Informatics, LIPIcs</em> 136 (July). <a
 href="https://doi.org/10.4230/LIPIcs.SNAPL.2019.5">https://doi.org/10.4230/LIPIcs.SNAPL.2019.5</a>.
 </div>
 <div id="ref-Dannenberg2018" class="csl-entry" role="listitem">
@@ -422,7 +421,7 @@ href="https://doi.org/10.1080/09298215.2013.778890">https://doi.org/10.1080/0929
 Markstrum, Shane. 2010. <span>“<span class="nocase">Staking claims: A
 history of programming language design claims and evidence: A positional
 work in progress</span>.”</span> <em>Evaluation and Usability of
-Programming Languages and Tools, PLATEAU’10</em>. <a
+Programming Languages and Tools, PLATEAU’10</em>, ahead of print. <a
 href="https://doi.org/10.1145/1937117.1937124">https://doi.org/10.1145/1937117.1937124</a>.
 </div>
 <div id="ref-McCartney2002" class="csl-entry" role="listitem">
@@ -433,10 +432,10 @@ href="https://doi.org/10.1162/014892602320991383">https://doi.org/10.1162/014892
 </div>
 <div id="ref-McLean2014" class="csl-entry" role="listitem">
 McLean, Alex. 2014. <span>“<span class="nocase">Making programming
-languages to dance to: Live coding with tidal</span>.”</span> In
-<em>FARM 2014 - Proceedings of the 2014 ACM SIGPLAN International
-Workshop on Functional Art, Music, Modelling and Design</em>, 63–70. New
-York, New York, USA: Association for Computing Machinery. <a
+languages to dance to: Live coding with tidal</span>.”</span> <em>FARM
+2014 - Proceedings of the 2014 ACM SIGPLAN International Workshop on
+Functional Art, Music, Modelling and Design</em> (New York, New York,
+USA), 63–70. <a
 href="https://doi.org/10.1145/2633638.2633647">https://doi.org/10.1145/2633638.2633647</a>.
 </div>
 <div id="ref-Mcpherson2020" class="csl-entry" role="listitem">
@@ -447,17 +446,17 @@ Music Languages</span>.”</span> <em>Organised Sound</em> 25 (1): 53–63.
 href="https://doi.org/10.1017/S1355771819000463">https://doi.org/10.1017/S1355771819000463</a>.
 </div>
 <div id="ref-mohayonao" class="csl-entry" role="listitem">
-mohayonao. 2015. <span>“<span>CoffeeCollider</span>.”</span> <a
+<span class="nocase">mohayonao</span>. 2015.
+<em><span>CoffeeCollider</span></em>. <a
 href="http://mohayonao.github.io/CoffeeCollider/">http://mohayonao.github.io/CoffeeCollider/</a>.
 </div>
 <div id="ref-Muller2020" class="csl-entry" role="listitem">
 Muller, Stefan K., and Hannah Ringler. 2020. <span>“<span
 class="nocase">A Rhetorical Framework for Programming Language
-evaluation</span>.”</span> In <em>Onward! 2020 - Proceedings of the 2020
+evaluation</span>.”</span> <em>Onward! 2020 - Proceedings of the 2020
 ACM SIGPLAN International Symposium on New Ideas, New Paradigms, and
 Reflections on Programming and Software, Co-Located with SPLASH
-2020</em>, 187–94. New York, NY, USA: Association for Computing
-Machinery, Inc. <a
+2020</em> (New York, NY, USA), November, 187–94. <a
 href="https://doi.org/10.1145/3426428.3426927">https://doi.org/10.1145/3426428.3426927</a>.
 </div>
 <div id="ref-Orlarey2004" class="csl-entry" role="listitem">
@@ -473,13 +472,13 @@ Systems and Software</em> 56 (1): 91–99. <a
 href="https://doi.org/10.1016/S0164-1212(00)00089-3">https://doi.org/10.1016/S0164-1212(00)00089-3</a>.
 </div>
 <div id="ref-tonejs" class="csl-entry" role="listitem">
-<span>“<span class="nocase">Tone.js</span>.”</span> 2021. <a
+<em><span class="nocase">Tone.js</span></em>. 2021. <a
 href="https://tonejs.github.io/">https://tonejs.github.io/</a>.
 </div>
 <div id="ref-Wakefield2010" class="csl-entry" role="listitem">
 Wakefield, Graham, Wesley Smith, and Charles Roberts. 2010.
 <span>“<span>LuaAV</span>: Extensibility and Heterogeneity for
-Audiovisual Computing.”</span> In <em>Proceeding of Linux Audio
+Audiovisual Computing.”</span> <em>Proceeding of Linux Audio
 Conference</em>.
 </div>
 <div id="ref-UnderstandingComputation" class="csl-entry"
@@ -537,8 +536,9 @@ href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
-<style>pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+<style>html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -549,7 +549,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }

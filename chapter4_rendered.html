@@ -31,14 +31,14 @@ Music Language<span class="citation"
 data-cites="McCartney2002 Mcpherson2020">(McCartney 2002; McPherson and
 Tahlroǧlu 2020)</span>、Language for Computer Music<span
 class="citation" data-cites="Dannenberg2018">(Dannenberg
-2018b)</span>、Computer Music Programming Systems<span class="citation"
+2018a)</span>、Computer Music Programming Systems<span class="citation"
 data-cites="Lazzarini2013">(Lazzarini
 2013)</span>などの呼ばれ方がされているが、それぞれの語の使用に明確なコンセンサスがあるわけではない。</p>
 <p>その中で敢えて、既存の語を用いずPLfMという新しい語を導入するのには、少なくとも3つの理由がある。</p>
 <p>1つ目は、Computer
 Musicという語を用いることによって、そのための道具が、コンピューターを用いることで新しい音楽表現を追求するというイデオロギーを持つ、特定の音楽様式と結びついてしまうことを避けるためだ。今日ではあらゆる音楽制作と再生のためにコンピューターが用いられている以上、あらゆる音楽は<strong>弱い意味でのComputer
 Music</strong>と呼ぶことができる。しかしそれらの多くはコンピューターでなければ不可能な、コンピューターというメディア固有の表現を目指しているわけではない。同様に、たとえば信号処理のアルゴリズムを抽象化することに特化したプログラミング言語Faust<span
-class="citation" data-cites="Orlarey2004">(Orlarey, Fober, and Letz
+class="citation" data-cites="Orlarey2004">(Orlarey et al.
 2004)</span>は、新しい音楽表現を必ずしも目的としていないが、その言語実装のための技術的要素はComputer
 Musicのための言語とも多数の共通点がある。またそれらのコンピューター音楽の文脈とは、3章で解説した、Macintosh以後のユーザーの誕生以前から行われてきた取り組みであることを頭に入れる必要がある。つまり、プログラミングという作業がユーザーから隠蔽される以前の1950〜1970年代におけるコンピューターの利用することはほぼ必然的にプログラミングを行うことでもあった。それゆえ、1990年代以降に現れてきた、パーソナルコンピューティング環境で使うことを想定された言語とは、コンピューターを使うためのインターフェースの中でよりユーザーフレンドリーな選択肢があるにも関わらず、それでもなお人工言語という形を選んでいるという面が強調されて然るべきである。</p>
 <p>2つ目はPLfMという枠組みを用いることで、単にコンピューター上のテキストというフォーマットで音楽を表すことを目的とした言語たち、例えばMML（Music
@@ -62,7 +62,7 @@ class="citation" data-cites="Roads2001">(Roads 2001)</span>や<span
 class="citation" data-cites="Nishino2016">(Nishino and Nakatsu
 2015)</span>、<span class="citation" data-cites="Wang2017">(Wang
 2017)</span>、<span class="citation"
-data-cites="Dannenberg2018">(Dannenberg 2018b)</span>などが存在する<a
+data-cites="Dannenberg2018">(Dannenberg 2018a)</span>などが存在する<a
 href="#fn1" class="footnote-ref" id="fnref1"
 role="doc-noteref"><sup>1</sup></a>。ローズによるコンピューター音楽の手法を網羅的に記述した著書（原題：Computer
 Music
@@ -574,8 +574,7 @@ Boxは1990年代初頭まで10年以上にわたって使い続けられ多く�
 Boxを「明らかな成功」だったと表現しながらも、万能薬（panacea）ではなかったとも評価している。例えば、MUSIC
 IVをPDP-10に移植したプログラムの1つであるMUS10（MUSIC
 10とも）では比較的簡単に実装できていたディレイ（遅延）エフェクトの1つを移植しようとしたり、既にハードウェア上で定義されているものの組み合わせで表現できないUGenを新たに定義しようとすると途端に手間がかかってしまうのだという<span
-class="citation" data-cites="Smith1991">(J. O. Smith
-1991)</span>。Samson
+class="citation" data-cites="Smith1991">(Smith 1991)</span>。Samson
 BoxのコントロールのためのソフトウェアMUSBOX（略称MBOX）の開発を行ったD・ガレス・ロイは、2013年に開発過程とアーキテクチャについてを整理した論文を書き、その中でSamson
 Boxが部分的に可変性に乏しいことに関して、そもそもMUSIC
 Nのモデル自体が万能ではないことに言及している。</p>
@@ -796,8 +795,7 @@ Signal Processing
 WorkStation（ISPW）が作られていた。このISPWのための新しい制御ソフトウェアとして、Max/FTS(Faster
 Than
 Sound)が開発された。FTSではMax上のGUIインターフェースから、ISPWの信号処理を今日のMaxと同じように<code>~</code>（チルダ）オブジェクトと呼ばれるボックス同士の接続として直接的に操作、記述できた。ISPWは4X同様に商用販売されることはなかったものの、1990年代にはアメリカやヨーロッパ各地の大学や研究所に導入された<span
-class="citation" data-cites="Rai1994">(莱, 曲淵, and 高橋
-1994)</span>。</p>
+class="citation" data-cites="Rai1994">(莱 et al. 1994)</span>。</p>
 <p>その後、1994年にパケットはカリフォルニア大学サンディエゴ校に着任し、新たに無料でオープンソースかつ、特別なDSPボードを必要とせずチルダオブジェクトを用いる信号処理が可能なソフトウェア、Pure
 Dataを開発する<span class="citation" data-cites="Puckette1997">(Puckette
 1997)</span>。この、Pure
@@ -897,10 +895,10 @@ class="header-section-number">4.7.3</span> SuperCollider</h3>
 <p>SuperColliderはテキストベースのPLfMであり、汎用プログラミング言語の中で発展してきた、リアルタイムで動作可能なメモリの自動確保と解放（ガベージコレクション）やクロージャ（入れ子に定義された関数の中で、その外側で定義された変数を参照できる記法）といった概念をとり入れた言語である。</p>
 <p>SuperColliderを開発したジェームズ・マッカートニーは大学で電子音楽を学んでいたが、卒業後にハッブル宇宙望遠鏡のシステム管理の仕事に関わる過程で言語処理系についての知識を得た。マッカートニーはC言語で書かれたノンリアルタイムなソフトウェアシンセサイザーSynth-O-Maticというプログラムと、Max上で動作する小さなスクリプティング言語Pyriteの2つを並行して開発しており、それらを統合させる形で、SuperColliderという言語を制作した<span
 class="citation" data-cites="McCartney1996">(McCartney
-1996a)</span>。</p>
+1996b)</span>。</p>
 <p>SuperColliderは当初有償のソフトウェアとして250ドルで販売された<span
 class="citation" data-cites="mccartney_announcing_1996">(McCartney
-1996b)</span>が、マッカートニーが2002年にAppleへ就職したことをきっかけに、オープンソースソフトウェアとしてGPLライセンス<a
+1996a)</span>が、マッカートニーが2002年にAppleへ就職したことをきっかけに、オープンソースソフトウェアとしてGPLライセンス<a
 href="#fn46" class="footnote-ref" id="fnref46"
 role="doc-noteref"><sup>46</sup></a>で公開される。またこのタイミングでリリースされたバージョン3からは、言語のインタプリタ（sclang）が音声合成エンジン（scsynth）に対してOSCプロトコル（<a
 href="../chapter3_rendered#imagination">第3章</a>も参考）を介して命令を送る形のサーバー・クライアントモデルが採用された。この仕組みが導入されることによって、SuperColliderの言語機能を用いずとも、OSCメッセージを送る別の言語を実装し、音声合成部分はSuperColliderに任せるという新たな形のPLfMの実装が可能になった<a
@@ -985,7 +983,7 @@ Dataでのイベント処理のように、オーディオ処理の1ブロック
 <p>もしくは、現在のMaxの実装のように別スレッドにイベントスケジューラーを設け、20ms間隔などでキューをチェックするような方式もあり得る。この場合、イベントキューのチェックのタイミングは環境設定などからオーディオ処理のブロックサイズから独立して設定できる。しかしこちらの実装の場合も、キューが実際にどのタイミングでチェックされるかはOSレベルのスケジューラーの実装に依存するため、ある程度の非決定性が生じる。</p>
 <p>ChucKは「strongly-timed
 language」をコンセプトに掲げた言語であり、UGenの接続をテキストベースで書くことができ、かつC言語に似た命令型のシンタックスを用いて、離散的に発生するイベントの処理を行うことができる。特徴的な点として、ChucKは離散的なイベント処理も論理時間ベースのスケジューラーを用いるため、サンプル単位の実行タイミング制御の実行を保証できる<span
-class="citation" data-cites="Wang2015">(Wang, Cook, and Salazar
+class="citation" data-cites="Wang2015">(Wang et al.
 2015)</span>。論理時間（<em>Logical
 Time</em>）とは、音声信号の処理がバッファごとの単位でまとめて行われ、必ずしもサンプル単位で実時間と同期しているわけではないように、処理の順序だけを保証するスケジューリングの仕組みである。</p>
 <p>コード 3に10000サンプルごとのタイミングでサイン波の周波数をランダムに書き換える例を示した。ChucK演算子<code>=&gt;</code>と呼ばれる独自の演算子は、値を変数に格納するための代入演算子（一般的な<code>=</code>と異なり右側に代入先を記述する、右向き代入）としての役割と、UGen同士の接続の記述を表す機能を兼ねている。また、<code>now</code>と呼ばれる値に<code>Time</code>型を持つ値を代入すると、その値の分論理時間スケジューラを停止する。このnowへの代入を用いて具体的な実行タイミングを制御するのである。</p>
@@ -1006,7 +1004,7 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="
 role="doc-noteref"><sup>53</sup></a>と呼ばれる仕組みを用いて、各ファイル単位の処理を、論理時間での同期を保証したまま並行して複数実行、任意のタイミングで更新、削除ができる。ただしこれには、更新時には信号処理のモジュールをShred丸ごと入れ替えるため、例えばフィードバックディレイやリバーブなどの処理を含むインスタンスを更新すると、その内部状態までは引き継がれず、エフェクト音が途切れるといった問題もある。</p>
 <p>西野はChucKの思想を引き継ぎ、「mostly-strongly-timed
 language」というコンセプトを持つLC言語を開発した。西野が着目したのは、プログラマにとって必ずしも全ての処理がサンプル単位で正確である必要性がないということだ。LCではそのため、<code>sync</code>と<code>async</code>という制御構文を用いることによって、サンプル単位の正確性が必要な処理と、正確性の保証の必要がなく別スレッドに投げてよい処理とをユーザーが明示的に分けて記述できる<span
-class="citation" data-cites="Nishino2014">(Nishino, Osaka, and Nakatsu
+class="citation" data-cites="Nishino2014">(Nishino et al.
 2014)</span>。また<code>async</code>構文では、一定の時間内に非同期処理が完了しなかった場合に行うタイムアウト処理が記述できることもPLfMの中では珍しい仕様である。</p>
 <p>また、strongly-timedコンセプトを引き継ぎつつ、テンプレートや第一級関数（関数を値として利用できる機能）などプログラミング言語としての機能を充実させたGwion言語がジェレミー・アストールによって開発されている<span
 class="citation" data-cites="Astor2016">(Astor 2016)</span>。</p>
@@ -1023,7 +1021,7 @@ class="citation" data-cites="Brandt2002">(Brandt
 2002)</span>。Chronic上では音声信号を含む様々な時間に関連するデータ型を、任意のデータ型<code>a</code>に対して絶対時間に紐づいたデータ<code>Event a</code>、あるデータ型を均等に配置する有限長配列<code>Vec a</code>、時間軸上で無限に続く無限長配列<code>IVec a</code>（実際はそうした配列を差分的に生成し続ける関数として表現させる）の3種類の型コンストラクタを組み合わせることで表現する。</p>
 <p>しかしChronicは、ディレイ処理に対するメモリ管理の効率性や、OCamlというそこまで高速ではない言語の採用によって、リアルタイム実行はできなかった。</p>
 <p>時間軸上のデータという考え方を中心においたChronicに対して、よりUGenのような、入出力を持つグラフ構造による処理の代数的表現を追求したのが、南フランスの電子音楽研究所GRAMEで、ヤン・オーラリー、ステファン・レッツ、ドミニク・フーバーらによって同じく2002年ごろから開発されているFaustである<span
-class="citation" data-cites="Orlarey2004">(Orlarey, Fober, and Letz
+class="citation" data-cites="Orlarey2004">(Orlarey et al.
 2004)</span>。</p>
 <!-- =latexがないとpandocのパースが狂う  -->
 <div id="lst:faustsample" class="listing rust">
@@ -1045,7 +1043,7 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="
 <p>Faustの言語の概念の中心となる概念は<strong>ブロックダイアグラム代数（Block
 Diagram
 Algebra：BDA）</strong>という体系である。BDAでは、定数、入力同士の四則演算、サイン波、ディレイなどのあらゆる要素が、任意の数の入出力を持つノードとして表される。そして、これらノードを、並列（<code>a , b</code>）、直列（<code>a : b</code>）、分岐（<code>a &lt;: (b,c)</code>）、合流（<code>(a,b) :&gt; c</code>）、再帰（<code>a ~ b</code>）という5種類の基本演算を組み合わせることによってグラフ構造を形成し、信号処理を表現する<span
-class="citation" data-cites="Orlarey2002">(Orlarey, Fober, and Letz
+class="citation" data-cites="Orlarey2002">(Orlarey et al.
 2002)</span>。Faustではのちに、アルバート・グラーフが再帰的にパターンマッチ可能なマクロの体系を導入することによって、例えば任意のオシレーターを100個入れ子状に複製する、といったような高度な抽象化が可能になった<span
 class="citation" data-cites="Graf2010">(Gräf
 2010)</span>。コード 4にFaustにおける有限インパルス応答フィルタの記述例を示した<a
@@ -1071,7 +1069,7 @@ class="citation" data-cites="Ruiz2020">(Ruiz
 data-cites="Dannenberg1997">(Dannenberg
 1997)</span>をはじめとして、関数型言語に影響された抽象化を模索してきたダネンバーグは、Python上のライブラリとしてUGenを定義し様々なバックエンドへ変換できるUGG（Unit
 Generator Generator）を提案している<span class="citation"
-data-cites="Dannenberg2018b">(Dannenberg 2018a)</span>。</p>
+data-cites="Dannenberg2018b">(Dannenberg 2018b)</span>。</p>
 <p>一方でこれら低レイヤーの拡張を試みる言語群には課題もある。それは、基本的に処理を1サンプルごとの差分的処理として捉えているため、FFT(高速フーリエ変換)のようなある一定のサンプルのまとまりの単位で処理を行う記述と混在させるのが難しいことだ。このマルチレート処理の問題は比較的早期から課題として挙げられ取り組まれてはいるものの、未だ実用的仕様としては採用されていない<span
 class="citation" data-cites="Jouvelot2011">(Jouvelot and Orlarey
 2011)</span>。また、MUSIC
@@ -1107,7 +1105,7 @@ class="citation" data-cites="Lazzarini2013">(Lazzarini
 <!-- （大学、研究所、企業、オープンソースみたいな普及の違いとインフラストラクチャ的束縛についてのまとめも足したい） -->
 <p>本章では、歴史ごとの構造の差分的変化や利用目的、応用例といったものに着目することで、様々なPLfMの歴史的位置付けを試みてきた。しかし本章で説明した背景のみでは、具体的にPLfMの設計や実装方法を議論するための具体的な差分を説明するには不足している。そのため次章では、現在も利用可能なPLfMに焦点を当て、その歴史的変遷よりも設計や実装の構造を整理し、新たなPLfM設計のための指針やそれを表すための語彙の整理を行う。</p>
 <div id="refs" class="references csl-bib-body hanging-indent"
-data-entry-spacing="0" role="list">
+role="list">
 <div id="ref-Aaron2013" class="csl-entry" role="listitem">
 Aaron, Samuel, and Alan F. Blackwell. 2013. <span>“<span
 class="nocase">From Sonic Pi to overtone: Creative musical experiences
@@ -1117,19 +1115,18 @@ Functional Programming, ICFP</em>, 35–46. <a
 href="https://doi.org/10.1145/2505341.2505346">https://doi.org/10.1145/2505341.2505346</a>.
 </div>
 <div id="ref-Allen1984" class="csl-entry" role="listitem">
-Allen, John, Gordon Bell, Jack Dennis, Jack Gilmore, Shag Graetz, Dave
-Gross, Alan Kotok, et al. 1984. <span>“<span>THE</span>
-<span>TX</span>-0: <span>PAST</span> and <span>PRESENT</span>.”</span>
-<em><span>THE</span> <span>COMPUTER</span> <span>MUSIC</span>
-<span>REPORT</span></em> 8: 2–11. <a
+Allen, John, Gordon Bell, Jack Dennis, et al. 1984.
+<span>“<span>THE</span> <span>TX</span>-0: <span>PAST</span> and
+<span>PRESENT</span>.”</span> <em><span>THE</span> <span>COMPUTER</span>
+<span>MUSIC</span> <span>REPORT</span></em> 8: 2–11. <a
 href="http://tcm.computerhistory.org/reports/TCMReportSpring1984.pdf">http://tcm.computerhistory.org/reports/TCMReportSpring1984.pdf</a>.
 </div>
 <div id="ref-Astor2016" class="csl-entry" role="listitem">
-Astor, Jérémie. 2016. <span>“Gwion.”</span> Gwion. <a
+Astor, Jérémie. 2016. <em>Gwion</em>. Gwion, released. <a
 href="https://github.com/Gwion/Gwion">https://github.com/Gwion/Gwion</a>.
 </div>
 <div id="ref-Born1995" class="csl-entry" role="listitem">
-Born, Georgina. 1995. <em><span>Rationalizing Culture</span></em>. 1.
+Born, Georgina. 1995. <em><span>Rationalizing Culture</span></em>.
 University of California Press.
 </div>
 <div id="ref-Brandt2002" class="csl-entry" role="listitem">
@@ -1139,8 +1136,8 @@ School of Computer Science, Carnegie Mellon University.
 </div>
 <div id="ref-Casey1996" class="csl-entry" role="listitem">
 Casey, Michael, and Paris Smaragdis. 1996. <span>“<span>NetSound</span>:
-Realtime Audio from Semantic Descriptions.”</span> In <em>Proceedings of
-International Computer Music Conference</em>. Hong Kong. <a
+Realtime Audio from Semantic Descriptions.”</span> <em>Proceedings of
+International Computer Music Conference</em> (Hong Kong). <a
 href="http://alumni.media.mit.edu/~mkc/icmc96/icmc96.html">http://alumni.media.mit.edu/~mkc/icmc96/icmc96.html</a>.
 </div>
 <div id="ref-Chun2005" class="csl-entry" role="listitem">
@@ -1158,7 +1155,7 @@ Interfaces for Musical Expression</em>, 355–58.
 Crab, Simon. 2013. <span>“The <span>‘<span>RCA</span> Synthesiser i
 &amp; <span>II</span>’</span> Harry Olson &amp; Herbert Belar,
 <span>USA</span>, 1951. 120 Years of Electronic Music.”</span> September
-21, 2013. <a
+21. <a
 href="https://120years.net/wordpress/the-rca-synthesiser-i-iiharry-olsen-hebert-belarusa1952/">https://120years.net/wordpress/the-rca-synthesiser-i-iiharry-olsen-hebert-belarusa1952/</a>.
 </div>
 <div id="ref-Dannenberg1997" class="csl-entry" role="listitem">
@@ -1167,16 +1164,17 @@ Implementation of Nyquist, A Sound Synthesis Language</span>.”</span>
 <em>Computer Music Journal</em> 21 (3): 71–82. <a
 href="http://www.jstor.org/stable/3681015">http://www.jstor.org/stable/3681015</a>.
 </div>
-<div id="ref-Dannenberg2018b" class="csl-entry" role="listitem">
-———. 2018a. <span>“<span>UGG</span>: A Unit Generator Generator.”</span>
-In <em>Proceedings of the 2018 International Computer Music
-Conference</em>.
-</div>
 <div id="ref-Dannenberg2018" class="csl-entry" role="listitem">
-———. 2018b. <span>“<span class="nocase">Languages for Computer
-Music</span>.”</span> <em>Frontiers in Digital Humanities</em> 5
-(November). <a
+Dannenberg, Roger B. 2018a. <span>“<span class="nocase">Languages for
+Computer Music</span>.”</span> <em>Frontiers in Digital Humanities</em>
+5 (November). <a
 href="https://doi.org/10.3389/fdigh.2018.00026">https://doi.org/10.3389/fdigh.2018.00026</a>.
+</div>
+<div id="ref-Dannenberg2018b" class="csl-entry" role="listitem">
+Dannenberg, Roger B. 2018b. <span>“<span>UGG</span>: A Unit Generator
+Generator.”</span> Paper presented International computer music
+conference. <em>Proceedings of the 2018 International Computer Music
+Conference</em>, August.
 </div>
 <div id="ref-Davis1994" class="csl-entry" role="listitem">
 Davis, Donald. 1994. <span>“Very Early Computer Music.”</span>
@@ -1189,8 +1187,9 @@ Doornbusch, Paul. 2005. <em><span class="nocase">The Music of Csirac,
 Australia’s First Computer Music</span></em>. Common Ground Publishing.
 </div>
 <div id="ref-Doornbusch2017" class="csl-entry" role="listitem">
-———. 2017. <span>“Early Computer Music Experiments in Australia and
-England.”</span> <em>Organised Sound</em> 22 (2): 297–307. <a
+Doornbusch, Paul. 2017. <span>“Early Computer Music Experiments in
+Australia and England.”</span> <em>Organised Sound</em> 22 (2): 297–307.
+<a
 href="https://doi.org/10.1017/S1355771817000206">https://doi.org/10.1017/S1355771817000206</a>.
 </div>
 <div id="ref-Eckstein1996" class="csl-entry" role="listitem">
@@ -1202,18 +1201,18 @@ href="https://doi.org/10.1109/85.476559">https://doi.org/10.1109/85.476559</a>.
 <div id="ref-Favreau1986" class="csl-entry" role="listitem">
 Favreau, Emmanuel, Michel Fingerhut, Olivier Koechlin, Patrick Potacsek,
 Miller S. Puckette, and Robert Rowe. 1986. <span>“Software Developments
-for the 4X Real-Time System.”</span> In <em>Proceedings of International
+for the 4X Real-Time System.”</span> <em>Proceedings of International
 Computer Music Conference</em>. <a
 href="https://quod.lib.umich.edu/cache//b/b/p/bbp2372.1986.074/bbp2372.1986.074.pdf#page=1;zoom=75">https://quod.lib.umich.edu/cache//b/b/p/bbp2372.1986.074/bbp2372.1986.074.pdf#page=1;zoom=75</a>.
 </div>
 <div id="ref-Fildes2008" class="csl-entry" role="listitem">
-Fildes, Jonathan. 2008. <span>“’Oldest’ Computer Music Unveiled,”</span>
-June. <a
+Fildes, Jonathan. 2008. <em>’Oldest’ Computer Music Unveiled</em>. June
+17. <a
 href="http://news.bbc.co.uk/2/hi/technology/7458479.stm">http://news.bbc.co.uk/2/hi/technology/7458479.stm</a>.
 </div>
 <div id="ref-Graf2010" class="csl-entry" role="listitem">
 Gräf, Albert. 2010. <span>“<span class="nocase">Term Rewriting Extension
-for the Faust Programming Language</span>.”</span> In <em>International
+for the Faust Programming Language</span>.”</span> <em>International
 Linux Audio Conference</em>. <a
 href="https://hal.archives-ouvertes.fr/hal-03162973 https://hal.archives-ouvertes.fr/hal-03162973/document">https://hal.archives-ouvertes.fr/hal-03162973
 https://hal.archives-ouvertes.fr/hal-03162973/document</a>.
@@ -1225,7 +1224,7 @@ href="https://doi.org/10.1002/j.1538-7305.1928.tb01236.x">https://doi.org/10.100
 </div>
 <div id="ref-Holst1998" class="csl-entry" role="listitem">
 Holst, Laurence. 1998. <span>“Playing Samples on the <span>PSG</span>.
-<span>MSX</span> Assembly Page.”</span> 1998. <a
+<span>MSX</span> Assembly Page.”</span> <a
 href="http://map.grauw.nl/articles/psg_sample.php">http://map.grauw.nl/articles/psg_sample.php</a>.
 </div>
 <div id="ref-Innis1968" class="csl-entry" role="listitem">
@@ -1237,7 +1236,7 @@ href="https://doi.org/10.2307/832426">https://doi.org/10.2307/832426</a>.
 <div id="ref-Irrlicht2015" class="csl-entry" role="listitem">
 Irrlicht Project. 2015. <span>“<span>IP</span>’s Ancient Wonderworld:
 Computer Music in 1949? <span>IP</span>’s Ancient Wonderworld.”</span>
-November 11, 2015. <a
+November 11. <a
 href="https://irrlichtproject.blogspot.com/2015/11/computer-music-in-1949.html">https://irrlichtproject.blogspot.com/2015/11/computer-music-in-1949.html</a>.
 </div>
 <div id="ref-Jaffe1989" class="csl-entry" role="listitem">
@@ -1252,26 +1251,26 @@ for Data Structuring in Multirate Faust.”</span> <em>Computer Languages,
 Systems &amp; Structures</em> 37 (3): 113–31.
 </div>
 <div id="ref-Yunchul2005" class="csl-entry" role="listitem">
-Kim, Yunchul. 2005. <span>“Hello, World! – Yunchul Kim.”</span> 2005. <a
+Kim, Yunchul. 2005. <span>“Hello, World! – Yunchul Kim.”</span> <a
 href="https://yunchulkim.net/work/hello-world/">https://yunchulkim.net/work/hello-world/</a>.
 </div>
 <div id="ref-Kirkbride2016" class="csl-entry" role="listitem">
 Kirkbride, Ryan. 2016. <span>“<span class="nocase">FoxDot: Live coding
-with python and supercollider</span>.”</span> In <em>Proceedings of the
+with python and supercollider</span>.”</span> <em>Proceedings of the
 International Conference on Live Interfaces</em>, 194–98.
 </div>
 <div id="ref-Lansky1990" class="csl-entry" role="listitem">
 Lansky, Paul. 1990. <span>“The Architecture and Musical Logic of
-Cmix.”</span> In <em>Proceedings of International Computer Music
+Cmix.”</span> <em>Proceedings of International Computer Music
 Conference</em>. <a
 href="https://quod.lib.umich.edu/cache//b/b/p/bbp2372.1990.023/bbp2372.1990.023.pdf">https://quod.lib.umich.edu/cache//b/b/p/bbp2372.1990.023/bbp2372.1990.023.pdf</a>.
 </div>
 <div id="ref-Lattner2004" class="csl-entry" role="listitem">
 Lattner, Chris, and Vikram Adve. 2004. <span>“<span class="nocase">LLVM:
 A Compilation Framework for Lifelong Program Analysis &amp;
-Transformation</span>.”</span> In <em>Proceedings of the International
+Transformation</span>.”</span> <em>Proceedings of the International
 Symposium on Code Generation and Optimization: Feedback-Directed and
-Runtime Optimization</em>, 75. CGO ’04. USA: IEEE Computer Society. <a
+Runtime Optimization</em> (USA), CGO ’04, 75. <a
 href="https://llvm.org/pubs/2004-01-30-CGO-LLVM.html">https://llvm.org/pubs/2004-01-30-CGO-LLVM.html</a>.
 </div>
 <div id="ref-Lazzarini2013" class="csl-entry" role="listitem">
@@ -1293,12 +1292,11 @@ href="https://www.jstor.org/stable/24265512">https://www.jstor.org/stable/242655
 </div>
 <div id="ref-Lyon2012" class="csl-entry" role="listitem">
 Lyon, Eric. 2012. <em>Designing Audio Objects for Max/<span>MSP</span>
-and Pd</em>. 1. ed. The Computer Music and Digital Audio Series 25.
-Middleton, Wisc: A-R Editions.
+and Pd</em>. 1. ed. The Computer Music and Digital Audio Series 25. A-R
+Editions.
 </div>
 <div id="ref-Magerko2016" class="csl-entry" role="listitem">
-Magerko, Brian, Jason Freeman, Tom Mcklin, Mike Reilly, Elise
-Livingston, Scott Mccoid, and Andrea Crews-Brown. 2016.
+Magerko, Brian, Jason Freeman, Tom Mcklin, et al. 2016.
 <span>“<span>EarSketch</span>: A <span>STEAM</span>-Based Approach for
 Underrepresented Populations in High School Computer Science
 Education.”</span> <em><span>ACM</span> Transactions on Computing
@@ -1318,9 +1316,9 @@ Journal</em> 40 (3): 677–94. <a
 href="https://doi.org/10.1002/j.1538-7305.1961.tb03237.x">https://doi.org/10.1002/j.1538-7305.1961.tb03237.x</a>.
 </div>
 <div id="ref-Mathews1963" class="csl-entry" role="listitem">
-———. 1963. <span>“<span class="nocase">The Digital Computer as a Musical
-Instrument</span>.”</span> <em>Science,New Series</em> 142 (3592):
-553–57. <a
+Mathews, Max V. 1963. <span>“<span class="nocase">The Digital Computer
+as a Musical Instrument</span>.”</span> <em>Science,New Series</em> 142
+(3592): 553–57. <a
 href="http://www.jstor.org/stable/1712380">http://www.jstor.org/stable/1712380</a>.
 </div>
 <div id="ref-Mathews1969" class="csl-entry" role="listitem">
@@ -1340,31 +1338,31 @@ Mathews, Max V., and Curtis Roads. 1980. <span>“<span
 class="nocase">Interview with Max Mathews</span>.”</span> <em>Computer
 Music Journal</em> 4 (4): 15–22.
 </div>
-<div id="ref-McCartney1996" class="csl-entry" role="listitem">
-McCartney, James. 1996a. <span>“<span>SuperCollider</span>, a New Real
-Time Synthesis Language.”</span> In <em>International Computer Music
-Conference Proceedings</em>. Michigan Publishing. <a
-href="http://hdl.handle.net/2027/spo.bbp2372.1996.078">http://hdl.handle.net/2027/spo.bbp2372.1996.078</a>.
-</div>
 <div id="ref-mccartney_announcing_1996" class="csl-entry"
 role="listitem">
-———. 1996b. <span>“<span>ANNOUNCING</span>: <span>SuperCollider</span>
-Is Now Available. Comp.music.research@googlegroups.com.”</span> March
-21, 1996. <a
+McCartney, James. 1996a. <span>“<span>ANNOUNCING</span>:
+<span>SuperCollider</span> Is Now Available.
+Comp.music.research@googlegroups.com.”</span> March 21. <a
 href="https://groups.google.com/g/comp.music.research/c/g2f9EcL1mUw#2ed9e3784bc66f55">https://groups.google.com/g/comp.music.research/c/g2f9EcL1mUw#2ed9e3784bc66f55</a>.
 </div>
+<div id="ref-McCartney1996" class="csl-entry" role="listitem">
+McCartney, James. 1996b. <span>“<span>SuperCollider</span>, a New Real
+Time Synthesis Language.”</span> <em>International Computer Music
+Conference Proceedings</em>. <a
+href="http://hdl.handle.net/2027/spo.bbp2372.1996.078">http://hdl.handle.net/2027/spo.bbp2372.1996.078</a>.
+</div>
 <div id="ref-McCartney2002" class="csl-entry" role="listitem">
-———. 2002. <span>“<span class="nocase">Rethinking the computer music
-language: SuperCollider</span>.”</span> <em>Computer Music Journal</em>
-26 (4): 61–68. <a
+McCartney, James. 2002. <span>“<span class="nocase">Rethinking the
+computer music language: SuperCollider</span>.”</span> <em>Computer
+Music Journal</em> 26 (4): 61–68. <a
 href="https://doi.org/10.1162/014892602320991383">https://doi.org/10.1162/014892602320991383</a>.
 </div>
 <div id="ref-McLean2014" class="csl-entry" role="listitem">
 McLean, Alex. 2014. <span>“<span class="nocase">Making programming
-languages to dance to: Live coding with tidal</span>.”</span> In
-<em>FARM 2014 - Proceedings of the 2014 ACM SIGPLAN International
-Workshop on Functional Art, Music, Modelling and Design</em>, 63–70. New
-York, New York, USA: Association for Computing Machinery. <a
+languages to dance to: Live coding with tidal</span>.”</span> <em>FARM
+2014 - Proceedings of the 2014 ACM SIGPLAN International Workshop on
+Functional Art, Music, Modelling and Design</em> (New York, New York,
+USA), 63–70. <a
 href="https://doi.org/10.1145/2633638.2633647">https://doi.org/10.1145/2633638.2633647</a>.
 </div>
 <div id="ref-Mcpherson2020" class="csl-entry" role="listitem">
@@ -1375,12 +1373,12 @@ Music Languages</span>.”</span> <em>Organised Sound</em> 25 (1): 53–63.
 href="https://doi.org/10.1017/S1355771819000463">https://doi.org/10.1017/S1355771819000463</a>.
 </div>
 <div id="ref-Michigan1969" class="csl-entry" role="listitem">
-Michigan Computing Center, University of. 1969. <span>“Computing Center
-Memo.”</span> <span>UM</span> Libraries.
+Michigan Computing Center, University of. 1969. <em>Computing Center
+Memo</em>. <span>UM</span> Libraries.
 </div>
 <div id="ref-Miyazaki2012" class="csl-entry" role="listitem">
 Miyazaki, Shintaro. 2012. <span>“Algorhythmic Listening 1949-1962
-Auditory Practices of Early Mainframe Computing.”</span> In, 5.
+Auditory Practices of Early Mainframe Computing.”</span> 5.
 </div>
 <div id="ref-Moore1982" class="csl-entry" role="listitem">
 Moore, F. Richard. 1982. <span>“The Computer Audio Research Laboratory
@@ -1390,9 +1388,9 @@ href="https://doi.org/10.2307/3680355">https://doi.org/10.2307/3680355</a>.
 </div>
 <div id="ref-Nishimura2014" class="csl-entry" role="listitem">
 Nishimura, Satoshi. 2014. <span>“Takt: A Read-Eval-Play-Loop Interpreter
-for a Structural/Procedural Score Language.”</span> In <em>Proceedings
-<span>ICMC</span><span></span><span>SMC</span><span></span>2014</em>,
-1736–41. Athens, Greece.
+for a Structural/Procedural Score Language.”</span> <em>Proceedings
+<span>ICMC</span><span></span><span>SMC</span><span></span>2014</em>
+(Athens, Greece), September 14, 1736–41.
 </div>
 <div id="ref-Nishino2016" class="csl-entry" role="listitem">
 Nishino, Hiroki, and Ryohei Nakatsu. 2015. <span>“<span
@@ -1414,9 +1412,10 @@ Metaprogramming Language for Digital Signal Processing</span>.”</span>
 href="https://doi.org/10.1162/COMJ_a_00330">https://doi.org/10.1162/COMJ_a_00330</a>.
 </div>
 <div id="ref-Norilo2016" class="csl-entry" role="listitem">
-———. 2016. <span>“<span class="nocase">Kronos Meta-Sequencer – From
-Ugens to Orchestra, Score and Beyond</span>.”</span> In <em>Proceedings
-of the International Computer Music Conference</em>, 117–22.
+Norilo, Vesa. 2016. <span>“<span class="nocase">Kronos Meta-Sequencer –
+From Ugens to Orchestra, Score and Beyond</span>.”</span>
+<em>Proceedings of the International Computer Music Conference</em>,
+117–22.
 </div>
 <div id="ref-Nyquist1928" class="csl-entry" role="listitem">
 Nyquist, H. 1928. <span>“<span class="nocase">Certain Topics in
@@ -1427,14 +1426,13 @@ href="https://doi.org/10.1109/T-AIEE.1928.5055024">https://doi.org/10.1109/T-AIE
 <div id="ref-Orlarey2002" class="csl-entry" role="listitem">
 Orlarey, Yann, Dominique Fober, and Stéphane Letz. 2002. <span>“An
 Algebra for Block Diagram Languages.”</span> In <em>International
-Computer Music Conference</em>, edited by ICMA, 542–47. Gothenburg,
-Sweden. <a
+Computer Music Conference</em>, edited by ICMA. Gothenburg, Sweden. <a
 href="https://hal.archives-ouvertes.fr/hal-02158932">https://hal.archives-ouvertes.fr/hal-02158932</a>.
 </div>
 <div id="ref-Orlarey2004" class="csl-entry" role="listitem">
-———. 2004. <span>“<span class="nocase">Syntactical and semantical
-aspects of Faust</span>.”</span> <em>Soft Computing</em> 8 (9): 623–32.
-<a
+Orlarey, Yann, Dominique Fober, and Stéphane Letz. 2004. <span>“<span
+class="nocase">Syntactical and semantical aspects of
+Faust</span>.”</span> <em>Soft Computing</em> 8 (9): 623–32. <a
 href="https://doi.org/10.1007/s00500-004-0388-1">https://doi.org/10.1007/s00500-004-0388-1</a>.
 </div>
 <div id="ref-Park2009" class="csl-entry" role="listitem">
@@ -1449,54 +1447,52 @@ University Press.
 </div>
 <div id="ref-Puckette1983" class="csl-entry" role="listitem">
 Puckette, Miller S. 1983. <span>“<span>MUSIC</span>-500: A New,
-Real-Time Digital Synthesis System.”</span> In <em>Proceeedings of
+Real-Time Digital Synthesis System.”</span> <em>Proceeedings of
 International Computer Music Conference</em>.
 </div>
 <div id="ref-Puckette1986" class="csl-entry" role="listitem">
-———. 1986. <span>“Interprocess Communication and Timing in
-Real-Time.”</span> In <em>Proceedings of International Computer Music
+Puckette, Miller S. 1986. <span>“Interprocess Communication and Timing
+in Real-Time.”</span> <em>Proceedings of International Computer Music
 Conference</em>, 43–46. <a
 href="http://msp.ucsd.edu/Publications/icmc86.pdf">http://msp.ucsd.edu/Publications/icmc86.pdf</a>.
 </div>
 <div id="ref-Puckette1988" class="csl-entry" role="listitem">
-———. 1988. <span>“The Patcher.”</span> In <em>Proceedings of
+Puckette, Miller S. 1988. <span>“The Patcher.”</span> <em>Proceedings of
 International Computer Music Conference</em>, 420–29. <a
 href="http://msp.ucsd.edu/Publications/icmc88.pdf">http://msp.ucsd.edu/Publications/icmc88.pdf</a>.
 </div>
 <div id="ref-Puckette1997" class="csl-entry" role="listitem">
-———. 1997. <span>“<span>Pure Data</span>.”</span> In <em>International
-Computer Music Conference Proceedings</em>. Michigan Publishing,
-University of Michigan Library. <a
+Puckette, Miller S. 1997. <span>“<span>Pure Data</span>.”</span>
+<em>International Computer Music Conference Proceedings</em>. <a
 href="http://hdl.handle.net/2027/spo.bbp2372.1997.060">http://hdl.handle.net/2027/spo.bbp2372.1997.060</a>.
 </div>
 <div id="ref-Puckette2002" class="csl-entry" role="listitem">
-———. 2002. <span>“<span class="nocase">Max at seventeen</span>.”</span>
-<em>Computer Music Journal</em> 26 (4): 31–43. <a
+Puckette, Miller S. 2002. <span>“<span class="nocase">Max at
+seventeen</span>.”</span> <em>Computer Music Journal</em> 26 (4): 31–43.
+<a
 href="https://doi.org/10.1162/014892602320991356">https://doi.org/10.1162/014892602320991356</a>.
 </div>
 <div id="ref-Puckette2020" class="csl-entry" role="listitem">
-Reese, Ivan. 2020. <span>“47 • Miller Puckette • Max/<span>MSP</span>
-&amp; Pure Data. Future of Coding.”</span> <a
+Reese, Ivan. 2020. <em>47 • Miller Puckette • Max/<span>MSP</span> &amp;
+Pure Data. Future of Coding</em>. No. 47. <a
 href="https://futureofcoding.org/episodes/047.html">https://futureofcoding.org/episodes/047.html</a>.
 </div>
 <div id="ref-Roads2001" class="csl-entry" role="listitem">
 Roads, Curtis. 2001. <em>コンピュータ音楽:
 歴史・テクノロジー・アート</em>. Translated by 青柳竜也, 小阪直敏,
-平田圭二, 堀内靖雄, 後藤孝文, 平野砂峰旅, and 松島俊明.
-東京電機大学出版局.
+平田圭二, et al. 東京電機大学出版局.
 </div>
 <div id="ref-Roads2003" class="csl-entry" role="listitem">
-———. 2004. <em><span>Microsound</span></em>. The MIT Press.
+Roads, Curtis. 2004. <em><span>Microsound</span></em>. The MIT Press.
 </div>
 <div id="ref-Ruiz2020" class="csl-entry" role="listitem">
-Ruiz, Leonardo Laguna. 2020. <span>“<span>Vult Language</span>.”</span>
-<a
+Ruiz, Leonardo Laguna. 2020. <em><span>Vult Language</span></em>. <a
 href="http://modlfo.github.io/vult/">http://modlfo.github.io/vult/</a>.
 </div>
 <div id="ref-Salazar2012" class="csl-entry" role="listitem">
 Salazar, Spencer, and Ge Wang. 2012. <span>“<span>CHUGENS, CHUBGRAPHS,
-CHUGINS: 3 TIERS FOR EXTENDING CHUCK</span>.”</span> In
-<em>International Computer Music Conference Proceedings</em>, 60–63. <a
+CHUGINS: 3 TIERS FOR EXTENDING CHUCK</span>.”</span> <em>International
+Computer Music Conference Proceedings</em>, 60–63. <a
 href="http://hdl.handle.net/2027/spo.bbp2372.2012.010">http://hdl.handle.net/2027/spo.bbp2372.2012.010</a>.
 </div>
 <div id="ref-Scheirer1999" class="csl-entry" role="listitem">
@@ -1506,12 +1502,12 @@ The <span>MPEG</span>-4 Structured Audio Orchestra Language.”</span>
 href="https://doi.org/10.1162/014892699559742">https://doi.org/10.1162/014892699559742</a>.
 </div>
 <div id="ref-Smith2006" class="csl-entry" role="listitem">
-Smith, Dan. 2006. <span>“<span>PDP</span>-1 Music.”</span> 2006. <a
+Smith, Dan. 2006. <span>“<span>PDP</span>-1 Music.”</span> <a
 href="http://www.dpbsmith.com/pdp1music/index.html">http://www.dpbsmith.com/pdp1music/index.html</a>.
 </div>
 <div id="ref-Smith1991" class="csl-entry" role="listitem">
 Smith, Julius O. 1991. <span>“Viewpoints on the History of Digital
-Synthesis.”</span> In <em>Proceedings of International Computer Music
+Synthesis.”</span> <em>Proceedings of International Computer Music
 Conference</em>, 1–10.
 </div>
 <div id="ref-Sorensen2018" class="csl-entry" role="listitem">
@@ -1527,13 +1523,13 @@ Sterne, Jonathan. 2014. <span>“There Is No Music Industry.”</span>
 href="https://doi.org/10.3998/MIJ.15031809.0001.110">https://doi.org/10.3998/MIJ.15031809.0001.110</a>.
 </div>
 <div id="ref-Storer2019" class="csl-entry" role="listitem">
-Storer, Julian. 2019. <span>“<span
-class="nocase">SOUL_Overview.md</span>.”</span> <a
+Storer, Julian. 2019. <em><span
+class="nocase">SOUL_Overview.md</span></em>. <a
 href="https://github.com/soul-lang/SOUL/blob/master/docs/SOUL_Overview.md">https://github.com/soul-lang/SOUL/blob/master/docs/SOUL_Overview.md</a>.
 </div>
 <div id="ref-Taylor1999" class="csl-entry" role="listitem">
 Taylor, Gregory. 1999. <span>“Article: An Interview with David Wessel
-<span></span> Cycling ’74.”</span> 1999. <a
+<span></span> Cycling ’74.”</span> <a
 href="https://cycling74.com/articles/an-interview-with-david-wessel">https://cycling74.com/articles/an-interview-with-david-wessel</a>.
 </div>
 <div id="ref-Theberge1997" class="csl-entry" role="listitem">
@@ -1541,47 +1537,48 @@ Theberge, Paul. 1997. <em>Any Sound You Can Imagine: Making
 Music/Consuming Technology (Music/Culture)</em>. Wesleyan Univ Pr.
 </div>
 <div id="ref-Tovar1977" class="csl-entry" role="listitem">
-Tovar, and Leland Smith. 1977. <span>“Music Manual.”</span> <a
+Tovar, and Leland Smith. 1977. <em>Music Manual</em>. <a
 href="https://purl.stanford.edu/yd668xf8379">https://purl.stanford.edu/yd668xf8379</a>.
 </div>
 <div id="ref-TX0Demo" class="csl-entry" role="listitem">
-<span>“<span>TX</span>-0 <span>DemoPgms</span>.”</span> n.d. Accessed
-January 5, 2022. <a
+<em><span>TX</span>-0 <span>DemoPgms</span></em>. n.d. Accessed January
+5, 2022. <a
 href="http://archive.org/details/bitsavers_mittx0memo_497914">http://archive.org/details/bitsavers_mittx0memo_497914</a>.
 </div>
 <div id="ref-Vercoe1984" class="csl-entry" role="listitem">
 Vercoe, Barry L. 1984. <span>“The Synthetic Performer in the Context of
-Live Performance.”</span> In <em>Proceedings of International Computer
+Live Performance.”</span> <em>Proceedings of International Computer
 Music Conference</em>, 199–200. <a
 href="https://web.media.mit.edu/~bv/papers/synthetic%20performer.pdf">https://web.media.mit.edu/~bv/papers/synthetic%20performer.pdf</a>.
 </div>
 <div id="ref-Vercoe2004" class="csl-entry" role="listitem">
-———. 2004. <span>“Audio-Pro with Multiple <span>DSPs</span> and Dynamic
-Load Distribution.”</span> <em><span>BT</span> Technology Journal</em>
-22 (4): 180–86. <a
+Vercoe, Barry L. 2004. <span>“Audio-Pro with Multiple <span>DSPs</span>
+and Dynamic Load Distribution.”</span> <em><span>BT</span> Technology
+Journal</em> 22 (4): 180–86. <a
 href="https://doi.org/10.1023/B:BTTJ.0000047597.07098.3a">https://doi.org/10.1023/B:BTTJ.0000047597.07098.3a</a>.
 </div>
 <div id="ref-Vercoe2012" class="csl-entry" role="listitem">
-———. 2012. <span>“Barry Vercoe 4/24/2012.”</span> April 24, 2012. <a
+Vercoe, Barry L. 2012. <span>“Barry Vercoe 4/24/2012.”</span> April 24.
+<a
 href="https://libraries.mit.edu/music-oral-history/interviews/barry-vercoe-4242012/">https://libraries.mit.edu/music-oral-history/interviews/barry-vercoe-4242012/</a>.
 </div>
 <div id="ref-Vercoe2016" class="csl-entry" role="listitem">
-———. 2016. <span>“What i Learned about Innovation from Founding the
-<span>MIT</span> Media Lab <span></span> Barry Vercoe <span></span>
-<span>TEDxChristchurch</span>.”</span> <a
+Vercoe, Barry L. 2016. <em>What i Learned about Innovation from Founding
+the <span>MIT</span> Media Lab <span></span> Barry Vercoe <span></span>
+<span>TEDxChristchurch</span></em>. <a
 href="https://www.youtube.com/watch?v=_fDEm1esS0g">https://www.youtube.com/watch?v=_fDEm1esS0g</a>.
 </div>
 <div id="ref-Vercoe1990" class="csl-entry" role="listitem">
 Vercoe, Barry L., and Dan Ellis. 1990. <span>“Real-Time
 <span>CSOUND</span>: Software Synthesis with Sensing and
-Control.”</span> In <em>Proceedings of International Computer Music
-Conference</em>, 209–11. Glasgow. <a
+Control.”</span> <em>Proceedings of International Computer Music
+Conference</em> (Glasgow), 209–11. <a
 href="https://web.media.mit.edu/~bv/papers/realtime%20csound.pdf">https://web.media.mit.edu/~bv/papers/realtime%20csound.pdf</a>.
 </div>
 <div id="ref-Wang2017" class="csl-entry" role="listitem">
 Wang, Ge. 2017. <span>“A History of Programming and Music.”</span> In
-<em>Cambridge Companion to Electronic Music</em>, 2nd ed., 58–85.
-Cambridge University Press. <a
+<em>Cambridge Companion to Electronic Music</em>, 2nd ed. Cambridge
+University Press. <a
 href="https://doi.org/10.1017/9781316459874.006">https://doi.org/10.1017/9781316459874.006</a>.
 </div>
 <div id="ref-Wang2015" class="csl-entry" role="listitem">
@@ -1596,15 +1593,13 @@ Sound</em> 4 (2): 38–41. <a
 href="http://www.muzines.co.uk/articles/digidesign-turbosynth/4028">http://www.muzines.co.uk/articles/digidesign-turbosynth/4028</a>.
 </div>
 <div id="ref-UNIVACConf1990" class="csl-entry" role="listitem">
-Woltman, Richard D., Frances B. Woltman, Louis D. Wilson, Albert B.
-Tonik, John K. Swearingen, Cecil M. Shuler, Joseph E. Sberro, et al.
-1990. <span>“<span>UNIVAC</span> Conference.”</span> Charles Babbage
-Institute. <a
+Woltman, Richard D., Frances B. Woltman, Louis D. Wilson, et al. 1990.
+<em><span>UNIVAC</span> Conference.</em> Charles Babbage Institute. <a
 href="https://hdl.handle.net/11299/104288">https://hdl.handle.net/11299/104288</a>.
 </div>
 <div id="ref-qmul2009" class="csl-entry" role="listitem">
-<span>“World’s First Album of Twitter Music.”</span> 2009. November 19,
-2009. <a
+<span>“World’s First Album of Twitter Music.”</span> 2009. November 19.
+<a
 href="https://web.archive.org/web/20130221151624/https://www.qmul.ac.uk/media/news/items/se/20934.html">https://web.archive.org/web/20130221151624/https://www.qmul.ac.uk/media/news/items/se/20934.html</a>.
 </div>
 <div id="ref-Werckmeister1994" class="csl-entry" role="listitem">
@@ -1614,7 +1609,7 @@ href="https://web.archive.org/web/20130221151624/https://www.qmul.ac.uk/media/ne
 </div>
 <div id="ref-Kay1984" class="csl-entry" role="listitem">
 ケイアラン C. 1992. <span>“コンピュータ・ソフトウェア.”</span> In
-<em>アラン・ケイ</em>, translated by 鶴岡雄二, 96–120. アスキー.
+<em>アラン・ケイ</em>, translated by 鶴岡雄二. アスキー.
 </div>
 <div id="ref-Small2011" class="csl-entry" role="listitem">
 スモールクリストファー. 2011.
@@ -1630,32 +1625,31 @@ and 古橋芳恵. 工学社.
 ─久保田晃弘の思索と実装</em>. ビー・エヌ・エヌ新社.
 </div>
 <div id="ref-Kubota2021" class="csl-entry" role="listitem">
-———. 2021.
+久保田晃弘. 2021.
 <span>“<span>私たちはもっとうまくできます——ライヴ・コーディングの起源と意味を再考する</span>.”</span>
 In <em>音と耳から考える──歴史・身体・テクノロジー</em>, edited by
-細川周平, 580–601. アルテスパブリッシング.
+細川周平. アルテスパブリッシング.
 </div>
 <div id="ref-Kitamura2000" class="csl-entry" role="listitem">
-北村秀仁. 2000. 通信カラオケ装置. <span>JP</span>2000298489A. Patent,
+北村秀仁. 2000. 通信カラオケ装置. Patent <span>JP</span>2000298489A,
 issued October 24, 2000. <a
 href="https://patents.google.com/patent/JP2000298489A/ja">https://patents.google.com/patent/JP2000298489A/ja</a>.
 </div>
 <div id="ref-Kitamura2001" class="csl-entry" role="listitem">
-———. 2001. 伴奏テンポ自動調整カラオケ装置. <span>JP</span>2001175266A.
-Patent, issued June 29, 2001. <a
+北村秀仁. 2001. 伴奏テンポ自動調整カラオケ装置. Patent
+<span>JP</span>2001175266A, issued June 29, 2001. <a
 href="https://patents.google.com/patent/JP2001175266A/ja">https://patents.google.com/patent/JP2001175266A/ja</a>.
 </div>
 <div id="ref-Yamamoto2007" class="csl-entry" role="listitem">
 山本裕治. 2007. <span>“カラオケ文化論 立命館大学産業社会学部
-<span>JASRAC寄附講座</span> 音楽・文化産業論II.”</span> December 22,
-2007. <a
+<span>JASRAC寄附講座</span> 音楽・文化産業論II.”</span> December 22. <a
 href="http://www.ritsumei.ac.jp/acd/cg/ss/07jasrac/kouki/13/kouki13.htm">http://www.ritsumei.ac.jp/acd/cg/ss/07jasrac/kouki/13/kouki13.htm</a>.
 </div>
 <div id="ref-Hidaka2021" class="csl-entry" role="listitem">
 日高良祐. 2021. <span>“プラットフォームをハックする音楽
 チップチューンにおけるゲームボーイ.”</span> In
 <em>技術と文化のメディア論</em>, edited by 梅田拓也, 近藤和都, and
-新倉貴仁, 73–90. ナカニシヤ出版.
+新倉貴仁. ナカニシヤ出版.
 </div>
 <div id="ref-Matsuura2016" class="csl-entry" role="listitem">
 松浦知也. 2017. <span>“<span>音響装置作品《送れ|遅れ / post |
@@ -1675,7 +1669,7 @@ Chiptune: ゲーム機から生まれた新しい音楽</span></em>. 単行本.
 </div>
 <div id="ref-Fukuda2015" class="csl-entry" role="listitem">
 福田裕大. 2015. <span>“録音技術の利用法.”</span> In
-<em>音響メディア史</em>, 63–80. ナカニシヤ出版.
+<em>音響メディア史</em>. ナカニシヤ出版.
 </div>
 <div id="ref-Shinoda2018" class="csl-entry" role="listitem">
 篠田ミル. 2018. <span>“<span>MIDI 規格の社会史</span>.”</span> Master’s
@@ -1697,12 +1691,12 @@ thesis, 東京大学.
 </div>
 <div id="ref-Yokemura2020" class="csl-entry" role="listitem">
 除村武志. 2020. <span>“Magical 8bit Plug <span></span> <span>YMCK</span>
-Official Website.”</span> 2020. <a
+Official Website.”</span> <a
 href="https://ymck.net/app/magical-8bit-plug">https://ymck.net/app/magical-8bit-plug</a>.
 </div>
 <div id="ref-Torikai1991" class="csl-entry" role="listitem">
 鳥養潮. 1991. <span>“鳥養潮 <span>MY</span> <span>STYLE</span>.”</span>
-In <em>スタジオ200活動誌 : 1979-1991</em>, 88–100. 西武百貨店. <a
+In <em>スタジオ200活動誌 : 1979-1991</em>. 西武百貨店. <a
 href="https://ci.nii.ac.jp/ncid/BN09214064">https://ci.nii.ac.jp/ncid/BN09214064</a>.
 </div>
 </div>
@@ -1711,9 +1705,9 @@ role="doc-endnotes">
 <hr />
 <ol>
 <li id="fn1"><p>なお、西野はLC<span class="citation"
-data-cites="Nishino2014">(Nishino, Osaka, and Nakatsu
+data-cites="Nishino2014">(Nishino et al.
 2014)</span>の、ワンはChucK<span class="citation"
-data-cites="Wang2015">(Wang, Cook, and Salazar
+data-cites="Wang2015">(Wang et al.
 2015)</span>の、ダネンバーグはNyquist<span class="citation"
 data-cites="Dannenberg1997">(Dannenberg
 1997)</span>他多数の言語の設計者でもある。このことからもやはり、音楽プログラミング言語の歴史を記述するには基本的にその設計や実装に関する知識や経験が必要になっていることが窺える。<a
@@ -1824,15 +1818,14 @@ id="fn24"><p>TX-0の次世代機である、1958年に作られたTX-2はアイ�
 href="#fnref24" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li
 id="fn25"><p>しかもサムソンはTX-0で、SketchPadで用いられていた、ライトペンと呼ばれる、今日のペンタブレットに近い仕組みを用いて、五線譜上にメロディデータの入力を可能にしていたともされ<span
-class="citation" data-cites="Smith2006">(D. Smith
+class="citation" data-cites="Smith2006">(Smith
 2006)</span>、これはおそらく世界で最も早いWYSIWYG的インターフェースの音楽生成システムに位置付けられる。TX-0関連のメモが残されたアーカイブの中にそれらしい「Interpret
 Music」という名前のプログラムの説明書が残されており、このメモによれば入力されたデータはバイナリテープに一度書き込まれ、「Music
 VIII」というプログラムによって直接的に再生可能とされている。このInterpret
 MusicとMusic
 VIIIに関してはこの著者不明のメモ以外に情報が残されておらず、MUSIC
 Nシリーズと何らかの関連性があるのかは定かでない<span class="citation"
-data-cites="TX0Demo">(<span>“<span>TX</span>-0
-<span>DemoPgms</span>”</span>
+data-cites="TX0Demo">(<em><span>TX</span>-0 <span>DemoPgms</span></em>,
 n.d.)</span>。他にも、この時期TX-0ではFMラジオから受け取った音声信号をAD変換、デジタルテープに記録し再生できるデジタル録音のはしりのような試みも行われていたという発言がある<span
 class="citation" data-cites="Allen1984">(Allen et al. 1984)</span>。<a
 href="#fnref25" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
@@ -1960,8 +1953,9 @@ role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
-<style>pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+<style>html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -1972,7 +1966,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
